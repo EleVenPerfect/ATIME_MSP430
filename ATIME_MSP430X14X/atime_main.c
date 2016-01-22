@@ -1,5 +1,6 @@
 #include <msp430x14x.h>
 #include "atime_msp430core.h"		              //MSP430ºËÐÄ¿â
+
 void main(void)
 { 
   
