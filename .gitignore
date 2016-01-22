@@ -45,3 +45,15 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+
+#atime MSP430 develop
+*.dep
+*.ewd
+*.eww
+*.ewp
+Debug
+Release
+settings
+
+atime_main.c

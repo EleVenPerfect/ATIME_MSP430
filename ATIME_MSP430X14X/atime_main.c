@@ -1,11 +1,9 @@
 #include <msp430x14x.h>
-#include "atime_msp430core.h"		//MSP430核心库
-
+#include "atime_msp430core.h"		              //MSP430���Ŀ�
 void main(void)
 { 
   
-	watchdog_close();				//关闭看门狗
-	basic_clock_init();				//系统时钟初始化
-	
+	watchdog_close();				//�رտ��Ź�
+        basic_clock_init();				//ϵͳʱ�ӳ�ʼ��
 	while(1);
 }
