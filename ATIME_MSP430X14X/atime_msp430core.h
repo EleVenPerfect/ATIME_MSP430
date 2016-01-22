@@ -12,12 +12,12 @@
 作者： ATIME	版权所有
 实例程序：
       #include <msp430x14x.h>
-      #include "atime_msp430core.h"		        //MSP430核心库
+      #include "atime_msp430core.h"		    //MSP430核心库
       
       void main(void)
       { 
         
-          watchdog_close();				//关闭看门狗
+          watchdog_close();					//关闭看门狗
           basic_clock_init();				//系统时钟初始化
               
           while(1);
@@ -91,7 +91,7 @@ void basic_clock_init(void)
     
     do
     {
-        IFG1 &= ~OFIFG;                 //清除晶振失败标志
+        IFG1 &= ~OFIFG;                //清除晶振失败标志
         for( i =0xFF; i>0; i--);       //延时等待8MHz晶体起振
  
     }while((IFG1 & OFIFG));            //晶振失效标志仍然存在
