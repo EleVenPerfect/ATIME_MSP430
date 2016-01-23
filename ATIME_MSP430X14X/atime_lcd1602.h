@@ -25,7 +25,7 @@
 
           watchdog_close();				//关闭看门狗
           basic_clock_init();				//系统时钟初始化
-          lcd1602_init( rightmove, cursornotdisplay);  //液晶屏幕初始化
+          lcd1602_init( rightmove, cursornotdisplay);   //液晶屏幕初始化
           
           print1602( db, 0, 1);                        //可以引用数组
           print1602( "EleVenPerfect", 1, 1);           //可以引用字符串
@@ -50,18 +50,18 @@
 *************************************/
 #define LCD1602_DATA       4     //定义lcd1602的8位数据口
 
-#define LCD1602_RS_PORT    5     //将RS位定义;清零
-#define LCD1602_RS_BIT     5     //将RS位定义;置一
+#define LCD1602_RS_PORT    5     //将RS位定义;端口号
+#define LCD1602_RS_BIT     5     //将RS位定义;端口位
 
-#define LCD1602_RW_PORT    5     //将RW位定义;清零
-#define LCD1602_RW_BIT     6     //将RW位定义;置一
+#define LCD1602_RW_PORT    5     //将RW位定义;端口号
+#define LCD1602_RW_BIT     6     //将RW位定义;端口位
 
-#define LCD1602_EN_PORT    5     //将EN位定义;清零
-#define LCD1602_EN_BIT     7     //将EN位定义;置一
+#define LCD1602_EN_PORT    5     //将EN位定义;端口号
+#define LCD1602_EN_BIT     7     //将EN位定义;端口位
 
-enum set		{clear1602, left1602, right1602 };				//枚举:设定参数，见186行注解
-enum lcdint_ac		{leftmove, rightmove, left_move, right_move };                  //枚举:初始化AC移动方向，见135行注解
-enum lcdint_cursor	{notdisplay, cursornotdisplay, cursorflash, cursornotflash };	//枚举:初始化光标状态，见143行注解
+enum set		{clear1602, left1602, right1602 };				//枚举:设定参数，见105行(set1602)注解
+enum lcdint_ac		{leftmove, rightmove, left_move, right_move };                  //枚举:初始化AC移动方向，见129行(lcd1602_init)注解
+enum lcdint_cursor	{notdisplay, cursornotdisplay, cursorflash, cursornotflash };	//枚举:初始化光标状态，见129行(lcd1602_init)注解
 
 
 /************************************
@@ -128,8 +128,9 @@ unsigned char set1602(enum set a )
 
 /************************************
 函数功能：并行初始化lcd1602
-传递参数：a:光标移动设置 ，详见a的注释
-		  b:开关光标显示 ，详见b的注释
+传递参数：
+      a:光标移动设置 ，详见a的注释
+      b:开关光标显示 ，详见b的注释
 返回值：1：成功；：失败0；
 ***************************************/
 unsigned char lcd1602_init(enum lcdint_ac a,enum lcdint_cursor b)
