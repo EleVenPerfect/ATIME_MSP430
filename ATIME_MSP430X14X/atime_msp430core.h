@@ -42,6 +42,40 @@ enum msp430_switch { on, off};       //枚举逻辑
 
 
 /*************************************
+I/O接口设置组，切勿修改！
+*************************************/
+#define PxIN(x)         PxINTEMP(x)
+#define PxINTEMP(x)     P##x##IN
+#define PxOUT(x)        PxOUTTEMP(x)
+#define PxOUTTEMP(x)    P##x##OUT
+#define PxDIR(x)        PxDIRTEMP(x)
+#define PxDIRTEMP(x)    P##x##DIR
+#define PxSEL(x)        PxSELTEMP(x)
+#define PxSELTEMP(x)    P##x##SEL
+
+#define PxIFG(x)        PxIFGTEMP(x)
+#define PxIFGTEMP(x)    P##x##IFG
+#define PxIES(x)        PxIESTEMP(x)
+#define PxIESTEMP(x)    P##x##IES
+#define PxIE(x)         PxIETEMP(x)
+#define PxIETEMP(x)     P##x##IE
+
+
+#define PxyOUTz(x,y,z)        PxyOUTzTEMP(x,y,z)
+#define PxyOUTzTEMP(x,y,z)    (z>0)?((P##x##OUT)|=(0x01<<y)) :((P##x##OUT) &=(~(0x01<<y)))
+#define PxyDIRz(x,y,z)        PxyDIRzTEMP(x,y,z)
+#define PxyDIRzTEMP(x,y,z)    (z>0)?((P##x##DIR)|=(0x01<<y)) :((P##x##DIR) &=(~(0x01<<y)))
+#define PxySELz(x,y,z)        PxySELzTEMP(x,y,z)
+#define PxySELzTEMP(x,y,z)    (z>0)?((P##x##SEL)|=(0x01<<y)) :((P##x##SEL) &=(~(0x01<<y)))
+
+#define PxyIFGz(x,y,z)        PxyIFGzTEMP(x,y,z)
+#define PxyIFGzTEMP(x,y,z)    (z>0)?((P##x##IFG)|=(0x01<<y)) :((P##x##IFG) &=(~(0x01<<y)))
+#define PxyIESz(x,y,z)        PxyIESzTEMP(x,y,z)
+#define PxyIESzTEMP(x,y,z)    (z>0)?((P##x##IES)|=(0x01<<y)) :((P##x##IES) &=(~(0x01<<y)))
+#define PxyIEz(x,y,z)         PxyIEzTEMP(x,y,z)
+#define PxyIEzTEMP(x,y,z)     (z>0)?((P##x##IE)|=(0x01<<y)) :((P##x##IE) &=(~(0x01<<y)))
+
+/*************************************
 函数功能：准确延时函数
 传递参数：x
 返回值：空
@@ -92,7 +126,7 @@ void basic_clock_init(void)
     do
     {
         IFG1 &= ~OFIFG;                //清除晶振失败标志
-        for( i =0xFF; i>0; i--);       //延时等待8MHz晶体起振
+        delay_us(200);                 //延时等待8MHz晶体起振
  
     }while((IFG1 & OFIFG));            //晶振失效标志仍然存在
  
@@ -115,7 +149,6 @@ void basic_clock_init(void)
       
     BCSCTL2 =i;//MCLK和SMCLK选择高频晶振
 }
-
 
 
 #endif
