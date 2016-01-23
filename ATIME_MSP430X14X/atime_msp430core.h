@@ -1,29 +1,29 @@
 /*************************************
-�⹦�ܣ�MSP430���Ĺ���
-��Ҫ�󣺳����Ѿ����룺
+库功能：MSP430核心功能
+库要求：程序已经载入：
         #include <msp430x14x.h>
-Ӧ�ú�����
+应用函数：
         watchdog_close();
         basic_clock_init();
-�޸���ʷ��
-         ���޸��ˡ�   ���޸����ݡ�  ���޸�ʱ�䡯
-	    ��		  ��		 ��
-����޸�ʱ�䣺2016-01-22
-���ߣ� ATIME	��Ȩ����
-ʵ������
+修改历史：
+         ‘修改人’   ‘修改内容’  ‘修改时间’
+	    空		  空		 空
+最后修改时间：2016-01-22
+作者： ATIME	版权所有
+实例程序：
       #include <msp430x14x.h>
-      #include "atime_msp430core.h"		    //MSP430���Ŀ�
+      #include "atime_msp430core.h"		    //MSP430核心库
       
       void main(void)
       { 
         
-          watchdog_close();					//�رտ��Ź�
-          basic_clock_init();				//ϵͳʱ�ӳ�ʼ��
+          watchdog_close();					//关闭看门狗
+          basic_clock_init();				//系统时钟初始化
               
           while(1);
       }
 
-����������ͣ�
+常见错误解释：
 *************************************/
 
 #ifndef _ATIME_MSP430_CORE_H_ 
@@ -31,18 +31,18 @@
 
 
 /*************************************
-��ȫ�ֱ�����
+库全局变量组
 *************************************/
-#define XIN   ((double)32768)        //�ⲿ��Ƶ����32.768KHZ
-#define XT2IN ((double)8000000)      //�ⲿ��Ƶ����8MHZ
-#define MSP430_DIVM 1                //MCLK��Ƶ��
-#define MSP430_DIVS 1                //SMCLK��Ƶ��
+#define XIN   ((double)32768)        //外部低频晶振32.768KHZ
+#define XT2IN ((double)8000000)      //外部高频晶振8MHZ
+#define MSP430_DIVM 1                //MCLK分频比
+#define MSP430_DIVS 1                //SMCLK分频比
 
-enum msp430_switch { on, off};       //ö���߼�
+enum msp430_switch { on, off};       //枚举逻辑
 
 
 /*************************************
-I/O�ӿ������飬�����޸ģ�
+I/O接口设置组，切勿修改！
 *************************************/
 #define PxIN(x)         PxINTEMP(x)
 #define PxINTEMP(x)     P##x##IN
@@ -76,18 +76,18 @@ I/O�ӿ������飬�����޸ģ�
 #define PxyIEzTEMP(x,y,z)     (z>0)?((P##x##IE)|=(0x01<<y)) :((P##x##IE) &=(~(0x01<<y)))
 
 /*************************************
-�������ܣ�׼ȷ��ʱ����
-���ݲ�����x
-����ֵ����
+函数功能：准确延时函数
+传递参数：x
+返回值：空
 *************************************/
 #define delay_us(x) __delay_cycles((long)(XT2IN*(double)x/1000000.0)) 
 #define delay_ms(x) __delay_cycles((long)(XT2IN*(double)x/1000.0)) 
 
 
 /*************************************
-�������ܣ��رտ��Ź�
-���ݲ�������
-����ֵ����
+函数功能：关闭看门狗
+传递参数：空
+返回值：空
 *************************************/
 void watchdog_close(void)
 {
@@ -96,9 +96,9 @@ void watchdog_close(void)
 
 
 /*************************************
-�������ܣ�������ʱ(����)
-���ݲ�������
-����ֵ����
+函数功能：软件延时(近似)
+传递参数：空
+返回值：空
 *************************************/
 void wait_ms(unsigned int i)
 {
@@ -112,23 +112,23 @@ void wait_ms(unsigned int i)
 
 
 /*************************************
-�������ܣ�ϵͳʱ�ӿ���
-basic clock ���ã��Ը�Ƶ����ΪMCLK/SMCLKʱ��Դ��������Ƶ��
-���ݲ�������
-����ֵ����
+函数功能：系统时钟控制
+basic clock 设置，以高频晶振为MCLK/SMCLK时钟源。均不分频。
+传递参数：空
+返回值：空
 *************************************/
 void basic_clock_init(void)
 {
     unsigned char i;  
   
-    BCSCTL1 &= ~XT2OFF;                 //��XT2��Ƶ��������
+    BCSCTL1 &= ~XT2OFF;                 //打开XT2高频晶体振荡器
     
     do
     {
-        IFG1 &= ~OFIFG;                //�������ʧ�ܱ�־
-        delay_us(200);                 //��ʱ�ȴ�8MHz��������
+        IFG1 &= ~OFIFG;                //清除晶振失败标志
+        delay_us(200);                 //延时等待8MHz晶体起振
  
-    }while((IFG1 & OFIFG));            //����ʧЧ��־��Ȼ����
+    }while((IFG1 & OFIFG));            //晶振失效标志仍然存在
  
     switch(MSP430_DIVM)
     {
@@ -147,7 +147,7 @@ void basic_clock_init(void)
         default: i=i + DIVS_0; break;
     }
       
-    BCSCTL2 =i;//MCLK��SMCLKѡ���Ƶ����
+    BCSCTL2 =i;//MCLK和SMCLK选择高频晶振
 }
 
 
