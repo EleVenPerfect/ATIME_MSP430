@@ -53,7 +53,7 @@ Temporary Items
 *.eww
 *.ewp
 *.c
-*.hbeta
+*.beta.h
 Debug
 Release
 settings
