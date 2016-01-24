@@ -37,7 +37,7 @@ Error[Pe011]: unrecognized preprocessing directive:检查#include拼写。
 #define XIN   ((double)32768)        //外部低频晶振32.768KHZ
 #define XT2IN ((double)8000000)      //外部高频晶振8MHZ
 #define MSP430_DIVM 1                //MCLK分频比
-#define MSP430_DIVS 1                //SMCLK分频比
+#define MSP430_DIVS 8                //SMCLK分频比
 
 enum msp430_switch { on, off};       //枚举逻辑
 
@@ -114,7 +114,7 @@ void wait_ms(unsigned int i)
 
 /*************************************
 函数功能：系统时钟控制
-basic clock 设置，以高频晶振为MCLK/SMCLK时钟源。均不分频。
+basic clock 设置，以高频晶振为MCLK/SMCLK时钟源。MCLK不分频，SMCLK8分频。
 传递参数：空
 返回值：空
 *************************************/
