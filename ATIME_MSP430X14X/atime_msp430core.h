@@ -24,6 +24,7 @@
       }
 
 常见错误解释：
+Error[Pe011]: unrecognized preprocessing directive:检查#include拼写。
 *************************************/
 
 #ifndef _ATIME_MSP430_CORE_H_ 
