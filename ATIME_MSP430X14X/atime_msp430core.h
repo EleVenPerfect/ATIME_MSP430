@@ -152,4 +152,19 @@ void basic_clock_init(void)
 }
 
 
+/************************************
+函数功能：打开总中断
+传递参数：空
+返回值：空
+***************************************/
+void interrupt_switch(enum msp430_switch a)
+{
+    if(a==on)
+        _EINT();
+    else
+        _DINT();
+}
+
+
+
 #endif
