@@ -1,30 +1,30 @@
 /************************************
-¿â¹¦ÄÜ£º´®¿Úº¯Êý¿â
-¿âÒªÇó£ºÖ÷º¯ÊýÖÐÒÑ¶¨Òå£º
+åº“åŠŸèƒ½ï¼šä¸²å£å‡½æ•°åº“
+åº“è¦æ±‚ï¼šä¸»å‡½æ•°ä¸­å·²å®šä¹‰ï¼š
         #include <msp430x14x.h>
         #include "atime_msp430core.h"
-Ó¦ÓÃº¯Êý£º
+åº”ç”¨å‡½æ•°ï¼š
           uart_init(void)
           uart_sendchar( unsigned char ch, unsigned char num)
           uart_send( unsigned char ch[], unsigned char num)    
-ÐÞ¸ÄÀúÊ·£º
-		   	 ¡®ÐÞ¸ÄÈË¡¯   ¡®ÐÞ¸ÄÄÚÈÝ¡¯  ¡®ÐÞ¸ÄÊ±¼ä¡¯
-				¿Õ			¿Õ			¿Õ
-×îºóÐÞ¸ÄÊ±¼ä£º2016-01-25
-×÷Õß£º ATIME	°æÈ¨ËùÓÐ
-ÊµÀý³ÌÐò£º
+ä¿®æ”¹åŽ†å²ï¼š
+		   	 â€˜ä¿®æ”¹äººâ€™   â€˜ä¿®æ”¹å†…å®¹â€™  â€˜ä¿®æ”¹æ—¶é—´â€™
+				ç©º			ç©º			ç©º
+æœ€åŽä¿®æ”¹æ—¶é—´ï¼š2016-01-25
+ä½œè€…ï¼š ATIME	ç‰ˆæƒæ‰€æœ‰
+å®žä¾‹ç¨‹åºï¼š
       #include <msp430x14x.h>
-      #include "atime_msp430core.h"		//MSP430ºËÐÄ¿â
+      #include "atime_msp430core.h"		//MSP430æ ¸å¿ƒåº“
       #include "atime_uart.h"
       #include "atime_interrupt.c"
 
       void main(void)
       {
 
-          watchdog_close();			//¹Ø±Õ¿´ÃÅ¹·
-          basic_clock_init();			//ÏµÍ³Ê±ÖÓ³õÊ¼»¯
-          uart_init();                          //´®¿Ú³õÊ¼»¯
-          interrupt_switch(on);                 //¿ª×ÜÖÐ¶Ï
+          watchdog_close();			//å…³é—­çœ‹é—¨ç‹—
+          basic_clock_init();			//ç³»ç»Ÿæ—¶é’Ÿåˆå§‹åŒ–
+          uart_init();                          //ä¸²å£åˆå§‹åŒ–
+          interrupt_switch(on);                 //å¼€æ€»ä¸­æ–­
           
           while(1)
           {
@@ -33,19 +33,19 @@
               wait_ms(500);
           }
       }
-      ÖÐ¶Ï·þÎñº¯Êý£º
+      ä¸­æ–­æœåŠ¡å‡½æ•°ï¼š
       #pragma vector=UART0RX_VECTOR
       __interrupt void UART0_RX_ISR(void)
       {
           unsigned char data=0;
-          data =U0RXBUF;                      //½ÓÊÕµ½µÄÊý¾Ý´æÆðÀ´
-          uart0_sendchar(data);               //½«½ÓÊÕµ½µÄÊý¾ÝÔÙ·¢ËÍ³öÈ¥
+          data =U0RXBUF;                      //æŽ¥æ”¶åˆ°çš„æ•°æ®å­˜èµ·æ¥
+          uart0_sendchar(data);               //å°†æŽ¥æ”¶åˆ°çš„æ•°æ®å†å‘é€å‡ºåŽ»
       }
 
 
-³£¼û´íÎó½âÊÍ£º
-Error[e46]: Undefined external "uart1_sendchar" referred in main  ´®¿Ú1ÉèÖÃÃ»ÓÐ´ò¿ª
-½â¾ö£º#define UART1_ON   
+å¸¸è§é”™è¯¯è§£é‡Šï¼š
+Error[e46]: Undefined external "uart1_sendchar" referred in main  ä¸²å£1è®¾ç½®æ²¡æœ‰æ‰“å¼€
+è§£å†³ï¼š#define UART1_ON   
 ***************************************/
 
 
@@ -54,49 +54,49 @@ Error[e46]: Undefined external "uart1_sendchar" referred in main  ´®¿Ú1ÉèÖÃÃ»ÓÐ´
 
 
 /************************************
-¿âÈ«¾Ö±äÁ¿×é
+åº“å…¨å±€å˜é‡ç»„
 ***************************************/
-/*´®¿Ú0ÉèÖÃ*/
-#define UART0_ON                        //´®¿Ú0¿ª¹Ø£¨UART0_ON£¬UART0_OFF£©
-#define UART0_BAUD              14400   //²¨ÌØÂÊÉèÖÃ£¨£©
-#define UART0_RECEIVE           1       //´®¿Ú0½ÓÊÕÖÐ¶ÏÊ¹ÄÜ£¨1EN£¬0DIS£©
-#define UART0_SEND              0       //´®¿Ú0·¢ËÍÖÐ¶ÏÊ¹ÄÜ£¨1EN£¬0DIS£©
-#define UART0_PARITY            0       //ÆæÅ¼Ð£ÑéÎ»ÉèÖÃ£¨0NONE,1ODD,2EVEN£©
-#define UART0_CHAR_LENGTH       8       //Êý¾ÝÎ»Î»ÊýÉèÖÃ£¨8,7£©
-#define UART0_STOP_BIT          1       //Í£Ö¹Î»ÉèÖÃ£¨1,2£©
+/*ä¸²å£0è®¾ç½®*/
+#define UART0_ON                        //ä¸²å£0å¼€å…³ï¼ˆUART0_ONï¼ŒUART0_OFFï¼‰
+#define UART0_BAUD              14400   //æ³¢ç‰¹çŽ‡è®¾ç½®ï¼ˆï¼‰
+#define UART0_RECEIVE           1       //ä¸²å£0æŽ¥æ”¶ä¸­æ–­ä½¿èƒ½ï¼ˆ1ENï¼Œ0DISï¼‰
+#define UART0_SEND              0       //ä¸²å£0å‘é€ä¸­æ–­ä½¿èƒ½ï¼ˆ1ENï¼Œ0DISï¼‰
+#define UART0_PARITY            0       //å¥‡å¶æ ¡éªŒä½è®¾ç½®ï¼ˆ0NONE,1ODD,2EVENï¼‰
+#define UART0_CHAR_LENGTH       8       //æ•°æ®ä½ä½æ•°è®¾ç½®ï¼ˆ8,7ï¼‰
+#define UART0_STOP_BIT          1       //åœæ­¢ä½è®¾ç½®ï¼ˆ1,2ï¼‰
 
-/*´®¿Ú1ÉèÖÃ*/
-#define UART1_OFF                       //´®¿Ú1¿ª¹Ø£¨UART1_ON£¬UART1_OFF£©
-#define UART1_BAUD              14400   //²¨ÌØÂÊÉèÖÃ£¨£©
-#define UART1_RECEIVE           1       //´®¿Ú1½ÓÊÕÖÐ¶ÏÊ¹ÄÜ£¨1EN£¬0DIS£©
-#define UART1_SEND              0       //´®¿Ú1·¢ËÍÖÐ¶ÏÊ¹ÄÜ£¨1EN£¬0DIS£©
-#define UART1_PARITY            0       //ÆæÅ¼Ð£ÑéÎ»ÉèÖÃ£¨0NONE,1ODD,2EVEN£©
-#define UART1_CHAR_LENGTH       8       //Êý¾ÝÎ»Î»ÊýÉèÖÃ£¨8,7£©
-#define UART1_STOP_BIT          1       //Í£Ö¹Î»ÉèÖÃ£¨1,2£©
+/*ä¸²å£1è®¾ç½®*/
+#define UART1_OFF                       //ä¸²å£1å¼€å…³ï¼ˆUART1_ONï¼ŒUART1_OFFï¼‰
+#define UART1_BAUD              14400   //æ³¢ç‰¹çŽ‡è®¾ç½®ï¼ˆï¼‰
+#define UART1_RECEIVE           1       //ä¸²å£1æŽ¥æ”¶ä¸­æ–­ä½¿èƒ½ï¼ˆ1ENï¼Œ0DISï¼‰
+#define UART1_SEND              0       //ä¸²å£1å‘é€ä¸­æ–­ä½¿èƒ½ï¼ˆ1ENï¼Œ0DISï¼‰
+#define UART1_PARITY            0       //å¥‡å¶æ ¡éªŒä½è®¾ç½®ï¼ˆ0NONE,1ODD,2EVENï¼‰
+#define UART1_CHAR_LENGTH       8       //æ•°æ®ä½ä½æ•°è®¾ç½®ï¼ˆ8,7ï¼‰
+#define UART1_STOP_BIT          1       //åœæ­¢ä½è®¾ç½®ï¼ˆ1,2ï¼‰
 /************************************
-´úÂëÇø¶Î£ºUART0Ïà¹Øº¯Êý
+ä»£ç åŒºæ®µï¼šUART0ç›¸å…³å‡½æ•°
 ***************************************/
 #ifdef UART0_ON
 
 /************************************
-²¨ÌØÂÊÉèÖÃ×é£¬ÇÐÎðÐÞ¸Ä
+æ³¢ç‰¹çŽ‡è®¾ç½®ç»„ï¼Œåˆ‡å‹¿ä¿®æ”¹
 ***************************************/
-#define UART0_BAUD_SETTING   (double)((double)(XT2IN/MSP430_DIVS)/((double)UART0_BAUD))           //²¨ÌØÂÊ¼ÆËã¹«Ê½
-#define UART0_BAUD_H         (unsigned char)((unsigned long)UART0_BAUD_SETTING>>8)               //U0BR1¸ßÎ»                                         //ÌáÈ¡¸ßÎ»
-#define UART0_BAUD_L         (unsigned char)((unsigned long)UART0_BAUD_SETTING)                  //U0BR0µÍÎ»                                         //µÍÎ»
-#define UART0_BAUD_U0MCTL    (unsigned char)((UART0_BAUD_SETTING-(long)UART0_BAUD_SETTING)*8+0.5) //U0MCTLµÍÎ»
-//×¢£º+0.5º¬Òå£º±àÒëÆ÷Êý¾ÝÀàÐÍ×ª»»Ê±ÎªÈ¥ÕûÊý²¿·Ö£¬¼Ó0.5¿ÉÒÔÊ¹ËüËÄÉáÎåÈë 
+#define UART0_BAUD_SETTING   (double)((double)(XT2IN/MSP430_DIVS)/((double)UART0_BAUD))           //æ³¢ç‰¹çŽ‡è®¡ç®—å…¬å¼
+#define UART0_BAUD_H         (unsigned char)((unsigned long)UART0_BAUD_SETTING>>8)               //U0BR1é«˜ä½                                         //æå–é«˜ä½
+#define UART0_BAUD_L         (unsigned char)((unsigned long)UART0_BAUD_SETTING)                  //U0BR0ä½Žä½                                         //ä½Žä½
+#define UART0_BAUD_U0MCTL    (unsigned char)((UART0_BAUD_SETTING-(long)UART0_BAUD_SETTING)*8+0.5) //U0MCTLä½Žä½
+//æ³¨ï¼š+0.5å«ä¹‰ï¼šç¼–è¯‘å™¨æ•°æ®ç±»åž‹è½¬æ¢æ—¶ä¸ºåŽ»æ•´æ•°éƒ¨åˆ†ï¼ŒåŠ 0.5å¯ä»¥ä½¿å®ƒå››èˆäº”å…¥ 
 /************************************
-º¯Êý¹¦ÄÜ£º³õÊ¼»¯´®¿Ú0
-´«µÝ²ÎÊý£º¿Õ
-·µ»ØÖµ£º¿Õ
+å‡½æ•°åŠŸèƒ½ï¼šåˆå§‹åŒ–ä¸²å£0
+ä¼ é€’å‚æ•°ï¼šç©º
+è¿”å›žå€¼ï¼šç©º
 ***************************************/
 void uart0_init(void)
 {
 
-    unsigned char i=0x01;          //U0CTLÉèÖÃ
+    unsigned char i=0x01;          //U0CTLè®¾ç½®
     
-    U0CTL |=SWRST;                  //³õÊ¼ÖÃ1
+    U0CTL |=SWRST;                  //åˆå§‹ç½®1
     
     #if UART0_PARITY==2
       i |=PENA;
@@ -105,24 +105,24 @@ void uart0_init(void)
     #if UART0_PARITY==1
       i |=PENA;
       i &=(~PEV);
-    #endif                //ÆæÅ¼Ð£ÑéÎ»ÉèÖÃ
+    #endif                //å¥‡å¶æ ¡éªŒä½è®¾ç½®
 
     #if UART0_STOP_BIT==2
       i |=SPB;
-    #endif                //Í£Ö¹Î»ÉèÖÃ
+    #endif                //åœæ­¢ä½è®¾ç½®
       
     #if UART0_CHAR_LENGTH==8
       i |=CHAR;
-    #endif                //Êý¾ÝÎ»³¤¶ÈÉèÖÃ
+    #endif                //æ•°æ®ä½é•¿åº¦è®¾ç½®
 
-    U0CTL |=i;		  //Èí¼þÇåÁãSWRSTÎ»
+    U0CTL |=i;		  //è½¯ä»¶æ¸…é›¶SWRSTä½
     
     
-    U0TCTL |=SSEL1;		    //²¨ÌØÂÊ·¢ÉúÆ÷Ê±ÖÓÆµÂÊSMCLK(1MHz)
+    U0TCTL |=SSEL1;		    //æ³¢ç‰¹çŽ‡å‘ç”Ÿå™¨æ—¶é’Ÿé¢‘çŽ‡SMCLK(1MHz)
     
-    U0BR1 =UART0_BAUD_H;            //È¡´®¿ÚÊ±ÖÓÆµÂÊ/²¨ÌØÂÊÆµÂÊÕûÊý
-    U0BR0 =UART0_BAUD_L;            //¸ßÎ»´æÔÚBR1£¬µÍÎ»´æÔÚBR0
-    switch(UART0_BAUD_U0MCTL)      //Ð¡Êý´æÔÚU0MCTL£¬Ëã·¨¼ûÉÏ·½ºê¶¨Òå
+    U0BR1 =UART0_BAUD_H;            //å–ä¸²å£æ—¶é’Ÿé¢‘çŽ‡/æ³¢ç‰¹çŽ‡é¢‘çŽ‡æ•´æ•°
+    U0BR0 =UART0_BAUD_L;            //é«˜ä½å­˜åœ¨BR1ï¼Œä½Žä½å­˜åœ¨BR0
+    switch(UART0_BAUD_U0MCTL)      //å°æ•°å­˜åœ¨U0MCTLï¼Œç®—æ³•è§ä¸Šæ–¹å®å®šä¹‰
     {
         case 1 :U0MCTL =0x04; break;
         case 2 :U0MCTL =0x22; break;
@@ -134,41 +134,41 @@ void uart0_init(void)
         default:U0MCTL =0x00;
     }
     
-    P3SEL |= 0x30;              //ÉèÖÃI/O¶Ë¿ÚÄ£Ê½P3.4-P3.5
+    P3SEL |= 0x30;              //è®¾ç½®I/Oç«¯å£æ¨¡å¼P3.4-P3.5
     P3DIR |= 0x10;
 	
-    U0ME |= UTXE0 + URXE0;      //·¢ËÍ½ÓÊÕÊ¹ÄÜ
+    U0ME |= UTXE0 + URXE0;      //å‘é€æŽ¥æ”¶ä½¿èƒ½
     
-    U0CTL&=~SWRST;              //Èí¼þÇåÁãSWRSTÎ»
+    U0CTL&=~SWRST;              //è½¯ä»¶æ¸…é›¶SWRSTä½
     
     #if UART0_RECEIVE==1	
-        U0IE |= URXIE0;	        //½ÓÊÕÖÐ¶ÏÊ¹ÄÜ
+        U0IE |= URXIE0;	        //æŽ¥æ”¶ä¸­æ–­ä½¿èƒ½
     #endif
         
     #if UART0_SEND==1	
-        U0IE |= UTXIE0;	        //·¢ËÍÖÐ¶ÏÊ¹ÄÜ
+        U0IE |= UTXIE0;	        //å‘é€ä¸­æ–­ä½¿èƒ½
     #endif    
 }
 
 
 /************************************
-º¯Êý¹¦ÄÜ£º´®¿Ú0·¢ËÍÊý¾Ý
-´«µÝ²ÎÊý£º
-        ch £º´ý·¢ËÍÊý¾Ý£»
-·µ»ØÖµ£º¿Õ
+å‡½æ•°åŠŸèƒ½ï¼šä¸²å£0å‘é€æ•°æ®
+ä¼ é€’å‚æ•°ï¼š
+        ch ï¼šå¾…å‘é€æ•°æ®ï¼›
+è¿”å›žå€¼ï¼šç©º
 ***************************************/
 void uart0_sendchar(unsigned char ch)
 {
-    while(!(IFG1&UTXIFG0));          //·¢ËÍ¼Ä´æÆ÷¿ÕµÄÊ±ºò·¢ËÍÊý¾Ý
+    while(!(IFG1&UTXIFG0));          //å‘é€å¯„å­˜å™¨ç©ºçš„æ—¶å€™å‘é€æ•°æ®
     U0TXBUF =ch;
 }
 
 
 /************************************
-º¯Êý¹¦ÄÜ£º´®¿Ú·¢ËÍ×Ö·û´®
-´«µÝ²ÎÊý£º
-        ch £º´ý·¢ËÍÊý¾Ý£»
-·µ»ØÖµ£º¿Õ
+å‡½æ•°åŠŸèƒ½ï¼šä¸²å£å‘é€å­—ç¬¦ä¸²
+ä¼ é€’å‚æ•°ï¼š
+        ch ï¼šå¾…å‘é€æ•°æ®ï¼›
+è¿”å›žå€¼ï¼šç©º
 ***************************************/
 void uart0_send(unsigned char ch[])
 {
@@ -183,29 +183,29 @@ void uart0_send(unsigned char ch[])
 
 
 /************************************
-´úÂëÇø¶Î£ºUART1Ïà¹Øº¯Êý
+ä»£ç åŒºæ®µï¼šUART1ç›¸å…³å‡½æ•°
 ***************************************/
 #ifdef UART1_ON
 
 /************************************
-²¨ÌØÂÊÉèÖÃ×é£¬ÇÐÎðÐÞ¸Ä
+æ³¢ç‰¹çŽ‡è®¾ç½®ç»„ï¼Œåˆ‡å‹¿ä¿®æ”¹
 ***************************************/
-#define UART1_BAUD_SETTING   (double)((double)(XT2IN/MSP430_DIVS)/((double)UART1_BAUD))           //²¨ÌØÂÊ¼ÆËã¹«Ê½
-#define UART1_BAUD_H         (unsigned char)((unsigned long)UART1_BAUD_SETTING>>8)               //U1BR1¸ßÎ»                                         //ÌáÈ¡¸ßÎ»
-#define UART1_BAUD_L         (unsigned char)((unsigned long)UART1_BAUD_SETTING)                  //U1BR0µÍÎ»                                         //µÍÎ»
-#define UART1_BAUD_U1MCTL    (unsigned char)((UART1_BAUD_SETTING-(long)UART1_BAUD_SETTING)*8+0.5) //U1MCTLµÍÎ»
-//×¢£º+0.5º¬Òå£º±àÒëÆ÷Êý¾ÝÀàÐÍ×ª»»Ê±ÎªÈ¥ÕûÊý²¿·Ö£¬¼Ó0.5¿ÉÒÔÊ¹ËüËÄÉáÎåÈë 
+#define UART1_BAUD_SETTING   (double)((double)(XT2IN/MSP430_DIVS)/((double)UART1_BAUD))           //æ³¢ç‰¹çŽ‡è®¡ç®—å…¬å¼
+#define UART1_BAUD_H         (unsigned char)((unsigned long)UART1_BAUD_SETTING>>8)               //U1BR1é«˜ä½                                         //æå–é«˜ä½
+#define UART1_BAUD_L         (unsigned char)((unsigned long)UART1_BAUD_SETTING)                  //U1BR0ä½Žä½                                         //ä½Žä½
+#define UART1_BAUD_U1MCTL    (unsigned char)((UART1_BAUD_SETTING-(long)UART1_BAUD_SETTING)*8+0.5) //U1MCTLä½Žä½
+//æ³¨ï¼š+0.5å«ä¹‰ï¼šç¼–è¯‘å™¨æ•°æ®ç±»åž‹è½¬æ¢æ—¶ä¸ºåŽ»æ•´æ•°éƒ¨åˆ†ï¼ŒåŠ 0.5å¯ä»¥ä½¿å®ƒå››èˆäº”å…¥ 
 /************************************
-º¯Êý¹¦ÄÜ£º³õÊ¼»¯´®¿Ú1
-´«µÝ²ÎÊý£º¿Õ
-·µ»ØÖµ£º¿Õ
+å‡½æ•°åŠŸèƒ½ï¼šåˆå§‹åŒ–ä¸²å£1
+ä¼ é€’å‚æ•°ï¼šç©º
+è¿”å›žå€¼ï¼šç©º
 ***************************************/
 void uart1_init(void)
 {
 
-    unsigned char i=0x01;          //U1CTLÉèÖÃ
+    unsigned char i=0x01;          //U1CTLè®¾ç½®
     
-    U1CTL |=SWRST;                  //³õÊ¼ÖÃ1
+    U1CTL |=SWRST;                  //åˆå§‹ç½®1
     
     #if UART1_PARITY==2
       i |=PENA;
@@ -214,24 +214,24 @@ void uart1_init(void)
     #if UART1_PARITY==1
       i |=PENA;
       i &=(~PEV);
-    #endif                //ÆæÅ¼Ð£ÑéÎ»ÉèÖÃ
+    #endif                //å¥‡å¶æ ¡éªŒä½è®¾ç½®
 
     #if UART1_STOP_BIT==2
       i |=SPB;
-    #endif                //Í£Ö¹Î»ÉèÖÃ
+    #endif                //åœæ­¢ä½è®¾ç½®
       
     #if UART1_CHAR_LENGTH==8
       i |=CHAR;
-    #endif                //Êý¾ÝÎ»³¤¶ÈÉèÖÃ
+    #endif                //æ•°æ®ä½é•¿åº¦è®¾ç½®
 
-    U1CTL |=i;		  //Èí¼þÇåÁãSWRSTÎ»
+    U1CTL |=i;		  //è½¯ä»¶æ¸…é›¶SWRSTä½
     
     
-    U1TCTL |=SSEL1;		    //²¨ÌØÂÊ·¢ÉúÆ÷Ê±ÖÓÆµÂÊSMCLK(1MHz)
+    U1TCTL |=SSEL1;		    //æ³¢ç‰¹çŽ‡å‘ç”Ÿå™¨æ—¶é’Ÿé¢‘çŽ‡SMCLK(1MHz)
     
-    U1BR1 =UART1_BAUD_H;            //È¡´®¿ÚÊ±ÖÓÆµÂÊ/²¨ÌØÂÊÆµÂÊÕûÊý
-    U1BR0 =UART1_BAUD_L;            //¸ßÎ»´æÔÚBR1£¬µÍÎ»´æÔÚBR1
-    switch(UART1_BAUD_U1MCTL)      //Ð¡Êý´æÔÚU1MCTL£¬Ëã·¨¼ûÉÏ·½ºê¶¨Òå
+    U1BR1 =UART1_BAUD_H;            //å–ä¸²å£æ—¶é’Ÿé¢‘çŽ‡/æ³¢ç‰¹çŽ‡é¢‘çŽ‡æ•´æ•°
+    U1BR0 =UART1_BAUD_L;            //é«˜ä½å­˜åœ¨BR1ï¼Œä½Žä½å­˜åœ¨BR1
+    switch(UART1_BAUD_U1MCTL)      //å°æ•°å­˜åœ¨U1MCTLï¼Œç®—æ³•è§ä¸Šæ–¹å®å®šä¹‰
     {
         case 1 :U1MCTL =0x04; break;
         case 2 :U1MCTL =0x22; break;
@@ -243,41 +243,41 @@ void uart1_init(void)
         default:U1MCTL =0x00;
     }
 
-    P3SEL |= 0xc0;              //ÉèÖÃI/O¶Ë¿ÚÄ£Ê½P3.6-P3.7
+    P3SEL |= 0xc0;              //è®¾ç½®I/Oç«¯å£æ¨¡å¼P3.6-P3.7
     P3DIR |= 0x40;
 
-    U1ME |= UTXE1 + URXE1;      //·¢ËÍ½ÓÊÕÊ¹ÄÜ
+    U1ME |= UTXE1 + URXE1;      //å‘é€æŽ¥æ”¶ä½¿èƒ½
     
-    U1CTL&=~SWRST;              //Èí¼þÇåÁãSWRSTÎ»
+    U1CTL&=~SWRST;              //è½¯ä»¶æ¸…é›¶SWRSTä½
     
     #if UART1_RECEIVE==1	
-        U1IE |= URXIE1;	        //½ÓÊÕÖÐ¶ÏÊ¹ÄÜ
+        U1IE |= URXIE1;	        //æŽ¥æ”¶ä¸­æ–­ä½¿èƒ½
     #endif
         
     #if UART1_SEND==1	
-        U1IE |= UTXIE1;	        //·¢ËÍÖÐ¶ÏÊ¹ÄÜ
+        U1IE |= UTXIE1;	        //å‘é€ä¸­æ–­ä½¿èƒ½
     #endif    
 }
 
 
 /************************************
-º¯Êý¹¦ÄÜ£º´®¿Ú1·¢ËÍÊý¾Ý
-´«µÝ²ÎÊý£º
-        ch £º´ý·¢ËÍÊý¾Ý£»
-·µ»ØÖµ£º¿Õ
+å‡½æ•°åŠŸèƒ½ï¼šä¸²å£1å‘é€æ•°æ®
+ä¼ é€’å‚æ•°ï¼š
+        ch ï¼šå¾…å‘é€æ•°æ®ï¼›
+è¿”å›žå€¼ï¼šç©º
 ***************************************/
 void uart1_sendchar(unsigned char ch)
 {
-    while(!(IFG2&UTXIFG1));          //·¢ËÍ¼Ä´æÆ÷¿ÕµÄÊ±ºò·¢ËÍÊý¾Ý
+    while(!(IFG2&UTXIFG1));          //å‘é€å¯„å­˜å™¨ç©ºçš„æ—¶å€™å‘é€æ•°æ®
     U1TXBUF =ch;
 }
 
 
 /************************************
-º¯Êý¹¦ÄÜ£º´®¿Ú1·¢ËÍ×Ö·û´®
-´«µÝ²ÎÊý£º
-        ch £º´ý·¢ËÍÊý¾Ý£»
-·µ»ØÖµ£º¿Õ
+å‡½æ•°åŠŸèƒ½ï¼šä¸²å£1å‘é€å­—ç¬¦ä¸²
+ä¼ é€’å‚æ•°ï¼š
+        ch ï¼šå¾…å‘é€æ•°æ®ï¼›
+è¿”å›žå€¼ï¼šç©º
 ***************************************/
 void uart1_send(unsigned char ch[])
 {
@@ -293,13 +293,13 @@ void uart1_send(unsigned char ch[])
 
 
 /************************************
-´úÂëÇø¶Î£º¹«¹²º¯Êý
+ä»£ç åŒºæ®µï¼šå…¬å…±å‡½æ•°
 ***************************************/
 
 /************************************
-º¯Êý¹¦ÄÜ£º³õÊ¼»¯´®¿Ú
-´«µÝ²ÎÊý£º¿Õ
-·µ»ØÖµ£º¿Õ
+å‡½æ•°åŠŸèƒ½ï¼šåˆå§‹åŒ–ä¸²å£
+ä¼ é€’å‚æ•°ï¼šç©º
+è¿”å›žå€¼ï¼šç©º
 ***************************************/
 void uart_init(void)
 {
@@ -313,13 +313,13 @@ void uart_init(void)
 
 
 /************************************
-º¯Êý¹¦ÄÜ£º´®¿Ú·¢ËÍÊý¾Ý
-´«µÝ²ÎÊý£º
-        num£º´®¿ÚºÅ£¨0,1£©£»
-        ch £º´ý·¢ËÍÊý¾Ý£»
-·µ»ØÖµ£º
-      0xff£º´íÎó
-      0£ºÕý³£
+å‡½æ•°åŠŸèƒ½ï¼šä¸²å£å‘é€æ•°æ®
+ä¼ é€’å‚æ•°ï¼š
+        numï¼šä¸²å£å·ï¼ˆ0,1ï¼‰ï¼›
+        ch ï¼šå¾…å‘é€æ•°æ®ï¼›
+è¿”å›žå€¼ï¼š
+      0xffï¼šé”™è¯¯
+      0ï¼šæ­£å¸¸
 ***************************************/
 unsigned char uart_sendchar( unsigned char ch, unsigned char num)
 {
@@ -343,11 +343,11 @@ unsigned char uart_sendchar( unsigned char ch, unsigned char num)
 
 
 /************************************
-º¯Êý¹¦ÄÜ£º´®¿Ú·¢ËÍ×Ö·û´®
-´«µÝ²ÎÊý£º
-        num£º´®¿ÚºÅ£¨0,1£©£»
-        ch £º´ý·¢ËÍÊý¾Ý£»
-·µ»ØÖµ£º¿Õ
+å‡½æ•°åŠŸèƒ½ï¼šä¸²å£å‘é€å­—ç¬¦ä¸²
+ä¼ é€’å‚æ•°ï¼š
+        numï¼šä¸²å£å·ï¼ˆ0,1ï¼‰ï¼›
+        ch ï¼šå¾…å‘é€æ•°æ®ï¼›
+è¿”å›žå€¼ï¼šç©º
 ***************************************/
 unsigned char uart_send( unsigned char ch[], unsigned char num)
 {
