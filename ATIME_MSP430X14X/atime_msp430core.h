@@ -76,6 +76,10 @@ I/O接口设置组，切勿修改！
 #define PxyIEz(x,y,z)         PxyIEzTEMP(x,y,z)
 #define PxyIEzTEMP(x,y,z)     (z>0)?((P##x##IE)|=(0x01<<y)) :((P##x##IE) &=(~(0x01<<y)))
 
+#define PxyINz(x,y)           PxyINzTEMP(x,y)
+#define PxyINzTEMP(x,y)       (P##x##IN)&(0x01<<y)
+
+
 /*************************************
 函数功能：准确延时函数
 传递参数：x
