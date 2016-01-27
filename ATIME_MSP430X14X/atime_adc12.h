@@ -73,11 +73,14 @@ unsigned char adc12_init( int chs, enum msp430_switch repeat)
         ADC12CTL1 |=0x04;
         if((high-low)==0)
         {
-            ADC12CTL1 &=(~0x02);
+            ADC12CTL1 &=~(0x02);
+            ADC12CTL1 |=SHP;
+            ADC12CTL0 |=MSC;
         }//单通道重复采集
         else
         {
-            ADC12CTL1 |=0x02;
+            ADC12CTL1 |=0x02+SHP;
+            ADC12CTL0 |=MSC;
         }//多通道重复采集
     }
     else
@@ -85,11 +88,13 @@ unsigned char adc12_init( int chs, enum msp430_switch repeat)
         ADC12CTL1 &=(~0x04);
         if((high-low)==0)
         {
-            ADC12CTL1 &=(~0x02);
+            ADC12CTL1 &=(~0x02+SHP);
+            ADC12CTL0 &=~MSC;
         }//单通道单次采集
         else
         {
-            ADC12CTL1 |=0x02;
+            ADC12CTL1 |=0x02+SHP;
+            ADC12CTL0 &=~MSC;
         }//多通道单次采集
     }    
     
