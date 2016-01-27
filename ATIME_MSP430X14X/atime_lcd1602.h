@@ -264,6 +264,28 @@ unsigned char printchar1602(unsigned char db, unsigned int y, unsigned int x)
 
 
 /************************************
+函数功能：显示数据、字母
+传递参数：db : 显示的数据 
+		  x:	 横向坐标
+		  y:	 纵向坐标
+		  坐标系左上角为（1,1）点向右向下为正
+返回值：1：成功；：失败0；
+特别注意：此函数只可以显示单个字符
+***************************************/
+unsigned char printint1602(unsigned int db, unsigned int y, unsigned int x)
+{
+	writezhi( 0x80 + 0x40*y + x );
+        
+	writedata( (db/10000)+48);
+	writedata( (db%10000)/1000+48);
+	writedata( (db%1000)/100+48);
+        writedata( (db%100)/10+48);
+        writedata( (db%10)+48);
+	return (1);
+}
+
+
+/************************************
 函数功能：1位BCD码转换3位可显示数字
 传递参数：a[]，BCD数据;b[]，可显示数据
 返回值：空
