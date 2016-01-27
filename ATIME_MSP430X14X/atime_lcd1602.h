@@ -275,7 +275,8 @@ unsigned char printchar1602(unsigned char db, unsigned int y, unsigned int x)
 unsigned char printint1602(unsigned int db, unsigned int y, unsigned int x)
 {
 	writezhi( 0x80 + 0x40*y + x );
-        if(db/10000!=0)
+
+        if(db/10000!=0x0)
         {
             writedata( (db/10000)+48);
             writedata( (db%10000)/1000+48);
@@ -289,21 +290,31 @@ unsigned char printint1602(unsigned int db, unsigned int y, unsigned int x)
             writedata( (db%1000)/100+48);
             writedata( (db%100)/10+48);
             writedata( (db%10)+48);
+            writedata( ' ');
         }
         else if(db/100!=0)
         {
             writedata( (db%1000)/100+48);
             writedata( (db%100)/10+48);
             writedata( (db%10)+48);
+            writedata( ' ');
+            writedata( ' ');
         }
         else if(db/10!=0)
         {
             writedata( (db%100)/10+48);
             writedata( (db%10)+48);
+            writedata( ' ');
+            writedata( ' ');
+            writedata( ' ');
         }
         else
         {
             writedata( (db%10)+48);
+            writedata( ' ');
+            writedata( ' ');
+            writedata( ' ');
+            writedata( ' ');
         }
 	return (1);
 }

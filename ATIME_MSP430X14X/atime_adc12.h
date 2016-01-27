@@ -21,7 +21,7 @@
 库全局变量组
 ***************************************/
 #define ADC12_CLK_DIV   0x1             //ADC12时钟分频（1~8）
-#define ADC12_CLK_SOU   0x0             //ADC12时钟选择（0ADC12OSC，1ACLK，2MCLK，3SMCLK）
+#define ADC12_CLK_SOU   0x2             //ADC12时钟选择（0ADC12OSC，1ACLK，2MCLK，3SMCLK）
 #define ADC12_SHS_SOU   0x0             //采样保持时钟源（0ADC12SC，1Timer_AOUT1，2Timer_BOUT0,3Timer_BOUT1）
 
 
