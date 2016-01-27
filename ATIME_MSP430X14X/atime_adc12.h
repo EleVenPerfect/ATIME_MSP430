@@ -21,7 +21,7 @@
 库全局变量组
 ***************************************/
 #define ADC12_CLK_DIV   0x1             //ADC12时钟分频（1~8）
-#define ADC12_CLK_SOU   0x2             //ADC12时钟选择（0ADC12OSC，1ACLK，2MCLK，3SMCLK）
+#define ADC12_CLK_SOU   0x0             //ADC12时钟选择（0ADC12OSC，1ACLK，2MCLK，3SMCLK）
 #define ADC12_SHS_SOU   0x0             //采样保持时钟源（0ADC12SC，1Timer_AOUT1，2Timer_BOUT0,3Timer_BOUT1）
 
 
@@ -43,7 +43,7 @@ unsigned char adc12_init( int chs, enum msp430_switch repeat)
     
     while((ADC12CTL1&0x01)==1);           //如果ADC忙，则等待
     
-    ADC12CTL0 =0x00;
+    ADC12CTL0 =ADC12ON;
 
     j =0x0001;
     for( i=0; i<16; i++,j=j<<1 )
@@ -94,7 +94,7 @@ unsigned char adc12_init( int chs, enum msp430_switch repeat)
         else
         {
             ADC12CTL1 |=0x02+SHP;
-            ADC12CTL0 &=~MSC;
+            ADC12CTL0 |=MSC;
         }//多通道单次采集
     }    
     
@@ -137,8 +137,8 @@ unsigned char adc12_init( int chs, enum msp430_switch repeat)
     }
     
     ADC12IE |=(0x01<<high);         //默认打开最后一个的中断
-    
-    ADC12CTL0 |=ADC12ON;
+    ADC12CTL0 |=ADC12SC;///////////////////////////////////////
+    ADC12CTL0 |=ENC;
     
     return (0);
 }
@@ -150,10 +150,10 @@ unsigned char adc12_init( int chs, enum msp430_switch repeat)
 ***************************************/
 void adc12_start(void)
 {
-    ADC12CTL0 |=ENC;
-    ADC12CTL0 |= ADC12SC;
-    delay_us(20);
+    //ADC12CTL0 |=ENC;
     ADC12CTL0 &= ~ADC12SC;
+    delay_us(20);
+    ADC12CTL0 |= ADC12SC;   
 }
 
 
@@ -208,6 +208,7 @@ void adc12_vref( unsigned char num, unsigned char refp, unsigned char refn)
         case 14:ADC12MCTL14|=i; break;
         case 15:ADC12MCTL15|=i; break; 
     }
+    //ADC12CTL0 |=ENC;
 }
 
 
@@ -216,6 +217,13 @@ void adc12_vref( unsigned char num, unsigned char refp, unsigned char refn)
 传递参数：空
 返回值：
 ***************************************/
+void adc12_start_seq(void)
+{
+    ADC12CTL0 |= ENC;
+    ADC12CTL0 |= ADC12SC;
+}
+
+
 /************************************
 函数功能：
 传递参数：空
