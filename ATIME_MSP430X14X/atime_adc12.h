@@ -9,6 +9,7 @@
         adc12_read(unsigned char chs)
         adc12_start(void)
         adc12_stop(void)
+        adc12_ieset( unsigned char i, enum msp430_switch a)
 修改历史：
         ‘修改人’   ‘修改内容’  ‘修改时间’
 	空	    空		空
@@ -75,7 +76,7 @@
           watchdog_close();			//关闭看门狗
           basic_clock_init();			//系统时钟初始化
           lcd1602_init( rightmove, cursornotdisplay);
-          adc12_init(0x0f,off);                //初始化ADC12，0~3通道自动重复
+          adc12_init(0x0f,off);                //初始化ADC12，关闭自动重复
           adc12_vref( 0, 2, 0);               //设置ADC12通道0转换参考电压为2.5V
           interrupt_switch(on);               //打开总中断
           while(1)
@@ -106,6 +107,9 @@
 因为ADC转换完成后自动开始新的转换，导致程序一直在中断服务函数中。
 2.默认ADC12只打开最后一个通道的中断允许，因此进入中断后必须读取这一通道的结果，
 读取某一通道结果硬件自动将该通道对应中断标志位复位。
+3.采样通道：
+|          0~7           |   8   |      9      |        10        |      11~15       |
+|A0 A1 A2 A3 A4 A5 A6 A7 |VeREF+ |VREF./VeREF. |Temperature sensor| (AVCC – AVSS) / 2|
 ***************************************/
 
 #ifndef _ATIME_MSP430_ADC12_H_ 
@@ -121,6 +125,24 @@
 
 
 /************************************
+函数功能：等待忙
+传递参数：空
+返回值：0：正常返回；0xff：超时返回
+***************************************/
+unsigned char adc12_wait( unsigned int j)
+{
+    unsigned int i=0;
+    while((ADC12CTL1&0x01)==1)
+    {
+        i++;
+        if(i>j)
+            return 0xff;
+    }
+    return 0;
+}
+
+
+/************************************
 函数功能：ADC12初始化
 传递参数：
         chs:通道编码；
@@ -131,9 +153,10 @@
         repeat:重复转换；
 返回值：
         0:正确；
-        0xff：错误；
+        0xff：通道错误；
+        0xfe: 等待超时；
 注：1.默认正参考电压3.3V，负参考电压0V;
-    2.采样保持时间默认为8个ADC12CLK;
+    2.采样保持时间默认为1024个ADC12CLK;
     3.repeat模式开启后，ADC中断内部需要设置逻辑停止ADC转换。
     因为ADC转换完成后自动开始新的转换，导致程序一直在中断服务函数中。
 ***************************************/
@@ -143,7 +166,8 @@ unsigned char adc12_init( int chs, enum msp430_switch repeat)
     unsigned int temp;
     int i, j;
     
-    while((ADC12CTL1&0x01)==1);           //如果ADC忙，则等待
+    if(adc12_wait(1000))           //如果ADC忙，则等待
+        return 0xfe;
     
     ADC12CTL0 =ADC12ON+MSC;
 
@@ -205,8 +229,8 @@ unsigned char adc12_init( int chs, enum msp430_switch repeat)
     ADC12CTL1 |=( (unsigned int)ADC12_CLK_SOU )<<3;      //ADC12频率源设置
     ADC12CTL1 |=( (unsigned int)ADC12_SHS_SOU )<<10;     //ADC12频率源设置
     
-    ADC12CTL0 |=SHT0_1 + SHT1_1;/************************
-    采样保持时间默认为8个ADC12CLK，如需更改在此处添加代码。
+    ADC12CTL0 |=SHT0_15 + SHT1_15;/************************
+    采样保持时间默认为1024个ADC12CLK，如需更改在此处添加代码。
     ******************************************************/
     
     for( i=0; i<16; i++)
@@ -321,6 +345,23 @@ void adc12_stop(void)
 
 
 /************************************
+函数功能：停止ADC转换
+传递参数：
+        i:通道；
+        a：选择开关；
+返回值：空
+***************************************/
+void adc12_ieset( unsigned char i, enum msp430_switch a)
+{
+    switch(a)
+    {
+        case on :ADC12IE |=0x01<<i; break;
+        case off:ADC12IE &=~(0x01<<i); break;
+    }
+}
+
+
+/************************************
 函数功能：读取对应通道数据
 传递参数：空
 返回值：采样值
@@ -329,6 +370,28 @@ void adc12_stop(void)
 unsigned int adc12_read(unsigned char chs)
 {
     return *(unsigned int*)(ADC12MEM0_+chs*2); 
+}
+
+
+/************************************
+函数功能：读取温度值
+传递参数：参考值
+返回值：温度值
+注：也可以直接读取对应的ADC12MEM0~ADC12MEM15
+***************************************/
+unsigned int adc12_temper( unsigned char refp)
+{
+    return ADC12MEM10;
+    /*
+    double a;
+    if(refp==1)
+        a =(double)(ADC12MEM10/4096*1.5-0.985)/0.0035;
+    if(refp==2)
+        a =(double)(ADC12MEM10/4096*2.5-0.985)/0.0035;
+    if(refp==3)
+        a =(double)(ADC12MEM10/4096*3.3-0.985)/0.0035;
+    return a;
+    */
 }
 
 
