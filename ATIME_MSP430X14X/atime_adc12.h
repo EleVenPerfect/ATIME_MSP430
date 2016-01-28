@@ -10,6 +10,7 @@
         adc12_start(void)
         adc12_stop(void)
         adc12_ieset( unsigned char i, enum msp430_switch a)
+        adc12_temper( unsigned char refp)
 修改历史：
         ‘修改人’   ‘修改内容’  ‘修改时间’
 	空	    空		空
@@ -102,6 +103,31 @@
           result3 =adc12_read(2);
           result4 =adc12_read(3);
       }
+3.内部温度传感器采集
+      #include <msp430x14x.h>
+      #include "atime_msp430core.h"		//MSP430核心库
+      #include "atime_lcd1602.h"
+      #include "atime_adc12.h"
+
+      int result1=1;
+      void main(void)
+      {
+          watchdog_close();			//关闭看门狗
+          basic_clock_init();			//系统时钟初始化
+          lcd1602_init( rightmove, cursornotdisplay);
+          adc12_init( 0x401, off);            //初始化ADC12
+          adc12_vref( 10, 1, 0);              //设置ADC12通道10转换参考电压为1.5V
+          adc12_ieset( 10, off);              //关闭通道10中断，采用查询方式读取
+          while(1)
+          {
+              adc12_start();                  //触发ADC12
+              printint1602(ADC12MEM10,1,1);   //显示实际读取结果
+              result1 =adc12_temper(1);
+              printint1602(result1,0,1);      //显示转换后结果
+              wait_ms(400);
+          }
+      }
+
 常见错误解释：
 1.repeat模式开启后，ADC中断内部需要设置逻辑停止ADC转换。
 因为ADC转换完成后自动开始新的转换，导致程序一直在中断服务函数中。
@@ -110,6 +136,7 @@
 3.采样通道：
 |          0~7           |   8   |      9      |        10        |      11~15       |
 |A0 A1 A2 A3 A4 A5 A6 A7 |VeREF+ |VREF./VeREF. |Temperature sensor| (AVCC – AVSS) / 2|
+4.内部温度传感器如果不使用可以将ADC12_TEMPER置0以减小程序体积。
 ***************************************/
 
 #ifndef _ATIME_MSP430_ADC12_H_ 
@@ -122,7 +149,7 @@
 #define ADC12_CLK_DIV   0x1             //ADC12时钟分频（1~8）
 #define ADC12_CLK_SOU   0x0             //ADC12时钟选择（0ADC12OSC，1ACLK，2MCLK，3SMCLK）
 #define ADC12_SHS_SOU   0x0             //采样保持时钟源（0ADC12SC，1Timer_AOUT1，2Timer_BOUT0,3Timer_BOUT1）
-
+#define ADC12_TEMPER    1               //内部温度传感器开关（0OFF，1ON）
 
 /************************************
 函数功能：等待忙
@@ -372,28 +399,31 @@ unsigned int adc12_read(unsigned char chs)
     return *(unsigned int*)(ADC12MEM0_+chs*2); 
 }
 
-
+#if ADC12_TEMPER==1
 /************************************
 函数功能：读取温度值
 传递参数：参考值
 返回值：温度值
-注：也可以直接读取对应的ADC12MEM0~ADC12MEM15
 ***************************************/
-unsigned int adc12_temper( unsigned char refp)
+int adc12_temper( unsigned char refp)
 {
-    return ADC12MEM10;
-    /*
-    double a;
+    int a;
+    long kk;
+    kk =ADC12MEM10;
     if(refp==1)
-        a =(double)(ADC12MEM10/4096*1.5-0.985)/0.0035;
+        kk =((kk-2692)*423);
     if(refp==2)
-        a =(double)(ADC12MEM10/4096*2.5-0.985)/0.0035;
+        kk =((kk-1617)*704);
     if(refp==3)
-        a =(double)(ADC12MEM10/4096*3.3-0.985)/0.0035;
+        kk =((kk-1224)*930)+18000;//校准温度值
+    kk =kk/4096;
+    a =kk%10+(kk/10%10)*10;
+    if(kk<0)
+        a =a*(-1);
     return a;
-    */
 }
 
+#endif
 
 
 #endif
