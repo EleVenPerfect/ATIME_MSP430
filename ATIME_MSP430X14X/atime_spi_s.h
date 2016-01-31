@@ -106,13 +106,39 @@ unsigned char transbit( unsigned char x)
 ***************************************/
 unsigned char spi_s_write0( struct spi_s a, unsigned char data)
 {
-    unsigned char *add,i;
+    unsigned char *add,j,i,temp;
     
-    add =ioreg_trans(a.sdo_p,1);//SDO 线PxOUT
-    add =ioreg_trans(a.cs_p,1); //CS  线PxOUT  
-    add =ioreg_trans(a.clk_p,1);//CLK 线PxOUT
-    add =ioreg_trans(a.sdi_p,1);//SDI 线PxOUT
+    add =ioreg_trans(a.cs_p,1); //CS  线PxOUT 
+    *add |=(0x01<<a.cs_b);
+    *add &=~(0x01<<a.cs_b);
     
+    add =ioreg_trans(a.clk_p,1); //CLK  线PxOUT1 
+    *add |=(0x01<<a.clk_b);
+    
+    i =0;
+    for( j=0; j<8; j++)
+    {
+        add =ioreg_trans(a.sdo_p,1);//SDO 线PxOUT
+        if(data&0x80)
+            *add |=(0x01<<a.sdo_b);//SDO线上数据
+        
+        add =ioreg_trans(a.clk_p,1); //CLK  线PxOUT0 
+        *add &=~(0x01<<a.clk_b);//CLK线下降沿
+        
+        add =ioreg_trans(a.sdi_p,0); //SDI  线PxIN0 
+        temp =*add;//读取 SDI 线数据
+        i <<=1;
+        i |=((temp>>a.sdi_b)&0x01);
+        
+        
+        add =ioreg_trans(a.clk_p,1); //CLK  线PxOUT0 
+        *add |=(0x01<<a.clk_b);//CLK线上升沿
+        
+        data <<=1;
+    }
+    
+    add =ioreg_trans(a.cs_p,1); //CS  线PxOUT 
+    *add |=(0x01<<a.cs_b);
     return (i);
 }
 /************************************
