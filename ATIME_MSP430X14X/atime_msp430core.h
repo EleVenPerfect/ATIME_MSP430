@@ -24,7 +24,10 @@
       }
 
 常见错误解释：
-Error[Pe011]: unrecognized preprocessing directive:检查#include拼写。
+1.Error[Pe011]: unrecognized preprocessing directive:检查#include拼写。
+2.软件仿真时，弹出：a word access on odd address 0x19;
+  表示有整型常量指定存储在flash奇地址上了。应该地址改成偶地址。
+  但是本函数中的地址为寄存器地址，所以不应该更改，而是用char型地址保存，详见ioreg_trans函数。
 *************************************/
 
 #ifndef _ATIME_MSP430_CORE_H_ 
@@ -167,6 +170,42 @@ void interrupt_switch(enum msp430_switch a)
         _EINT();
     else
         _DINT();
+}
+
+
+/************************************
+函数功能：寄存器转换
+          返回制定的IO端口寄存器地址；
+传递参数：
+        port：端口号（1~6）；
+        func：功能（0~4）；
+          0:PxIN;
+          1:PxOUT;
+          2:PxDIR;
+          3:PxSEL;
+返回值：地址
+特别注意：
+返回值为地址，调试时本来使用unsigned int 型，仿真出现a word access on odd address 0x19弹窗，
+问题出现在：有整型常量指定存储在flash奇地址上了。地址改成偶地址。
+实际I/O地址即为奇数地址，尝试改为char型，可以通过。
+***************************************/
+unsigned char* ioreg_trans( unsigned char port, unsigned char func)
+{
+    unsigned char i;
+    if(port==2||port==1)
+        if(func==3)
+            func+=0x03;
+    func *=1u;
+    switch(port)
+    {
+        case 1:i=0x0020u;i+=func;break;
+        case 2:i=0x0028u;i+=func;break;
+        case 3:i=0x0018u;i+=func;break;
+        case 4:i=0x001Cu;i+=func;break;
+        case 5:i=0x0030u;i+=func;break;
+        case 6:i=0x0034u;i+=func;break;
+    }
+    return (unsigned char*)i;
 }
 
 
