@@ -1,16 +1,16 @@
 /************************************
-¿â¹¦ÄÜ£ºÈí¼şSPI¿â
-¿âÒªÇó£ºÖ÷º¯ÊıÖĞÒÑ¶¨Òå£º
+åº“åŠŸèƒ½ï¼šè½¯ä»¶SPIåº“
+åº“è¦æ±‚ï¼šä¸»å‡½æ•°ä¸­å·²å®šä¹‰ï¼š
         #include <msp430x14x.h>
         #include "atime_msp430core.h"
-Ó¦ÓÃº¯Êı£º
-ĞŞ¸ÄÀúÊ·£º
-		   	 ¡®ĞŞ¸ÄÈË¡¯   ¡®ĞŞ¸ÄÄÚÈİ¡¯  ¡®ĞŞ¸ÄÊ±¼ä¡¯
-				¿Õ			¿Õ			¿Õ
-×îºóĞŞ¸ÄÊ±¼ä£º2016-01-29
-×÷Õß£º ATIME	°æÈ¨ËùÓĞ
-ÊµÀı³ÌĞò£º
-³£¼û´íÎó½âÊÍ£º
+åº”ç”¨å‡½æ•°ï¼š
+ä¿®æ”¹å†å²ï¼š
+		   	 â€˜ä¿®æ”¹äººâ€™   â€˜ä¿®æ”¹å†…å®¹â€™  â€˜ä¿®æ”¹æ—¶é—´â€™
+				ç©º			ç©º			ç©º
+æœ€åä¿®æ”¹æ—¶é—´ï¼š2016-01-29
+ä½œè€…ï¼š ATIME	ç‰ˆæƒæ‰€æœ‰
+å®ä¾‹ç¨‹åºï¼š
+å¸¸è§é”™è¯¯è§£é‡Šï¼š
 ***************************************/
 
 
@@ -19,70 +19,70 @@
 
 
 /************************************
-¿âÈ«¾Ö±äÁ¿×é
+åº“å…¨å±€å˜é‡ç»„
 ***************************************/
 struct spi_s
 {
-    unsigned char cs_p;         //Éè±¸Ê¹ÄÜĞÅºÅ£¬port
-    unsigned char cs_b;         //Éè±¸Ê¹ÄÜĞÅºÅ£¬bit
-    unsigned char clk_p;        //Ê±ÖÓĞÅºÅ£¬port
-    unsigned char clk_b;        //Ê±ÖÓĞÅºÅ£¬bit
-    unsigned char sdi_p;        //Ö÷Éè±¸ÊäÈë£¬port
-    unsigned char sdi_b;        //Ö÷Éè±¸ÊäÈë£¬bit
-    unsigned char sdo_p;        //´ÓÉè±¸Êä³ö£¬port
-    unsigned char sdo_b;        //´ÓÉè±¸Êä³ö£¬bit
-    unsigned char mode;         //ÉèÖÃ¹¤×÷Ä£Ê½£¨0~3£©
-};                               //¶¨ÒåSPI×ÜÏßĞÅºÅÏßÊı¾İ´«Êä½á¹¹
+    unsigned char cs_p;         //è®¾å¤‡ä½¿èƒ½ä¿¡å·ï¼Œport
+    unsigned char cs_b;         //è®¾å¤‡ä½¿èƒ½ä¿¡å·ï¼Œbit
+    unsigned char clk_p;        //æ—¶é’Ÿä¿¡å·ï¼Œport
+    unsigned char clk_b;        //æ—¶é’Ÿä¿¡å·ï¼Œbit
+    unsigned char sdi_p;        //ä¸»è®¾å¤‡è¾“å…¥ï¼Œport
+    unsigned char sdi_b;        //ä¸»è®¾å¤‡è¾“å…¥ï¼Œbit
+    unsigned char sdo_p;        //ä»è®¾å¤‡è¾“å‡ºï¼Œport
+    unsigned char sdo_b;        //ä»è®¾å¤‡è¾“å‡ºï¼Œbit
+    unsigned char mode;         //è®¾ç½®å·¥ä½œæ¨¡å¼ï¼ˆ0~3ï¼‰
+};                               //å®šä¹‰SPIæ€»çº¿ä¿¡å·çº¿æ•°æ®ä¼ è¾“ç»“æ„
 
 /************************************
-¹¤×÷Ä£Ê½ËµÃ÷£º
-Ä£Ê½0£ºCPHA=0;CPOL=0;
-Ä£Ê½1£ºCPHA=0;CPOL=1;
-Ä£Ê½2£ºCPH1=1;CPOL=0;
-Ä£Ê½3£ºCPHA=1;CPOL=0;
-CPHA:Ê±ÖÓÏàÎ»ÉèÖÃ£»
-     0±íÊ¾Ã¿ÖÜÆÚµÚÒ»¸öÊ±ÖÓÑØ²ÉÑù£¬
-     1±íÊ¾Ã¿ÖÜÆÚµÚ¶ş¸öÊ±ÖÓÑØ²ÉÑù¡£
-CPOL:Ê±ÖÓĞÅºÅÉèÖÃ£»
-     0±íÊ¾ÏĞÊ±Îª0£¬
-     1±íÊ¾ÏĞÊ±Îª1.
+å·¥ä½œæ¨¡å¼è¯´æ˜ï¼š
+æ¨¡å¼0ï¼šCPHA=0;CPOL=0;
+æ¨¡å¼1ï¼šCPHA=0;CPOL=1;
+æ¨¡å¼2ï¼šCPH1=1;CPOL=0;
+æ¨¡å¼3ï¼šCPHA=1;CPOL=0;
+CPHA:æ—¶é’Ÿç›¸ä½è®¾ç½®ï¼›
+     0è¡¨ç¤ºæ¯å‘¨æœŸç¬¬ä¸€ä¸ªæ—¶é’Ÿæ²¿é‡‡æ ·ï¼Œ
+     1è¡¨ç¤ºæ¯å‘¨æœŸç¬¬äºŒä¸ªæ—¶é’Ÿæ²¿é‡‡æ ·ã€‚
+CPOL:æ—¶é’Ÿä¿¡å·è®¾ç½®ï¼›
+     0è¡¨ç¤ºé—²æ—¶ä¸º0ï¼Œ
+     1è¡¨ç¤ºé—²æ—¶ä¸º1.
 ***************************************/
 
  /**************************************
-º¯Êı¹¦ÄÜ£º¶Ë¿Ú³õÊ¼»¯
-´«µİ²ÎÊı£ºstruct spi_s a£º¶Ë¿ÚĞÅÏ¢
-·µ»ØÖµ£º¿Õ
+å‡½æ•°åŠŸèƒ½ï¼šç«¯å£åˆå§‹åŒ–
+ä¼ é€’å‚æ•°ï¼šstruct spi_s aï¼šç«¯å£ä¿¡æ¯
+è¿”å›å€¼ï¼šç©º
 ***************************************/
 void spi_s_init(struct spi_s a)
 {
     unsigned char *add;
     
     add =ioreg_trans(a.cs_p,2);
-    *add |=(0x01<<a.cs_b);
+    *add |=(0x01<<a.cs_b);//è®¾ç½®PxDIR
     add =ioreg_trans(a.cs_p,3);
-    *add &=~(0x01<<a.cs_b);
+    *add &=~(0x01<<a.cs_b);//è®¾ç½®PxSEL
     
     add =ioreg_trans(a.clk_p,2);
-    *add |=(0x01<<a.clk_b);
+    *add |=(0x01<<a.clk_b);//è®¾ç½®PxDIR
     add =ioreg_trans(a.clk_p,3);
-    *add &=~(0x01<<a.clk_b);
+    *add &=~(0x01<<a.clk_b);//è®¾ç½®PxSEL
     
     add =ioreg_trans(a.sdo_p,2);
-    *add |=(0x01<<a.sdo_b);
+    *add |=(0x01<<a.sdo_b);//è®¾ç½®PxDIR
     add =ioreg_trans(a.sdo_p,3);
-    *add &=~(0x01<<a.sdo_b);
+    *add &=~(0x01<<a.sdo_b);//è®¾ç½®PxSEL
     
     add =ioreg_trans(a.sdi_p,2);
-    *add &=~(0x01<<a.sdi_b);
+    *add &=~(0x01<<a.sdi_b);//è®¾ç½®PxDIR
     add =ioreg_trans(a.sdi_p,3);
-    *add &=~(0x01<<a.sdi_b);
+    *add &=~(0x01<<a.sdi_b);//è®¾ç½®PxSEL
 }
 
 
  /**************************************
-º¯Êı¹¦ÄÜ£º¸ßµÍÎ»»¥»»
-´«µİ²ÎÊı£º´ı×ª»»×Ö½Ú
-·µ»ØÖµ£º½á¹û
+å‡½æ•°åŠŸèƒ½ï¼šé«˜ä½ä½äº’æ¢
+ä¼ é€’å‚æ•°ï¼šå¾…è½¬æ¢å­—èŠ‚
+è¿”å›å€¼ï¼šç»“æœ
 ***************************************/
 unsigned char transbit( unsigned char x)
 {
@@ -100,21 +100,25 @@ unsigned char transbit( unsigned char x)
 
 
 /************************************
-º¯Êı¹¦ÄÜ£ºSPIĞ´Êı¾İ0
-´«µİ²ÎÊı£º¿Õ
-·µ»ØÖµ£º¿Õ
+å‡½æ•°åŠŸèƒ½ï¼šSPIå†™æ•°æ®0
+ä¼ é€’å‚æ•°ï¼šç©º
+è¿”å›å€¼ï¼šç©º
 ***************************************/
 unsigned char spi_s_write0( struct spi_s a, unsigned char data)
 {
-    unsigned char i;
+    unsigned char *add,i;
     
+    add =ioreg_trans(a.sdo_p,1);//SDO çº¿PxOUT
+    add =ioreg_trans(a.cs_p,1); //CS  çº¿PxOUT  
+    add =ioreg_trans(a.clk_p,1);//CLK çº¿PxOUT
+    add =ioreg_trans(a.sdi_p,1);//SDI çº¿PxOUT
     
     return (i);
 }
 /************************************
-º¯Êı¹¦ÄÜ£ºSPIĞ´Êı¾İ1
-´«µİ²ÎÊı£º¿Õ
-·µ»ØÖµ£º¿Õ
+å‡½æ•°åŠŸèƒ½ï¼šSPIå†™æ•°æ®1
+ä¼ é€’å‚æ•°ï¼šç©º
+è¿”å›å€¼ï¼šç©º
 ***************************************/
 unsigned char spi_s_write1( struct spi_s a, unsigned char data)
 {
@@ -124,9 +128,9 @@ unsigned char spi_s_write1( struct spi_s a, unsigned char data)
     return (i);
 }
 /************************************
-º¯Êı¹¦ÄÜ£ºSPIĞ´Êı¾İ2
-´«µİ²ÎÊı£º¿Õ
-·µ»ØÖµ£º¿Õ
+å‡½æ•°åŠŸèƒ½ï¼šSPIå†™æ•°æ®2
+ä¼ é€’å‚æ•°ï¼šç©º
+è¿”å›å€¼ï¼šç©º
 ***************************************/
 unsigned char spi_s_write2( struct spi_s a, unsigned char data)
 {
@@ -136,9 +140,9 @@ unsigned char spi_s_write2( struct spi_s a, unsigned char data)
     return (i);
 }
 /************************************
-º¯Êı¹¦ÄÜ£ºSPIĞ´Êı¾İ3
-´«µİ²ÎÊı£º¿Õ
-·µ»ØÖµ£º¿Õ
+å‡½æ•°åŠŸèƒ½ï¼šSPIå†™æ•°æ®3
+ä¼ é€’å‚æ•°ï¼šç©º
+è¿”å›å€¼ï¼šç©º
 ***************************************/
 unsigned char spi_s_write3( struct spi_s a, unsigned char data)
 {
@@ -148,9 +152,9 @@ unsigned char spi_s_write3( struct spi_s a, unsigned char data)
     return (i);
 }
 /************************************
-º¯Êı¹¦ÄÜ£ºSPIĞ´Êı¾İ
-´«µİ²ÎÊı£º¿Õ
-·µ»ØÖµ£º¿Õ
+å‡½æ•°åŠŸèƒ½ï¼šSPIå†™æ•°æ®
+ä¼ é€’å‚æ•°ï¼šç©º
+è¿”å›å€¼ï¼šç©º
 ***************************************/
 unsigned char spi_s_write( struct spi_s a, unsigned char data)
 {
