@@ -32,6 +32,7 @@ struct spi_s
     unsigned char sdo_p;        //从设备输出，port
     unsigned char sdo_b;        //从设备输出，bit
     unsigned char mode;         //设置工作模式（0~3）
+    unsigned char wait;         //定义等待时间（us）
 };                               //定义SPI总线信号线数据传输结构
 
 /************************************
@@ -79,6 +80,12 @@ void spi_s_init(struct spi_s a)
     
     add =ioreg_trans(a.cs_p,1); //CS  线PxOUT 
     *add |=(0x01<<a.cs_b);//CS 线置高
+    
+    add =ioreg_trans(a.clk_p,1); //CLK  线PxOUT1 
+    if((a.mode&0x01)==0x00)//CPOL=0，则平时为低电平
+	*add &=~(0x01<<a.clk_b);
+    else
+	*add |=(0x01<<a.clk_b);
 }
 
 
@@ -159,14 +166,15 @@ unsigned char spi_s_write( struct spi_s a, unsigned char data)
     
     add =ioreg_trans(a.cs_p,1); //CS  线PxOUT 
     *add |=(0x01<<a.cs_b);
+    wait_5us(a.wait);
     *add &=~(0x01<<a.cs_b);
-    
+    wait_5us(a.wait);
     add =ioreg_trans(a.clk_p,1); //CLK  线PxOUT1 
     if((a.mode&0x01)==0x00)//CPOL=0，则平时为低电平
 	*add &=~(0x01<<a.clk_b);
     else
 	*add |=(0x01<<a.clk_b);
-    
+    wait_5us(a.wait);
     i =0;
     temp =data;
     for( j=0; j<8; j++)
@@ -174,20 +182,28 @@ unsigned char spi_s_write( struct spi_s a, unsigned char data)
         if((a.mode&0x02)==0x02)
         {
             spi_s_clk(a);
+            wait_5us(a.wait);
             spi_s_mosi(a,temp);
+            wait_5us(a.wait);
             temp<<=1;
             spi_s_clk(a);
+            wait_5us(a.wait);
             i<<=1;
             i |=spi_s_miso(a);
+            wait_5us(a.wait);
         }
         else
         {
             spi_s_mosi(a,temp);
+            wait_5us(a.wait);
             temp<<=1;
             spi_s_clk(a);
+            wait_5us(a.wait);
             i<<=1;
             i |=spi_s_miso(a);
+            wait_5us(a.wait);
             spi_s_clk(a);
+            wait_5us(a.wait);
         }
     }
     add =ioreg_trans(a.cs_p,1); //CS  线PxOUT 
@@ -207,32 +223,37 @@ unsigned char spi_s_read( struct spi_s a)
     
     add =ioreg_trans(a.cs_p,1); //CS  线PxOUT 
     *add |=(0x01<<a.cs_b);
+    wait_5us(a.wait);
     *add &=~(0x01<<a.cs_b);
-    
+    wait_5us(a.wait);
     add =ioreg_trans(a.clk_p,1); //CLK  线PxOUT1 
     if((a.mode&0x01)==0x00)//CPOL=0，则平时为低电平
 	*add &=~(0x01<<a.clk_b);
     else
 	*add |=(0x01<<a.clk_b);
-    
+    wait_5us(a.wait);
     i =0;
     for( j=0; j<8; j++)
     {
         if((a.mode&0x02)==0x02)
         {
             spi_s_clk(a);
-            delay_us(100);
+            wait_5us(a.wait);
             spi_s_clk(a);
+            wait_5us(a.wait);
             i<<=1;
             i |=spi_s_miso(a);
+            wait_5us(a.wait);
         }
         else
         {
             spi_s_clk(a);
+            wait_5us(a.wait);
             i<<=1;
             i |=spi_s_miso(a);
+            wait_5us(a.wait);
             spi_s_clk(a);
-            delay_us(100);
+            wait_5us(a.wait);
         }
     }
     add =ioreg_trans(a.cs_p,1); //CS  线PxOUT 
