@@ -1,0 +1,384 @@
+sca3060spi.h
+#ifndef __SCA3060SPI_H__
+#define __SCA3060SPI_H__
+#define SCK_1  P4OUT |= BIT6 //SCK=1,P4.6
+#define SCK_0  P4OUT &=~ BIT6 //SCK=0,P4.6
+#define SI_1   P4OUT |= BIT3 //CPU写1,P4.3
+#define SI_0   P4OUT &=~ BIT3 //CPU写0,P4.4 mosi
+#define SO_IN  (P4IN & 0x20) == 0x20//CPU读 p4.5 miso
+#define CSB_1  P4OUT |= BIT4     //p4.4
+#define CSB_0  P4OUT &= ~BIT4
+void Init(void) ;
+void Delay(unsigned int dtime);
+char ReadSPIByte(void);  
+void WriteSPIByte(char b);  
+void Write_One_Byte(char addr,char d);
+
+char Read_One_Byte(char addr);
+
+#endif
+
+
+
+
+
+
+
+//sca3060spi.c
+#include "MSP430x16x.h"
+#include "sca3060spi.h"
+void Init(void) //MSP430F149引脚初始化；
+{
+  P4DIR |= BIT4;
+  P4OUT |= BIT4;
+  
+  P4DIR |= BIT3;
+  P4OUT |= BIT3;
+  P4DIR |= BIT6;
+  P4OUT |= BIT6;
+}
+void Delay(unsigned int dtime) 
+       {
+	unsigned int temp;
+	for(temp=0;temp<dtime;temp++);
+        }
+
+/*从SPI总线读一个字节*/ 
+char ReadSPIByte(void)  
+{
+  int i,data;
+   
+   for(i=0;i<8;i++)
+        {
+           SCK_1;
+            Delay(2);
+           SCK_0;//sck 下降沿
+            Delay(2);
+          if(SO_IN)      //判断收到的电平信号
+           { 
+            data<<=1;
+            data =data+BIT0;
+            } 
+           else
+           data<<=1;
+          }
+	return(data);	//返回data
+}
+
+
+/*向SPI总线写一个字节*/ 
+void WriteSPIByte(char b)  
+{
+  char i;
+  for(i=0;i<8;i++) //BITx 是指8 位字节的第x 位为1，其它位全为0
+  { 
+    
+    if(b &BIT7) //高位是1 把data中的高位发出去
+       SI_1; //P4.4OUT 1;
+    else
+        SI_0; //P4.4 OUT 0
+        Delay(2);
+        SCK_0; //p4.5 
+         Delay(2);
+        SCK_1; //SCK
+        b<<=1; //data 中的数据右移
+}
+}
+	
+
+/*向指定地址写一个字节*/
+void Write_One_Byte(char addr,char d)	//单字节写
+{
+  char add1;
+  addr<<=2;
+  add1=addr|0X02;
+  CSB_0;
+  _NOP();
+  _NOP();
+  WriteSPIByte(add1);
+  WriteSPIByte(d);
+  CSB_1;
+}
+	
+
+/*从指定地址读一个字节*/
+char Read_One_Byte(char addr)
+{
+  char mydata;
+  addr<<=2;
+  CSB_0;
+  _NOP();
+  WriteSPIByte(addr);
+  mydata=ReadSPIByte();
+  CSB_1;
+  return(mydata);
+}
+
+
+
+//main.c
+#include "msp430x16x.h" //使用UART1串口SPI模式控制SD卡存储  端口选择 P5.0/STE=1  P5.1/SIMO=2  P5.2/SOMI=7  P5.3/UCLK=5  
+#include "string.h"
+#include "sca3060spi.h"
+
+#define CS_1 P5OUT|=0x01
+#define CS_0 P5OUT&=~0x01
+#define SUCCESS 1
+#define failed 0
+#define cmd0 0
+#define cmd55 55
+#define acmd41 41
+#define cmd9 9
+#define cmd16 16
+#define cmd24 24
+#define cmd17 17
+
+
+ 
+//******************************************************************************
+
+ unsigned char response=0;//回应
+
+
+
+    
+  void open_xt2(void)
+{
+  BCSCTL1 &= ~XT2OFF;
+  char n;
+  do
+  {
+    IFG1 &= ~OFIFG;
+    for(n=0xee;n>0;n--)
+    {
+      ;
+    }
+  }
+  while((IFG1&OFIFG)!=0);    
+  BCSCTL2 |= SELM_2+ SELS+DIVM_3;       
+}
+void SPI_init(void)
+{ 
+  open_xt2();//函数
+  UCTL1=SWRST;//开启设置
+  UTCTL1=CKPH+SSEL1+STC;//选择SMCLK
+  UCTL1|=CHAR+SYNC+MM;//8为数据 SPI模式
+  UBR01=0x04;//波特率设置 
+  UBR11=0X00;
+  UMCTL1=0X00;
+  UCTL1&=~SWRST;//关闭设置
+  ME2|=USPIE1;//使能SPI
+}
+
+
+//发送八位字节  同时用于延时八个CLK
+char Sendbyte(unsigned char byte)
+{
+  while((IFG2&UTXIFG1)==0);//等待...直到发送中断标志位置位
+  TXBUF1=byte;
+  while((IFG2&URXIFG1)==0);//等待...直到接受缓存数据满  再取回数据
+  return (RXBUF1);
+}
+
+
+void Sendcmd(unsigned char cmd,unsigned long data,unsigned char CRC)//cmd 命令字  data 命令指令 CRC 校验位
+{
+  unsigned char command[6];
+  int i;
+  command[0]=(cmd|0x40);
+  for(i=1;i<5;i++)
+    command[i]=(char)(data>>8*(4-i));
+  command[5]=CRC;
+    for(i=0;i<6;i++)
+    Sendbyte(command[i]);
+}
+
+//回应0x00
+unsigned char getresponse0()
+{
+  int i=0;
+  while(i<10)
+  {
+    response=Sendbyte(0xff);
+    if(response==0x00)break;
+    i++;
+  }
+  return (response);
+}
+//回应0x01
+unsigned char getresponse1()
+{
+  int i=0;
+  while(i<10)
+  {
+    response=Sendbyte(0xff);
+    if(response==0x01)break;
+    i++;
+  }
+  return (response);
+}
+//SD卡初始化
+char SD_init(void)
+{
+  int i;
+  int time=5;
+  unsigned char response1=0xff,response2=0xff;
+  P5SEL|=0X0e;//0000 1110 P5.0.1.2.3选择第二功能
+  P5DIR|=0X0B;//0000 1011
+  SPI_init();
+  CS_1;
+  do
+  {
+    if(!time)
+      return (failed);
+    time--;
+   for(i=0;i<10;i++)
+     Sendbyte(0xff);//延时80个CLK
+     CS_0;
+     Sendcmd(cmd0,0,0x95);
+  }
+   while(getresponse1()!=0x01);
+     while((response1!=0x01)||(response2!=0x00))
+    {
+      CS_1;
+      Sendbyte(0xff);//延时8个CLK
+      CS_0;
+      Sendcmd(cmd55,0,0xff);
+      response1=getresponse1();
+      CS_1;
+      Sendbyte(0xff);
+      CS_0;
+      Sendcmd(acmd41,0,0xff);
+      response2=getresponse0();
+    }
+    CS_1;
+  Sendbyte(0xff);
+  return (SUCCESS);
+}
+//设置数据长度 cmd16
+char Set_block_length(unsigned long length)
+{
+  CS_0;
+  Sendcmd(cmd16,length,0xff);
+  while(getresponse0()!=0x00)
+  {
+    SD_init();
+    CS_0;
+    Sendcmd(cmd16,length,0xff);
+  }
+  CS_1;
+  Sendbyte(0xff);
+  return (SUCCESS);
+}
+//读取SD卡数据(单块)
+char Read_data(unsigned long address,unsigned long length,unsigned char *buffer)
+{
+  int check;
+  unsigned long i;
+  check=Set_block_length(length);
+  if(check==SUCCESS)
+  {
+    do
+    { 
+    Sendbyte(0xff);
+    CS_0;
+    Sendcmd(cmd17,address,0xff);
+    }
+   while(getresponse0()!=0x00);
+   while(Sendbyte(0xff)!=0xfe);
+   for(i=0;i<length;i++)
+     buffer[i]=Sendbyte(0xff);
+  }
+  return (*buffer);
+}
+
+//发送命令字
+
+//读取SD卡容量信息，此信息存储在CSD寄存器中  通过发送cmd9来读取 
+//需要数据为80-84/SD_len  62-73/SD_size  47-49/SD_size_mult
+unsigned long  Read_SD_size(void)
+{
+  unsigned int data,i,j,SD_size;
+  unsigned char SD_len,SD_size_mult;
+  unsigned long SD_card_size;
+  do
+  {
+   CS_1;
+   Sendbyte(0xff);
+   CS_0;
+   Sendcmd(cmd9,0,0xff);
+  }
+  while(getresponse0()!=0x00);
+  do
+    data=response=Sendbyte(0xff);
+    while(data!=0xfe);
+    for(i=0;i<5;i++)//88-127
+    data=Sendbyte(0xff);
+    data=Sendbyte(0xff);//80-87
+    SD_len=data&0x0F;//取出80-83
+    data=Sendbyte(0xff);//72-79
+    SD_size=(data&0x03)<<10;//取出72-72位  并放到最高位
+    data=Sendbyte(0xff);//64-71
+    SD_size+=data<<2;
+    data=Sendbyte(0xff);//56-63
+    SD_size+=data>>6;
+    data=Sendbyte(0xff);//48-55
+    SD_size_mult=(data&0x3)<<1;//取出48-49
+    data=Sendbyte(0xff);//40-47
+    SD_size_mult+=data>>7;
+    for(i=0;i<5;i++)
+    data=Sendbyte(0xff);//0-39
+    for(i=0;i<4;i++)//延时
+    Sendbyte(0xff);
+    data=Sendbyte(0xff);
+    CS_0;
+    //开始计算容量
+    SD_card_size=SD_size+1;
+    for(i=2,j=SD_size_mult+2;j>1;j--)
+      i<<=1;
+    SD_card_size*=i;
+    for(i=2,j=SD_len;j>1;j--)
+      i<<=1;
+    SD_card_size*=i;
+    return SD_card_size;
+}
+
+
+//向SD卡写数据（单块）        写入的地址             数据长度              要写入的数据
+unsigned char  Write_data(unsigned long address,unsigned  long length ,unsigned char *buffer)
+{ 
+  int check,temp;
+  unsigned long i;
+  check=Set_block_length(length);
+  if(check==SUCCESS)
+  {
+    do
+    { 
+    Sendbyte(0xff);
+    CS_0;
+    Sendcmd(cmd24,address,0xff);
+    }
+   while(getresponse0()!=0x00);
+   Sendbyte(0xff);
+   Sendbyte(0xff);
+   Sendbyte(0xfe);
+   for(i=0;i<length;i++)
+     Sendbyte(*buffer++);
+   Sendbyte(0xff);
+   Sendbyte(0xff);
+   temp =  Sendbyte(0xFF);   //读SD卡运行响应
+   if((temp & 0x1F)!=0x05)             //如果最后4位为0101，为操作成功。否则为操作失败。
+   {
+      CS_1;
+      return(failed); //返回错误
+   }
+   while ( Sendbyte(0xFF) != 0xFF);
+   CS_1;
+   return(SUCCESS);                            //返回成功   
+  }
+  else
+    return(failed);     
+}
+
+
+//
