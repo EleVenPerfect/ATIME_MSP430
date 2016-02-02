@@ -1,10 +1,17 @@
+
+//尚未测试，移植自ATIME51单片机库。
+//尚未测试，移植自ATIME51单片机库。
+//尚未测试，移植自ATIME51单片机库。
+
+
 /************************************
 库功能：FAT文件系统
 库要求：程序已经载入：
-		#include <reg52.h>
-		#include "atime_spi.h"
-		#include "atime_spi_sdcard.h"
-		#include "atime_sd_fat.h"	
+	#include <msp430x14x.h>
+        #include "atime_msp430core.h"		//MSP430核心库
+        #include "atime_spi_s.h"
+        #include "atime_sdcard.h"
+        #include "atime_sd_fat.h"	
 应用函数：
 			unsigned char int_fat(void)
 			unsigned char read_file_start512(unsigned long cluster, unsigned char number)
@@ -12,7 +19,7 @@
 			unsigned char search_file_name( unsigned long cluster, unsigned char name[12])
 修改历史：
 		   	 ‘修改人’       ‘修改内容’  			‘修改时间’
-最后完成时间：2014-04-12
+最后完成时间：尚未测试，移植自ATIME51单片机库。
 作者： ATIME	版权所有
 实例程序：
 例程01：分配单元采用512字节：
