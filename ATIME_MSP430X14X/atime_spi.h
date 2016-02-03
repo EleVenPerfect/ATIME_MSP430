@@ -88,4 +88,18 @@ unsigned char spi2_init(void)
 代码区段：公共函数
 ***************************************/
 
+/************************************
+函数功能：初始化SPI接口
+传递参数：空
+返回值：空
+***************************************/
+void spi_init(void)
+{
+#ifdef SPI1_ON
+    spi1_init();
+#endif
+#ifdef SPI0_ON
+    spi0_init();
+#endif
+}
 #endif
