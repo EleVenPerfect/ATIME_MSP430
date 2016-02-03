@@ -61,7 +61,7 @@ CPOL:时钟信号设置；
 传递参数：空
 返回值：空
 ***************************************/
-unsigned char spi1_init(void)
+unsigned char spi0_init(void)
 {
 
     return(0);                  //设置成功
@@ -78,7 +78,7 @@ unsigned char spi1_init(void)
 传递参数：空
 返回值：空
 ***************************************/
-unsigned char spi2_init(void)
+unsigned char spi1_init(void)
 {
 
     return(0);                  //设置成功
@@ -102,4 +102,48 @@ void spi_init(void)
     spi0_init();
 #endif
 }
+
+
+/************************************
+函数功能：SPI发送数据
+传递参数：
+        num：SPI口号（0,1）；
+        ch ：待发送数据；
+返回值：
+      0xff：错误
+      0：正常
+***************************************/
+unsigned char spi_sendchar( unsigned char ch, unsigned char num)
+{
+    if(num==0)
+    {
+    #ifdef SPI0_ON
+        spi0_sendchar(ch);
+        return (0);
+    #endif
+    }
+    else 
+    if(num==1)
+    {
+    #ifdef SPI1_ON
+        spi1_sendchar(ch);
+        return (0);
+    #endif
+    }
+    return (0xff);
+}
+
+
+/************************************
+函数功能：SPI接收数据
+传递参数：
+        num：SPI口号（0,1）；
+        ch ：待发送数据；
+返回值：
+      0xff：错误
+      0：正常
+***************************************/
+需要判断忙！！！UART也需要！！
+
+
 #endif
