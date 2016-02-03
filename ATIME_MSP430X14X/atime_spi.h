@@ -21,7 +21,23 @@
 /************************************
 库全局变量组
 ***************************************/
+/*SPI串口0设置*/
+#define SPI0_OFF                       //SPI串口0开关（SPI0_ON，SPI0_OFF）
+#define SPI0_BAUD              14400   //波特率设置（）
+#define SPI0_RECEIVE           1       //SPI串口0接收中断使能（1EN，0DIS）
+#define SPI0_SEND              0       //SPI串口0发送中断使能（1EN，0DIS）
+#define SPI0_MODE              1       //SPI模式设置（1~4）
+#define SPI0_PIN               4       //SPI模式设置（3~4）
+#define SPI0_CHAR_LENGTH       8       //数据位位数设置（8,7）
 
+/*SPI串口1设置*/
+#define SPI1_OFF                       //SPI串口1开关（SPI1_ON，SPI1_OFF）
+#define SPI1_BAUD              14400   //波特率设置（）
+#define SPI1_RECEIVE           1       //SPI串口1接收中断使能（1EN，0DIS）
+#define SPI1_SEND              0       //SPI串口1发送中断使能（1EN，0DIS）
+#define SPI1_MODE              0       //SPI模式设置（1~4）
+#define SPI1_PIN               4       //SPI模式设置（3~4）
+#define SPI1_CHAR_LENGTH       8       //数据位位数设置（8,7）
 /************************************
 工作模式说明：
 模式0：CPHA=0;CPOL=0;
@@ -36,218 +52,40 @@ CPOL:时钟信号设置；
      1表示闲时为1.
 ***************************************/
 
- /**************************************
-函数功能：端口初始化
-传递参数：struct spi_s a：端口信息
+/************************************
+代码区段：SPI0相关函数
+***************************************/
+#ifdef SPI0_ON
+/************************************
+函数功能：初始化SPI接口1
+传递参数：空
 返回值：空
 ***************************************/
-void spi_s_init(struct spi_s a)
+unsigned char spi1_init(void)
 {
-    unsigned char *add;
-    
-    add =ioreg_trans(a.cs_p,2);
-    *add |=(0x01<<a.cs_b);//设置PxDIR
-    add =ioreg_trans(a.cs_p,3);
-    *add &=~(0x01<<a.cs_b);//设置PxSEL
-    
-    add =ioreg_trans(a.clk_p,2);
-    *add |=(0x01<<a.clk_b);//设置PxDIR
-    add =ioreg_trans(a.clk_p,3);
-    *add &=~(0x01<<a.clk_b);//设置PxSEL
-    
-    add =ioreg_trans(a.sdo_p,2);
-    *add |=(0x01<<a.sdo_b);//设置PxDIR
-    add =ioreg_trans(a.sdo_p,3);
-    *add &=~(0x01<<a.sdo_b);//设置PxSEL
-    
-    add =ioreg_trans(a.sdi_p,2);
-    *add &=~(0x01<<a.sdi_b);//设置PxDIR
-    add =ioreg_trans(a.sdi_p,3);
-    *add &=~(0x01<<a.sdi_b);//设置PxSEL
-    
-    add =ioreg_trans(a.cs_p,1); //CS  线PxOUT 
-    *add |=(0x01<<a.cs_b);//CS 线置高
-    
-    add =ioreg_trans(a.clk_p,1); //CLK  线PxOUT1 
-    if((a.mode&0x01)==0x00)//CPOL=0，则平时为低电平
-	*add &=~(0x01<<a.clk_b);
-    else
-	*add |=(0x01<<a.clk_b);
+
+    return(0);                  //设置成功
 }
 
-
- /**************************************
-函数功能：高低位互换
-传递参数：待转换字节
-返回值：结果
-***************************************/
-unsigned char transbit( unsigned char x)
-{
-	unsigned char i;
-	i =(x & 0x7e) | ( ( (x&0x80) >> 7 ) | ( (x&0x01) << 7 ) );
-	x =i;
-	i =(x & 0xbd) | ( ( (x&0x40) >> 5 ) | ( (x&0x02) << 5 ) );
-	x =i;
-	i =(x & 0xdb) | ( ( (x&0x20) >> 3 ) | ( (x&0x04) << 3 ) );
-	x =i;		
-	i =(x & 0xe7) | ( ( (x&0x10) >> 1 ) | ( (x&0x08) << 1 ) );
-	x =i;  
-	return x;		
-}
-
+#endif
 
 /************************************
-函数功能：SPI时钟跳变
-传递参数：a:SPI信息
+代码区段：SPI1相关函数
+***************************************/
+#ifdef SPI1_ON
+/************************************
+函数功能：初始化SPI接口2
+传递参数：空
 返回值：空
 ***************************************/
-void spi_s_clk( struct spi_s a)
+unsigned char spi2_init(void)
 {
-    unsigned char *add,var;
-    
-    add =ioreg_trans(a.clk_p,1); //CLK  线PxOUT0
-    var =*add;
-    if(var&(0x01<<a.clk_b))
-	*add &=~(0x01<<a.clk_b);//CLK线下降沿
-    else
-	*add |=(0x01<<a.clk_b);//CLK线上升沿
+
+    return(0);                  //设置成功
 }
+#endif
 /************************************
-函数功能：SPI读线上数据
-传递参数：a:SPI信息
-返回值：空
+代码区段：公共函数
 ***************************************/
-unsigned char spi_s_miso( struct spi_s a)
-{
-    unsigned char i,*add,temp;
-    i =0;
-    add =ioreg_trans(a.sdi_p,0); //SDI  线PxIN0 
-    temp =*add;//读取 SDI 线数据
-    i |=((temp>>a.sdi_b)&0x01);
-
-    return (i);
-}
-/************************************
-函数功能：SPI写线上数据
-传递参数：a:SPI信息
-返回值：空
-***************************************/
-void spi_s_mosi( struct spi_s a, unsigned char data)
-{
-    unsigned char *add;
-	
-    add =ioreg_trans(a.sdo_p,1);//SDO 线PxOUT
-    if(data&0x80)
-	*add |=(0x01<<a.sdo_b);//SDO线上数据
-    else
-	*add &=~(0x01<<a.sdo_b);//SDO线上数据
-}
-/************************************
-函数功能：SPI写数据
-传递参数：a:SPI信息；data：数据；
-返回值：sdi读取的结果
-***************************************/
-unsigned char spi_s_write( struct spi_s a, unsigned char data)
-{
-    unsigned char *add,j,i,temp;
-    
-    add =ioreg_trans(a.cs_p,1); //CS  线PxOUT 
-    *add |=(0x01<<a.cs_b);
-    wait_5us(a.wait);
-    *add &=~(0x01<<a.cs_b);
-    wait_5us(a.wait);
-    add =ioreg_trans(a.clk_p,1); //CLK  线PxOUT1 
-    if((a.mode&0x01)==0x00)//CPOL=0，则平时为低电平
-	*add &=~(0x01<<a.clk_b);
-    else
-	*add |=(0x01<<a.clk_b);
-    wait_5us(a.wait);
-    i =0;
-    temp =data;
-    for( j=0; j<8; j++)
-    {
-        if((a.mode&0x02)==0x02)
-        {
-            spi_s_clk(a);
-            wait_5us(a.wait);
-            spi_s_mosi(a,temp);
-            wait_5us(a.wait);
-            temp<<=1;
-            spi_s_clk(a);
-            wait_5us(a.wait);
-            i<<=1;
-            i |=spi_s_miso(a);
-            wait_5us(a.wait);
-        }
-        else
-        {
-            spi_s_mosi(a,temp);
-            wait_5us(a.wait);
-            temp<<=1;
-            spi_s_clk(a);
-            wait_5us(a.wait);
-            i<<=1;
-            i |=spi_s_miso(a);
-            wait_5us(a.wait);
-            spi_s_clk(a);
-            wait_5us(a.wait);
-        }
-    }
-    add =ioreg_trans(a.cs_p,1); //CS  线PxOUT 
-    *add |=(0x01<<a.cs_b);
-    return (i);
-}
-
-
-/************************************
-函数功能：SPI读数据
-传递参数：a:SPI信息
-返回值：读取的结果
-***************************************/
-unsigned char spi_s_read( struct spi_s a)
-{
-    unsigned char *add,j,i;
-    
-    add =ioreg_trans(a.cs_p,1); //CS  线PxOUT 
-    *add |=(0x01<<a.cs_b);
-    wait_5us(a.wait);
-    *add &=~(0x01<<a.cs_b);
-    wait_5us(a.wait);
-    add =ioreg_trans(a.clk_p,1); //CLK  线PxOUT1 
-    if((a.mode&0x01)==0x00)//CPOL=0，则平时为低电平
-	*add &=~(0x01<<a.clk_b);
-    else
-	*add |=(0x01<<a.clk_b);
-    wait_5us(a.wait);
-    i =0;
-    for( j=0; j<8; j++)
-    {
-        if((a.mode&0x02)==0x02)
-        {
-            spi_s_clk(a);
-            wait_5us(a.wait);
-            spi_s_clk(a);
-            wait_5us(a.wait);
-            i<<=1;
-            i |=spi_s_miso(a);
-            wait_5us(a.wait);
-        }
-        else
-        {
-            spi_s_clk(a);
-            wait_5us(a.wait);
-            i<<=1;
-            i |=spi_s_miso(a);
-            wait_5us(a.wait);
-            spi_s_clk(a);
-            wait_5us(a.wait);
-        }
-    }
-    add =ioreg_trans(a.cs_p,1); //CS  线PxOUT 
-    *add |=(0x01<<a.cs_b);
-    return (i);
-}
-
-
 
 #endif
