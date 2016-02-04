@@ -16,12 +16,13 @@
 2.Warning[Pe223]: function "uart0_sendchar" declared implicitly 
 解决：函数库载入顺序错误，需要将被调用的函数库放在这个控制库前面载入。
 ***************************************/
-
+#ifndef _MSP430_INTERRUPT_H_
+#define _MSP430_INTERRUPT_H_
 /************************************
 函数功能：串口0接收中断服务函数
 ***************************************/
 #pragma vector=UART0RX_VECTOR
-__interrupt void UART0_RX_ISR(void)
+__interrupt void USART0_RX_ISR(void)
 {
 
 }
@@ -31,7 +32,7 @@ __interrupt void UART0_RX_ISR(void)
 函数功能：串口0发送中断服务函数
 ***************************************/
 #pragma vector=UART0TX_VECTOR
-__interrupt void UART0_TX_ISR(void)
+__interrupt void USART0_TX_ISR(void)
 {
 
 }
@@ -41,7 +42,7 @@ __interrupt void UART0_TX_ISR(void)
 函数功能：串口1接收中断服务函数
 ***************************************/
 #pragma vector=UART1RX_VECTOR
-__interrupt void UART1_RX_ISR(void)
+__interrupt void USART1_RX_ISR(void)
 {
 
 }
@@ -51,7 +52,7 @@ __interrupt void UART1_RX_ISR(void)
 函数功能：串口1发送中断服务函数
 ***************************************/
 #pragma vector=UART1TX_VECTOR
-__interrupt void UART1_TX_ISR(void)
+__interrupt void USART1_TX_ISR(void)
 {
 
 }
@@ -65,3 +66,4 @@ __interrupt void ADC_12_ISR(void)
 {
 
 }
+#endif
