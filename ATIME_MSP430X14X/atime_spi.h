@@ -4,9 +4,11 @@
         #include <msp430x14x.h>
         #include "atime_msp430core.h"
 应用函数：
+        spi_init(void)
+        spi_trans( unsigned char ch, unsigned char num)
 修改历史：
-		   	 ‘修改人’   ‘修改内容’  ‘修改时间’
-				空			空			空
+	‘修改人’   ‘修改内容’  ‘修改时间’
+	  空          空	  空
 最后修改时间：2016-01-31，尚未测试
 作者： ATIME	版权所有
 实例程序：
