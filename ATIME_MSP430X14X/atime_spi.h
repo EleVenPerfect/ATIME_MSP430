@@ -61,7 +61,8 @@ CPOL:时钟信号设置；
 ***************************************/
 unsigned char spi0_init(void)
 {	
-	U0CTL |=SWRST;                 //初始
+	P3SEL |=0x0e;
+        U0CTL |=SWRST;                 //初始
 	U0CTL &=0x01;
 	U0CTL |=MM+SYNC;
 	#if SPI0_CHAR_LENGTH==8
@@ -125,7 +126,8 @@ unsigned char spi0_trans(unsigned char a)
 ***************************************/
 unsigned char spi1_init(void)
 {
-	U1CTL |=SWRST;                 //初始
+	P5SEL |=0x0e;
+        U1CTL |=SWRST;                 //初始
 	U1CTL &=0x01;
 	U1CTL |=MM+SYNC;
 	#if SPI1_CHAR_LENGTH==8
