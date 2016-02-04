@@ -15,7 +15,28 @@
 最后修改时间：2016-02-04
 作者： ATIME	版权所有
 实例程序：
-常见错误解释：
+      #include <msp430x14x.h>
+      #include "atime_msp430core.h"		//MSP430核心库
+      #include "atime_lcd5110_printf.h"
+
+      void main(void)
+      {
+          int x =1993;
+          float y =3.1415;
+          
+          watchdog_close();			//关闭看门狗
+          basic_clock_init();			//系统时钟初始化
+          lcd5110_init();                     //液晶屏幕初始化
+
+          printf("The number is:%d;and:%f\n",x,y);
+          printf("Float:%f",y);
+          printf("\nPower By ATIME");
+          
+          while(1);
+      }
+
+说明：写完一个字符光标自动加一，自动换行，最后一行写完后光标自动回到第一行。
+      本行写完之后，光标自动换到下一行第一列。
 *************************************/
 
 #ifndef _ATIME_MSP430_LCD5110_PRINTF_H_ 
@@ -52,8 +73,6 @@ int putchar_5110(int ch)
 {
     if(ch=='\n')
     {
-        if(lcd5110_x ==16)
-            return ch;
         lcd5110_y++;
         lcd5110_x =0;
         //lcd5110_clear_row(lcd5110_y);
@@ -92,7 +111,7 @@ int putchar(int ch)
 传递参数：y：纵坐标
           x：横坐标
 返回值：空
-注：本函数为了初始化液晶坐标位置或重设坐标
+注：本函数为了校准坐标
 ***************************************/
 void printf_setadd( unsigned char y, unsigned char x)
 {
