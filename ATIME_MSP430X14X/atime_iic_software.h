@@ -38,8 +38,7 @@ or stop condition as defined below.
 ***************************************/
 void iic_init_s()
 {
-    PxyDIRz(SCL_PORT,SCL_BIT,0);
-    PxyDIRz(SDA_PORT,SDA_BIT,0);
+    
     
     PxySELz(SCL_PORT,SCL_BIT,0);
     PxySELz(SDA_PORT,SDA_BIT,0);
@@ -53,7 +52,16 @@ void iic_init_s()
 ***************************************/
 void iic_start_s()
 {
+    PxyDIRz(SCL_PORT,SCL_BIT,1);
+    PxyDIRz(SDA_PORT,SDA_BIT,1);
     
+    PxyOUTz(SCL_PORT,SCL_BIT,1);
+    PxyOUTz(SDA_PORT,SDA_BIT,1);
+    delay_us(10);
+    
+    PxyOUTz(SDA_PORT,SDA_BIT,0);
+    delay_us(10);
+    PxyOUTz(SCL_PORT,SCL_BIT,0);
 }
 
 /************************************
@@ -63,18 +71,49 @@ void iic_start_s()
 ***************************************/
 void iic_stop_s()
 {
-    
+    PxyDIRz(SCL_PORT,SCL_BIT,1);
+    PxyDIRz(SDA_PORT,SDA_BIT,1);
+    delay_us(8);
+    PxyOUTz(SCL_PORT,SCL_BIT,1);
+    PxyOUTz(SDA_PORT,SDA_BIT,0);
+    PxyOUTz(SDA_PORT,SDA_BIT,1);
 }
 
 
 /************************************
-函数功能：IIC接口ACKNOWLEDGE
+函数功能：IIC接口接收ACKNOWLEDGE
 传递参数：空
 返回值：空
 ***************************************/
-void iic_ack_s()
+unsigned char iic_getack_s()
 {
+    unsigned char ack=1;
+    PxyDIRz(SCL_PORT,SCL_BIT,1);
+    PxyDIRz(SDA_PORT,SDA_BIT,0);
     
+    PxyOUTz(SCL_PORT,SCL_BIT,0);
+    delay_us(3);
+    PxyOUTz(SCL_PORT,SCL_BIT,1);
+    delay_us(3);
+    ack =PxyINz(SCL_PORT,SCL_BIT);
+    PxyOUTz(SCL_PORT,SCL_BIT,0);
+    return ack;
+}
+/************************************
+函数功能：IIC接口发送ACKNOWLEDGE
+传递参数：空
+返回值：空
+***************************************/
+void iic_setack_s()
+{
+    PxyDIRz(SCL_PORT,SCL_BIT,1);
+    PxyDIRz(SDA_PORT,SDA_BIT,1);
+    
+    PxyOUTz(SCL_PORT,SCL_BIT,0);
+    PxyOUTz(SDA_PORT,SDA_BIT,0);
+    PxyOUTz(SCL_PORT,SCL_BIT,1);
+    PxyOUTz(SCL_PORT,SCL_BIT,0);
+    PxyOUTz(SDA_PORT,SDA_BIT,0);
 }
 
 /************************************
@@ -84,7 +123,21 @@ void iic_ack_s()
 ***************************************/
 void iic_readchar_s()
 {
-    
+    unsigned char i,data,temp=0;
+    PxyDIRz(SCL_PORT,SCL_BIT,1);
+    PxyDIRz(SDA_PORT,SDA_BIT,0);
+    for( i=0; i<8; i++)
+    {
+        PxyOUTz(SCL_PORT,SCL_BIT,1);
+        data <<=1;
+        temp =PxyINz(SCL_PORT,SCL_BIT);
+        if(temp)
+            data |=0x01;
+        else
+            data &=~(0x01);
+        PxyOUTz(SCL_PORT,SCL_BIT,0);
+        delay_us(10);
+    }
 }
 
 
@@ -93,9 +146,23 @@ void iic_readchar_s()
 传递参数：空
 返回值：空
 ***************************************/
-void iic_writechar_s()
+void iic_writechar_s(unsigned char data)
 {
+    unsigned char i;
+    PxyDIRz(SCL_PORT,SCL_BIT,1);
+    PxyDIRz(SDA_PORT,SDA_BIT,1);
     
+    for( i=0; i<8; i++)
+    {
+        if(data&0x80)
+            PxyOUTz(SDA_PORT,SDA_BIT,1);
+        else
+            PxyOUTz(SDA_PORT,SDA_BIT,0);
+        PxyOUTz(SCL_PORT,SCL_BIT,1);
+        delay_us(20);
+        PxyOUTz(SCL_PORT,SCL_BIT,0);
+        delay_us(15);
+    }
 }
 
 
