@@ -48,10 +48,10 @@ void iic_start_s()
     
     PxyOUTz(SCL_PORT,SCL_BIT,1);
     PxyOUTz(SDA_PORT,SDA_BIT,1);
-    delay_us(10);
+    delay_us(50);
     
     PxyOUTz(SDA_PORT,SDA_BIT,0);
-    delay_us(10);
+    delay_us(50);
     PxyOUTz(SCL_PORT,SCL_BIT,0);
     delay_us(10);
 }
@@ -65,10 +65,12 @@ void iic_stop_s()
 {
     PxyDIRz(SCL_PORT,SCL_BIT,1);
     PxyDIRz(SDA_PORT,SDA_BIT,1);
-    delay_us(8);
+    delay_us(15);
     PxyOUTz(SCL_PORT,SCL_BIT,1);
     PxyOUTz(SDA_PORT,SDA_BIT,0);
+	delay_us(15);
     PxyOUTz(SDA_PORT,SDA_BIT,1);
+	delay_us(15);
 }
 
 
@@ -84,10 +86,10 @@ unsigned char iic_getack_s()
     PxyDIRz(SDA_PORT,SDA_BIT,0);
     
     PxyOUTz(SCL_PORT,SCL_BIT,0);
-    delay_us(3);
+    delay_us(10);
     PxyOUTz(SCL_PORT,SCL_BIT,1);
-    delay_us(3);
-    ack =PxyINz(SCL_PORT,SCL_BIT);
+    delay_us(10);
+    ack =PxyINz(SDA_PORT,SDA_BIT);
     PxyOUTz(SCL_PORT,SCL_BIT,0);
     return ack;
 }
@@ -103,9 +105,12 @@ void iic_setack_s()
     
     PxyOUTz(SCL_PORT,SCL_BIT,0);
     PxyOUTz(SDA_PORT,SDA_BIT,0);
+	delay_us(10);
     PxyOUTz(SCL_PORT,SCL_BIT,1);
+	delay_us(30);
     PxyOUTz(SCL_PORT,SCL_BIT,0);
     PxyOUTz(SDA_PORT,SDA_BIT,0);
+	delay_us(10);
 }
 
 /************************************
@@ -116,14 +121,15 @@ void iic_setack_s()
 ***************************************/
 unsigned char iic_readbyte_s()
 {
-    unsigned char i,data,temp=0;
+    unsigned char i,data=0,temp;
     PxyDIRz(SCL_PORT,SCL_BIT,1);
     PxyDIRz(SDA_PORT,SDA_BIT,0);
     for( i=0; i<8; i++)
     {
         PxyOUTz(SCL_PORT,SCL_BIT,1);
+		delay_us(20);
         data <<=1;
-        temp =PxyINz(SCL_PORT,SCL_BIT);
+        temp =PxyINz(SDA_PORT,SDA_BIT);
         if(temp)
             data |=0x01;
         else
@@ -153,10 +159,12 @@ void iic_writebyte_s(unsigned char data)
             PxyOUTz(SDA_PORT,SDA_BIT,1);
         else
             PxyOUTz(SDA_PORT,SDA_BIT,0);
+		delay_us(20);
         PxyOUTz(SCL_PORT,SCL_BIT,1);
-        delay_us(20);
+        delay_us(40);
         PxyOUTz(SCL_PORT,SCL_BIT,0);
         delay_us(15);
+		data <<=1;
     }
 }
 
@@ -171,10 +179,13 @@ void iic_write(unsigned char data[],unsigned char n)
     unsigned char i;
     iic_start_s();
     data[0] &=~0x01;
+    //delay_us(30);
     for( i=0; i<n; i++)
     {
         iic_writebyte_s(data[i]);  
+        //delay_us(30);
         iic_getack_s();
+        //delay_us(30);
     }
     iic_stop_s();
 }
@@ -198,7 +209,8 @@ void iic_read(unsigned char wdata[],unsigned char wn,unsigned char rdata[],unsig
     }
     iic_start_s();
     wdata[0] |=0x01;
-    iic_writebyte_s(wdata[0]);  
+    iic_writebyte_s(wdata[0]);
+    iic_getack_s();	
     for( i=0; i<rn-1; i++)
     {
         rdata[i] =iic_readbyte_s();
