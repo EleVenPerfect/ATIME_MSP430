@@ -55,15 +55,15 @@ Error[Pe011]: unrecognized preprocessing directive:检查#include拼写。
 库全局变量组
 *************************************/
 #define LCD5110_RST_PORT        4       //定义RST位端口
-#define LCD5110_RST_BIT         0       //定义RST位引脚
+#define LCD5110_RST_BIT         1       //定义RST位引脚
 #define LCD5110_CE_PORT         4       //定义CE位端口
-#define LCD5110_CE_BIT          1       //定义CE位引脚
-#define LCD5110_DC_PORT         4       //定义DC位端口
-#define LCD5110_DC_BIT          2       //定义DC位引脚
-#define LCD5110_DIN_PORT        4       //定义DIN位端口
-#define LCD5110_DIN_BIT         3       //定义DIN位引脚
-#define LCD5110_CLK_PORT        4       //定义CLK位端口
-#define LCD5110_CLK_BIT         4       //定义CLK位引脚
+#define LCD5110_CE_BIT          0       //定义CE位引脚
+#define LCD5110_DC_PORT         5       //定义DC位端口
+#define LCD5110_DC_BIT          7       //定义DC位引脚
+#define LCD5110_DIN_PORT        5       //定义DIN位端口
+#define LCD5110_DIN_BIT         6       //定义DIN位引脚
+#define LCD5110_CLK_PORT        5       //定义CLK位端口
+#define LCD5110_CLK_BIT         5       //定义CLK位引脚
 
 #define LCD5110_CONTRAST        4       //设置液晶对比度（0~7）数字越小越黑
 
