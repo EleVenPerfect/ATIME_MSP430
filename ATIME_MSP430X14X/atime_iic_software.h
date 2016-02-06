@@ -70,7 +70,7 @@ void iic_stop_s()
     PxyOUTz(SDA_PORT,SDA_BIT,0);
 	delay_us(15);
     PxyOUTz(SDA_PORT,SDA_BIT,1);
-	delay_us(15);
+	delay_us(30);
 }
 
 
@@ -127,7 +127,7 @@ unsigned char iic_readbyte_s()
     for( i=0; i<8; i++)
     {
         PxyOUTz(SCL_PORT,SCL_BIT,1);
-		delay_us(20);
+	delay_us(20);
         data <<=1;
         temp =PxyINz(SDA_PORT,SDA_BIT);
         if(temp)
@@ -164,7 +164,8 @@ void iic_writebyte_s(unsigned char data)
         delay_us(40);
         PxyOUTz(SCL_PORT,SCL_BIT,0);
         delay_us(15);
-		data <<=1;
+        data <<=1;
+        PxyOUTz(SDA_PORT,SDA_BIT,0);
     }
 }
 
@@ -192,7 +193,7 @@ void iic_write(unsigned char data[],unsigned char n)
 
 
 /************************************
-函数功能：IIC接口写n字节
+函数功能：IIC接口读n字节
 传递参数：data[]：数据；n：数据个数
 返回值：空
 注：发送数据高位先发送
