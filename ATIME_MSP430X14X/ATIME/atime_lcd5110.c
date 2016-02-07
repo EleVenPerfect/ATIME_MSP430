@@ -5,7 +5,7 @@
         #include "atime_msp430core.h"
         #include "ascii_8_6.h"//ASCII字库
 应用函数：
-        lcd5110_port_init(void)
+        lcd5110_init(void)
         print5110( unsigned char d[], unsigned char y, unsigned char x)
         printchar5110( unsigned char d, unsigned char y, unsigned char x)
 修改历史：

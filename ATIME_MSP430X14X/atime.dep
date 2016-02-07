@@ -48,8 +48,20 @@
       <file>$PROJ_DIR$\ATIME\ascii_8_6.h</file>
       <file>$PROJ_DIR$\ATIME\atime_msp430core.h</file>
       <file>$PROJ_DIR$\ATIME\atime_uart.h</file>
+      <file>$PROJ_DIR$\ATIME\atime_adc12.h</file>
       <file>$PROJ_DIR$\TAPwm.h</file>
+      <file>$PROJ_DIR$\ATIME\atime_adc12.c</file>
+      <file>$PROJ_DIR$\ATIME\atime_timer_b.c</file>
       <file>$TOOLKIT_DIR$\inc\msp430x16x.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_lcd5110.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_lcd5110_printf.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_interrupt.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_msp430core.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_interrupt.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_lcd5110.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_msp430core.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_lcd5110_printf.pbi</file>
+      <file>$PROJ_DIR$\ATIME\atime_timer_a.c</file>
     </outputs>
     <file>
       <name>[ROOT_NODE]</name>
@@ -79,11 +91,11 @@
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 26 27 5 40 37</file>
+          <file> 26 27 5 40 37 33 34 39 35 14 11 13 0 28 15 25 12 7 21 36 55 23</file>
         </tool>
         <tool>
           <name>ICC430</name>
-          <file> 26 27 5</file>
+          <file> 26 27 5 40 37 33 34 39 35 14 11 13 0 28 15 25 12 7 21 36 55 23</file>
         </tool>
       </inputs>
     </file>
@@ -103,6 +115,19 @@
       </inputs>
     </file>
     <file>
+      <name>$PROJ_DIR$\atime_interrupt.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 51</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 49</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
       <name>$PROJ_DIR$\TAPwm.c</name>
       <outputs>
         <tool>
@@ -117,18 +142,69 @@
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 43 27 5 42</file>
+          <file> 46 27 5 43</file>
         </tool>
         <tool>
           <name>ICC430</name>
-          <file> 43 27 5 42</file>
+          <file> 46 27 5 43</file>
         </tool>
       </inputs>
     </file>
-    <forcedrebuild>
-      <name>$PROJ_DIR$\atime_main.c</name>
-      <tool>ICC430</tool>
-    </forcedrebuild>
+    <file>
+      <name>$PROJ_DIR$\ATIME\atime_lcd5110.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 52</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 47</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 39</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 39</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\ATIME\atime_lcd5110_printf.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 54</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 48</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 34 39 35 14 11 13 0 28 15 25 12 7 21</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 34 39 35 14 11 13 0 28 15 25 12 7 21</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\ATIME\atime_msp430core.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 53</file>
+        </tool>
+      </outputs>
+    </file>
   </configuration>
   <configuration>
     <name>Release</name>
