@@ -48,14 +48,7 @@ Temporary Items
 
 
 #atime MSP430 develop
-*.dep
-*.ewd
-*.eww
-*.ewp
-*.beta.h
 Debug
 Release
 settings
 待调试
-ATIME_MSP430X14X/atime_main.c
-ATIME_MSP430X14X/interrupt.c
