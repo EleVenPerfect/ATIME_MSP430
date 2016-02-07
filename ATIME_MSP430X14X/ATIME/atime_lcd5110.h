@@ -51,21 +51,7 @@ Error[Pe011]: unrecognized preprocessing directive:检查#include拼写。
 #include "ascii_8_6.h"
 #endif
 
-/*************************************
-库全局变量组
-*************************************/
-#define LCD5110_RST_PORT        4       //定义RST位端口
-#define LCD5110_RST_BIT         1       //定义RST位引脚
-#define LCD5110_CE_PORT         4       //定义CE位端口
-#define LCD5110_CE_BIT          0       //定义CE位引脚
-#define LCD5110_DC_PORT         5       //定义DC位端口
-#define LCD5110_DC_BIT          7       //定义DC位引脚
-#define LCD5110_DIN_PORT        5       //定义DIN位端口
-#define LCD5110_DIN_BIT         6       //定义DIN位引脚
-#define LCD5110_CLK_PORT        5       //定义CLK位端口
-#define LCD5110_CLK_BIT         5       //定义CLK位引脚
-
-#define LCD5110_CONTRAST        4       //设置液晶对比度（0~7）数字越小越黑
+#include "atime_lcd5110.c"
 
 
 /************************************
@@ -75,32 +61,7 @@ Error[Pe011]: unrecognized preprocessing directive:检查#include拼写。
         cmd：1数据，0指令；
 返回值：空
 ***************************************/
-void lcd5110_send_byte(unsigned char dat, unsigned char cmd)
-{
-    unsigned char i;
-    PxyOUTz(LCD5110_CE_PORT,LCD5110_CE_BIT,0);
-    if(cmd==0)                                          //1数据，0指令
-        PxyOUTz(LCD5110_DC_PORT,LCD5110_DC_BIT,0);
-    else
-        PxyOUTz(LCD5110_DC_PORT,LCD5110_DC_BIT,1);
-    for( i=8; i; i--)                                   //8位数据, 先高后低
-    {
-        if(dat&0x80)
-        {
-            PxyOUTz(LCD5110_DIN_PORT,LCD5110_DIN_BIT,1);
-        }
-        else
-        {
-            PxyOUTz(LCD5110_DIN_PORT,LCD5110_DIN_BIT,0);
-        }
-        PxyOUTz(LCD5110_CLK_PORT,LCD5110_CLK_BIT,0);
-        dat <<=1;
-        PxyOUTz(LCD5110_CLK_PORT,LCD5110_CLK_BIT,1);
-    }
-    PxyOUTz(LCD5110_CE_PORT,LCD5110_CE_BIT,1);          //保持CE线为0，让数据在显示屏上也保持
-    PxyOUTz(LCD5110_CE_PORT,LCD5110_CE_BIT,0); 
-    PxyOUTz(LCD5110_DC_PORT,LCD5110_DC_BIT,1);
-}
+void lcd5110_send_byte(unsigned char dat, unsigned char cmd);
 
 
 /************************************
@@ -108,11 +69,7 @@ void lcd5110_send_byte(unsigned char dat, unsigned char cmd)
 传递参数：空
 返回值：空
 ***************************************/
-void lcd5110_add( unsigned char y, unsigned char x)
-{
-    lcd5110_send_byte( 0x80|x, 0);
-    lcd5110_send_byte( 0x40|y, 0);
-}
+void lcd5110_add( unsigned char y, unsigned char x);
 
 
 /************************************
@@ -121,20 +78,7 @@ void lcd5110_add( unsigned char y, unsigned char x)
 传递参数：空
 返回值：空
 ***************************************/
-void lcd5110_port_init(void)
-{
-    PxyDIRz(LCD5110_RST_PORT,LCD5110_RST_BIT,1);
-    PxyDIRz(LCD5110_CE_PORT,LCD5110_CE_BIT,1);
-    PxyDIRz(LCD5110_DC_PORT,LCD5110_DC_BIT,1);
-    PxyDIRz(LCD5110_DIN_PORT,LCD5110_DIN_BIT,1);
-    PxyDIRz(LCD5110_CLK_PORT,LCD5110_CLK_BIT,1);
-
-    PxySELz(LCD5110_RST_PORT,LCD5110_RST_BIT,0);
-    PxySELz(LCD5110_DC_PORT,LCD5110_DC_BIT,0);
-    PxySELz(LCD5110_CE_PORT,LCD5110_CE_BIT,0);
-    PxySELz(LCD5110_DIN_PORT,LCD5110_DIN_BIT,0);
-    PxySELz(LCD5110_CLK_PORT,LCD5110_CLK_BIT,0);
-}
+void lcd5110_port_init(void);
 
 
 /************************************
@@ -142,16 +86,7 @@ void lcd5110_port_init(void)
 传递参数：空
 返回值：空
 ***************************************/
-void lcd5110_clear_all(void)
-{
-    unsigned int i;
-	
-    lcd5110_send_byte( 0x80, 0);
-    lcd5110_send_byte( 0x40, 0);
-	
-    for( i=504; i; i--)
-        lcd5110_send_byte( 0x00, 1);
-}
+void lcd5110_clear_all(void);
 
 
 /************************************
@@ -159,15 +94,7 @@ void lcd5110_clear_all(void)
 传递参数：a：行号（0~5）
 返回值：空
 ***************************************/
-void lcd5110_clear_row(unsigned char a)
-{
-    unsigned int i;
-	
-    lcd5110_add( a, 0);
-	
-    for( i =84; i; i--)
-       lcd5110_send_byte( 0x00, 1);
-}
+void lcd5110_clear_row(unsigned char a);
 
 
 /************************************
@@ -175,24 +102,7 @@ void lcd5110_clear_row(unsigned char a)
 传递参数：空
 返回值：空
 ***************************************/
-void lcd5110_init(void)
-{
-    lcd5110_port_init();
-    PxyOUTz(LCD5110_RST_PORT,LCD5110_RST_BIT,0);
-    PxyOUTz(LCD5110_RST_PORT,LCD5110_RST_BIT,1);        //复位
-    
-    lcd5110_send_byte( 0x21, 0);                        //设置水平寻址，扩展指令集
-    lcd5110_send_byte( 0x06, 0);                        //设置温度系数2
-    lcd5110_send_byte((0x10|(7-(unsigned char)LCD5110_CONTRAST)), 0);  //设置偏置系统1:48
-    lcd5110_send_byte( 0xc8, 0);                        //设置电压VLCD = 3.06 + 0.06*Vop,对比度调整
-    lcd5110_send_byte( 0x20, 0);		        //工作模式,水平寻址基本指令      
-    lcd5110_send_byte( 0x0c, 0);                        //设置LCD普通模式
-
-    lcd5110_send_byte( 0x40, 0);                        //设置起始x地址
-    lcd5110_send_byte( 0x80, 0);                        //设置起始y地址
-
-    lcd5110_clear_all();
-}
+void lcd5110_init(void);
 
 
 /************************************
@@ -203,14 +113,7 @@ void lcd5110_init(void)
         x  ：横坐标（0~83）
 返回值：空
 ***************************************/
-void printchar5110( unsigned char d, unsigned char y, unsigned char x)
-{
-    unsigned char i;
-    d -=32;                         //前32个字符未取用
-    lcd5110_add( y, x);
-    for( i=0; i<=5; i++) 
-        lcd5110_send_byte(ascii_8_6[d][i],1);
-}
+void printchar5110( unsigned char d, unsigned char y, unsigned char x);
 
 
 /************************************
@@ -221,17 +124,7 @@ void printchar5110( unsigned char d, unsigned char y, unsigned char x)
         x  ：横坐标（0~83）
 返回值：空
 ***************************************/
-void print5110( unsigned char d[], unsigned char y, unsigned char x)
-{
-    unsigned char i,j;
-    
-    lcd5110_add( y, x);
-    for( j=0;d[j]!='\0';j++)
-    {
-        for( i=0; i<=5; i++) 
-            lcd5110_send_byte(ascii_8_6[d[j]-32][i],1);
-    }                    //前32个字符未取用
-}
+void print5110( unsigned char d[], unsigned char y, unsigned char x);
 
 
 

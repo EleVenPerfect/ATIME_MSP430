@@ -40,23 +40,29 @@
       因字库限制目前只支持ASCII码（32~127）内的字符，不支持中文。
 *************************************/
 
-#ifndef _ATIME_MSP430_LCD5110_PRINTF_H_ 
-#define _ATIME_MSP430_LCD5110_PRINTF_H_
+#ifndef _ATIME_MSP430_LCD5110_PRINTF_C_ 
+#define _ATIME_MSP430_LCD5110_PRINTF_C_
 
 #ifndef _ATIME_MSP430_LCD5110_H_ 
 #include "atime_lcd5110.h"
 #endif
 
 #include <stdio.h>
-#include "atime_lcd5110_printf.c"
-
+/*************************************
+库全局变量组
+*************************************/
+unsigned char lcd5110_x =0;
+unsigned char lcd5110_y =0;
 
 /************************************
 函数功能：串口写入数据
 传递参数：空
 返回值：空
 ***************************************/
-int putchar_uart(int ch);
+int putchar_uart(int ch)
+{
+    return ch;
+}
 
 
 /************************************
@@ -64,7 +70,28 @@ int putchar_uart(int ch);
 传递参数：空
 返回值：空
 ***************************************/
-int putchar_5110(int ch);
+int putchar_5110(int ch)
+{
+    if(ch=='\n')
+    {
+        lcd5110_y++;
+        lcd5110_x =0;
+        //lcd5110_clear_row(lcd5110_y);
+        return ch;
+    }
+    printchar5110( (unsigned char)ch, lcd5110_y, lcd5110_x*6);
+    lcd5110_x++;
+    if(lcd5110_x==14)
+    {
+        lcd5110_x =0;
+        lcd5110_y++;
+        if(lcd5110_y==6)
+            lcd5110_y =0;
+        //lcd5110_clear_row(lcd5110_y);
+    }
+
+    return ch;
+}
 
 
 /************************************
@@ -72,7 +99,12 @@ int putchar_5110(int ch);
 传递参数：空
 返回值：空
 ***************************************/
-int putchar(int ch);
+int putchar(int ch)
+{
+    putchar_uart(ch);
+    putchar_5110(ch);
+    return ch;
+}
 
 
 /************************************
@@ -82,8 +114,10 @@ int putchar(int ch);
 返回值：空
 注：本函数为了校准坐标
 ***************************************/
-void printf_setadd( unsigned char y, unsigned char x);
-
-
+void printf_setadd( unsigned char y, unsigned char x)
+{
+    lcd5110_x =x;
+    lcd5110_y =y;
+}
 
 #endif

@@ -33,63 +33,7 @@
 #ifndef _ATIME_MSP430_CORE_H_ 
 #define _ATIME_MSP430_CORE_H_
 
-
-/*************************************
-库全局变量组
-*************************************/
-#define XIN   ((double)32768)        //外部低频晶振32.768KHZ
-#define XT2IN ((double)8000000)      //外部高频晶振8MHZ
-#define MSP430_DIVM 1                //MCLK分频比
-#define MSP430_DIVS 8                //SMCLK分频比
-
-enum msp430_switch { on, off};       //枚举逻辑
-
-
-/*************************************
-I/O接口设置组，切勿修改！
-*************************************/
-#define PxIN(x)         PxINTEMP(x)
-#define PxINTEMP(x)     P##x##IN
-#define PxOUT(x)        PxOUTTEMP(x)
-#define PxOUTTEMP(x)    P##x##OUT
-#define PxDIR(x)        PxDIRTEMP(x)
-#define PxDIRTEMP(x)    P##x##DIR
-#define PxSEL(x)        PxSELTEMP(x)
-#define PxSELTEMP(x)    P##x##SEL
-
-#define PxIFG(x)        PxIFGTEMP(x)
-#define PxIFGTEMP(x)    P##x##IFG
-#define PxIES(x)        PxIESTEMP(x)
-#define PxIESTEMP(x)    P##x##IES
-#define PxIE(x)         PxIETEMP(x)
-#define PxIETEMP(x)     P##x##IE
-
-
-#define PxyOUTz(x,y,z)        PxyOUTzTEMP(x,y,z)
-#define PxyOUTzTEMP(x,y,z)    (z>0)?((P##x##OUT)|=(0x01<<y)) :((P##x##OUT) &=(~(0x01<<y)))
-#define PxyDIRz(x,y,z)        PxyDIRzTEMP(x,y,z)
-#define PxyDIRzTEMP(x,y,z)    (z>0)?((P##x##DIR)|=(0x01<<y)) :((P##x##DIR) &=(~(0x01<<y)))
-#define PxySELz(x,y,z)        PxySELzTEMP(x,y,z)
-#define PxySELzTEMP(x,y,z)    (z>0)?((P##x##SEL)|=(0x01<<y)) :((P##x##SEL) &=(~(0x01<<y)))
-
-#define PxyIFGz(x,y,z)        PxyIFGzTEMP(x,y,z)
-#define PxyIFGzTEMP(x,y,z)    (z>0)?((P##x##IFG)|=(0x01<<y)) :((P##x##IFG) &=(~(0x01<<y)))
-#define PxyIESz(x,y,z)        PxyIESzTEMP(x,y,z)
-#define PxyIESzTEMP(x,y,z)    (z>0)?((P##x##IES)|=(0x01<<y)) :((P##x##IES) &=(~(0x01<<y)))
-#define PxyIEz(x,y,z)         PxyIEzTEMP(x,y,z)
-#define PxyIEzTEMP(x,y,z)     (z>0)?((P##x##IE)|=(0x01<<y)) :((P##x##IE) &=(~(0x01<<y)))
-
-#define PxyINz(x,y)           PxyINzTEMP(x,y)
-#define PxyINzTEMP(x,y)       (P##x##IN)&(0x01<<y)
-
-
-/*************************************
-函数功能：准确延时函数
-传递参数：x
-返回值：空
-*************************************/
-#define delay_us(x) __delay_cycles((long)(XT2IN*(double)x/1000000.0)) 
-#define delay_ms(x) __delay_cycles((long)(XT2IN*(double)x/1000.0)) 
+#include "atime_msp430core.c"
 
 
 /*************************************
@@ -97,10 +41,7 @@ I/O接口设置组，切勿修改！
 传递参数：空
 返回值：空
 *************************************/
-void watchdog_close(void)
-{
-     WDTCTL =WDTPW + WDTHOLD;
-}
+void watchdog_close(void);
 
 
 /*************************************
@@ -108,15 +49,7 @@ void watchdog_close(void)
 传递参数：空
 返回值：空
 *************************************/
-void wait_ms(unsigned int i)
-{
-     int j=0;
-     i =i/MSP430_DIVM;
-     for( j=0; j<i; j++)
-     {
-         delay_us(990);
-     }
-}
+void wait_ms(unsigned int i);
 
 
 /*************************************
@@ -124,15 +57,7 @@ void wait_ms(unsigned int i)
 传递参数：空
 返回值：空
 *************************************/
-void wait_5us(unsigned int i)
-{
-     int j=0;
-     i =i/MSP430_DIVM;
-     for( j=0; j<i; j++)
-     {
-         delay_us(4);
-     }
-}
+void wait_5us(unsigned int i);
 
 
 /*************************************
@@ -141,38 +66,7 @@ basic clock 设置，以高频晶振为MCLK/SMCLK时钟源。MCLK不分频，SMC
 传递参数：空
 返回值：空
 *************************************/
-void basic_clock_init(void)
-{
-    unsigned char i;  
-  
-    BCSCTL1 &= ~XT2OFF;                 //打开XT2高频晶体振荡器
-    
-    do
-    {
-        IFG1 &= ~OFIFG;                //清除晶振失败标志
-        delay_us(200);                 //延时等待8MHz晶体起振
- 
-    }while((IFG1 & OFIFG));            //晶振失效标志仍然存在
- 
-    switch(MSP430_DIVM)
-    {
-        case 1 : i=SELM_2 + SELS + DIVM_0; break;
-        case 2 : i=SELM_2 + SELS + DIVM_1; break;
-        case 4 : i=SELM_2 + SELS + DIVM_2; break;
-        case 8 : i=SELM_2 + SELS + DIVM_3; break;
-        default: i=SELM_2 + SELS + DIVM_0; break;
-    }
-    switch(MSP430_DIVS)
-    {
-        case 1 : i=i + DIVS_0; break;
-        case 2 : i=i + DIVS_1; break;
-        case 4 : i=i + DIVS_2; break;
-        case 8 : i=i + DIVS_3; break;
-        default: i=i + DIVS_0; break;
-    }
-      
-    BCSCTL2 =i;//MCLK和SMCLK选择高频晶振
-}
+void basic_clock_init(void);
 
 
 /************************************
@@ -180,13 +74,7 @@ void basic_clock_init(void)
 传递参数：空
 返回值：空
 ***************************************/
-void interrupt_switch(enum msp430_switch a)
-{
-    if(a==on)
-        _EINT();
-    else
-        _DINT();
-}
+void interrupt_switch(enum msp430_switch a);
 
 
 /************************************
@@ -205,24 +93,7 @@ void interrupt_switch(enum msp430_switch a)
 问题出现在：有整型常量指定存储在flash奇地址上了。地址改成偶地址。
 实际I/O地址即为奇数地址，尝试改为char型，可以通过。
 ***************************************/
-unsigned char* ioreg_trans( unsigned char port, unsigned char func)
-{
-    unsigned char i;
-    if(port==2||port==1)
-        if(func==3)
-            func+=0x03;
-    func *=1u;
-    switch(port)
-    {
-        case 1:i=0x0020u;i+=func;break;
-        case 2:i=0x0028u;i+=func;break;
-        case 3:i=0x0018u;i+=func;break;
-        case 4:i=0x001Cu;i+=func;break;
-        case 5:i=0x0030u;i+=func;break;
-        case 6:i=0x0034u;i+=func;break;
-    }
-    return (unsigned char*)i;
-}
+unsigned char* ioreg_trans( unsigned char port, unsigned char func);
 
 
 

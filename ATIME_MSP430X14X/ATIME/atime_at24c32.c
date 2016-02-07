@@ -53,18 +53,45 @@
 常见错误解释：
 ***************************************/
 
-#ifndef _ATIME_AT24C32_H_ 
-#define _ATIME_AT24C32_H_
+#ifndef _ATIME_AT24C32_C_ 
+#define _ATIME_AT24C32_C_
 
-#include "atime_at24c32.c"
 
+/************************************
+库全局变量组
+***************************************/
+#define AT24C32_ADDR            0xA0            //定义器件地址
+unsigned char at24c32_buf[32]={0};              //读取一次最多连续读32个
 
 /************************************
 函数功能：写32字节数据到地址
 传递参数：addr：地址；data：待发送数组
 返回值：空
 ***************************************/
-void at24c32_writebyte( unsigned int addr, unsigned char data);
+void at24c32_writebyte( unsigned int addr, unsigned char data)
+{
+    delay_ms(1);
+    iic_start_s();
+    delay_us(30);
+    iic_writebyte_s(AT24C32_ADDR&0xfe);  
+    delay_us(30);
+    iic_getack_s();
+    delay_us(30);
+    iic_writebyte_s(addr/256);  
+    delay_us(30);
+    iic_getack_s();
+    delay_us(30);
+    iic_writebyte_s(addr%256);  
+    delay_us(30);
+    iic_getack_s();
+    delay_us(30);
+    
+    iic_writebyte_s(data);  
+    delay_us(30);
+    iic_getack_s();
+    delay_us(30);
+    iic_stop_s();
+}
 
 
 /************************************
@@ -72,7 +99,44 @@ void at24c32_writebyte( unsigned int addr, unsigned char data);
 传递参数：addr：地址
 返回值：读取的数据
 ***************************************/
-unsigned char at24c32_readbyte( unsigned int addr);
+unsigned char at24c32_readbyte( unsigned int addr)
+{
+    unsigned char wdata[3],rdata[1];
+    delay_ms(1);
+    wdata[0] =(AT24C32_ADDR&0xfe);
+    wdata[1] =addr/256;
+    wdata[2] =addr%256;
+    iic_read(wdata,3,rdata,1);
+    return rdata[0];
+    /*
+    iic_start_s();
+    delay_us(100);
+    for( i=0; i<3; i++)
+    {
+        iic_writebyte_s(wdata[i]); 
+        delay_us(100);
+        iic_getack_s();
+        delay_us(100);
+    }
+    iic_start_s();
+    delay_us(100);
+    wdata[0] |=0x01;
+    iic_writebyte_s(wdata[0]);
+    delay_us(100);
+    iic_getack_s();	
+    delay_us(100);
+    for( i=0; i<32; i++)
+    {
+        data[i] =iic_readbyte_s();
+        delay_us(100);
+        iic_setack_s();
+        delay_us(100);
+    }
+    data[0] =iic_readbyte_s();
+    delay_us(100);
+    iic_stop_s();
+    */
+}
 
 
 /************************************
@@ -83,7 +147,33 @@ unsigned char at24c32_readbyte( unsigned int addr);
       rdata：待写数据数组；
 返回值：空
 ***************************************/
-void at24c32_writepage( unsigned int addr,unsigned int n, unsigned char rdata[]);
+void at24c32_writepage( unsigned int addr,unsigned int n, unsigned char rdata[])
+{
+    unsigned char i;
+    delay_ms(3);
+    iic_start_s();
+    delay_us(30);
+    iic_writebyte_s(AT24C32_ADDR&0xfe);  
+    delay_us(30);
+    iic_getack_s();
+    delay_us(30);
+    iic_writebyte_s(addr/256);  
+    delay_us(30);
+    iic_getack_s();
+    delay_us(30);
+    iic_writebyte_s(addr%256);  
+    delay_us(30);
+    iic_getack_s();
+    delay_us(30);
+    for( i=0; i<n; i++)
+    {
+        iic_writebyte_s(rdata[i]);  
+        delay_us(30);
+        iic_getack_s();
+        delay_us(30);
+    }
+    iic_stop_s();
+}
 
 
 /************************************
@@ -92,8 +182,15 @@ void at24c32_writepage( unsigned int addr,unsigned int n, unsigned char rdata[])
 返回值：读取的数据
 注：读取一次最多连续读32个
 ***************************************/
-void at24c32_readpage( unsigned int addr, unsigned int n, unsigned char rdata[]);
-
+void at24c32_readpage( unsigned int addr, unsigned int n, unsigned char rdata[])
+{
+    unsigned char wdata[3];
+    delay_ms(1);
+    wdata[0] =(AT24C32_ADDR&0xfe);
+    wdata[1] =addr/256;
+    wdata[2] =addr%256;
+    iic_read(wdata,3,rdata,n);
+}
     
     
 #endif

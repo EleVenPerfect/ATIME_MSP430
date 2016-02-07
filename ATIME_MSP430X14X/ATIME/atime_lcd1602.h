@@ -44,24 +44,7 @@
 #ifndef _ATIME_MSP430_LCD1602_H_ 
 #define _ATIME_MSP430_LCD1602_H_
 
-
-/*************************************
-库全局变量组
-*************************************/
-#define LCD1602_DATA       4     //定义lcd1602的8位数据口
-
-#define LCD1602_RS_PORT    5     //将RS位定义;端口号
-#define LCD1602_RS_BIT     5     //将RS位定义;端口位
-
-#define LCD1602_RW_PORT    5     //将RW位定义;端口号
-#define LCD1602_RW_BIT     6     //将RW位定义;端口位
-
-#define LCD1602_EN_PORT    5     //将EN位定义;端口号
-#define LCD1602_EN_BIT     7     //将EN位定义;端口位
-
-enum set		{clear1602, left1602, right1602 };				//枚举:设定参数，见105行(set1602)注解
-enum lcdint_ac		{leftmove, rightmove, left_move, right_move };                  //枚举:初始化AC移动方向，见129行(lcd1602_init)注解
-enum lcdint_cursor	{notdisplay, cursornotdisplay, cursorflash, cursornotflash };	//枚举:初始化光标状态，见129行(lcd1602_init)注解
+#include "atime_lcd1602.c"
 
 
 /************************************
@@ -69,18 +52,7 @@ enum lcdint_cursor	{notdisplay, cursornotdisplay, cursorflash, cursornotflash };
 传递参数：db 数据指令内容
 返回值：空
 ***************************************/
-void writedata(char db)
-{
-	//while(mang()==1);
-	PxyOUTz(LCD1602_RS_PORT,LCD1602_RS_BIT,1);
-	PxyOUTz(LCD1602_RW_PORT,LCD1602_RW_BIT,0);
-	PxyOUTz(LCD1602_EN_PORT,LCD1602_EN_BIT,0);
-	PxOUT(LCD1602_DATA) =db;
-	delay_ms( 2);
-	PxyOUTz(LCD1602_EN_PORT,LCD1602_EN_BIT,1);
-	delay_ms( 5);
-	PxyOUTz(LCD1602_EN_PORT,LCD1602_EN_BIT,0);
-}
+void writedata(char db);
 
 
 /************************************
@@ -88,18 +60,7 @@ void writedata(char db)
 传递参数：db  数据指令内容
 返回值：空
 ***************************************/
-void writezhi(unsigned char db)
-{
-	//while(mang()==1);
-	PxyOUTz(LCD1602_RS_PORT,LCD1602_RS_BIT,0);
-	PxyOUTz(LCD1602_RW_PORT,LCD1602_RW_BIT,0);
-	PxyOUTz(LCD1602_EN_PORT,LCD1602_EN_BIT,0);
-	PxOUT(LCD1602_DATA) =db;
-	delay_ms( 2);
-	PxyOUTz(LCD1602_EN_PORT,LCD1602_EN_BIT,1);
-	delay_ms( 5);
-	PxyOUTz(LCD1602_EN_PORT,LCD1602_EN_BIT,0);
-}
+void writezhi(unsigned char db);
 
 
 /************************************
@@ -111,19 +72,7 @@ void writezhi(unsigned char db)
 
 返回值：1：成功；：失败0；
 ***************************************/
-unsigned char set1602(enum set a )
-{
-	switch(a)
-	{
-		case clear1602 : writezhi(0x01); break;
-		case left1602  : writezhi(0x18); break;
-		case right1602 : writezhi(0x1C); break;
-		default        :return (0);
-	}
-	//EX0 =1;
-	return (1);
-}
-
+unsigned char set1602(enum set a );
 
 
 /************************************
@@ -133,59 +82,7 @@ unsigned char set1602(enum set a )
       b:开关光标显示 ，详见b的注释
 返回值：1：成功；：失败0；
 ***************************************/
-unsigned char lcd1602_init(enum lcdint_ac a,enum lcdint_cursor b)
-{
-	/*设置I/O端口方向和功能*/
-    PxSEL(LCD1602_DATA) =0x00;
-    PxySELz(LCD1602_RS_PORT,LCD1602_RS_BIT,0);
-    PxySELz(LCD1602_RW_PORT,LCD1602_RW_BIT,0);
-    PxySELz(LCD1602_EN_PORT,LCD1602_EN_BIT,0);
-        
-    PxDIR(LCD1602_DATA) =0xff;
-    PxyDIRz(LCD1602_RS_PORT,LCD1602_RS_BIT,1);
-    PxyDIRz(LCD1602_RW_PORT,LCD1602_RW_BIT,1);
-    PxyDIRz(LCD1602_EN_PORT,LCD1602_EN_BIT,1);
-        
-    /*设置1602*/
-    writezhi( 0x01);
-	delay_ms( 15);
-	PxyOUTz(LCD1602_RS_PORT,LCD1602_RS_BIT,0);
-	PxyOUTz(LCD1602_EN_PORT,LCD1602_EN_BIT,0);
-	PxOUT(LCD1602_DATA) =0X38;
-	delay_ms( 2);
-	PxyOUTz(LCD1602_EN_PORT,LCD1602_EN_BIT,1);
-	delay_ms( 5);
-	PxyOUTz(LCD1602_EN_PORT,LCD1602_EN_BIT,0);
-	PxOUT(LCD1602_DATA) =0X38;
-	delay_ms( 2);
-	PxyOUTz(LCD1602_EN_PORT,LCD1602_EN_BIT,1);
-	delay_ms( 5);
-	PxyOUTz(LCD1602_EN_PORT,LCD1602_EN_BIT,0);
-	PxOUT(LCD1602_DATA) =0X38;
-	delay_ms( 2);
-	PxyOUTz(LCD1602_EN_PORT,LCD1602_EN_BIT,1);
-	delay_ms( 5);
-	writezhi( 0x01);
-	
-	switch(a)
-	{
-		case rightmove  : writezhi(0x06); break;	  //画面不动，读写后AC自动+1
-		case leftmove   : writezhi(0x04); break;	  //画面不动，读写后AC自动-1
-		case right_move : writezhi(0x07); break;	  //画面向左平移1次，读写后AC自动+1
-		case left_move  : writezhi(0x05); break;	  //画面向右平移1次，读写后AC自动-1
-		default 		: return (0);             // 错误
-	}
-	switch(b)
-	{
-		case cursornotflash   : writezhi(0x0e); break;	  //画面显示，光标显示，光标不闪动
-		case cursorflash      : writezhi(0x0d); break;	  //画面显示，光标显示，光标闪动
-		case cursornotdisplay : writezhi(0x0c); break;	  //画面显示，光标不显示，光标不闪动
-		case notdisplay       : writezhi(0x08); break;	  //画面不显示，光标不显示，光标不闪动
-		default               : return (0);               // 错误
-	}
-	set1602(clear1602);
-	return (1);
-}
+unsigned char lcd1602_init(enum lcdint_ac a,enum lcdint_cursor b);
 
 
 /************************************
@@ -193,12 +90,7 @@ unsigned char lcd1602_init(enum lcdint_ac a,enum lcdint_cursor b)
 传递参数：字符串指针
 返回值：字符串长度
 ***************************************/
-unsigned int str_long(unsigned char db[])
-{
-	unsigned int i;
-	for( i =0; db[i]!=0; i++) ;
-	return (i);
-}
+unsigned int str_long(unsigned char db[]);
 
 
 /************************************
@@ -210,16 +102,7 @@ unsigned int str_long(unsigned char db[])
 返回值：1：成功；：失败0；
 特别注意：此函数只可以显示字符串、字符串数组，不可以显示单个字符
 ***************************************/
-unsigned char print1602(unsigned char db[], unsigned int y, unsigned int x)
-{
-	unsigned int i; 
-	writezhi( 0x80 + 0x40*y + x );
-	for( i=0; i< str_long(db); i++)		 //修改了判断字符串长度方式	由shrlen改为自定义的str_long
-	{
-		writedata( db[i]);
-	}
-	return (1);
-}
+unsigned char print1602(unsigned char db[], unsigned int y, unsigned int x);
 
 
 /************************************
@@ -233,17 +116,7 @@ unsigned char print1602(unsigned char db[], unsigned int y, unsigned int x)
 		用printchar1602函数，数据位写之前定义的字符标号即可
 		如：printchar1602(0,2,1);
 ***************************************/
-void setpic1602(unsigned char i, unsigned char a[])
-{
-	unsigned j;
-	writezhi( (0x40+0x08*i) );
-	delay_ms( 5);
-	for( j=0; j<8; j++)
-	{	
-		writedata( a[j]);
-		delay_ms( 2);	
-	}				
-}
+void setpic1602(unsigned char i, unsigned char a[]);
 		
 
 /************************************
@@ -255,12 +128,7 @@ void setpic1602(unsigned char i, unsigned char a[])
 返回值：1：成功；：失败0；
 特别注意：此函数只可以显示单个字符
 ***************************************/
-unsigned char printchar1602(unsigned char db, unsigned int y, unsigned int x)
-{
-	writezhi( 0x80 + 0x40*y + x );
-	writedata( db);
-	return (1);
-}
+unsigned char printchar1602(unsigned char db, unsigned int y, unsigned int x);
 
 
 /************************************
@@ -272,52 +140,7 @@ unsigned char printchar1602(unsigned char db, unsigned int y, unsigned int x)
 返回值：1：成功；：失败0；
 特别注意：此函数只可以显示单个字符
 ***************************************/
-unsigned char printint1602(unsigned int db, unsigned int y, unsigned int x)
-{
-	writezhi( 0x80 + 0x40*y + x );
-
-        if(db/10000!=0x0)
-        {
-            writedata( (db/10000)+48);
-            writedata( (db%10000)/1000+48);
-            writedata( (db%1000)/100+48);
-            writedata( (db%100)/10+48);
-            writedata( (db%10)+48);
-        }
-        else if(db/1000!=0)
-        {
-            writedata( (db%10000)/1000+48);
-            writedata( (db%1000)/100+48);
-            writedata( (db%100)/10+48);
-            writedata( (db%10)+48);
-            writedata( ' ');
-        }
-        else if(db/100!=0)
-        {
-            writedata( (db%1000)/100+48);
-            writedata( (db%100)/10+48);
-            writedata( (db%10)+48);
-            writedata( ' ');
-            writedata( ' ');
-        }
-        else if(db/10!=0)
-        {
-            writedata( (db%100)/10+48);
-            writedata( (db%10)+48);
-            writedata( ' ');
-            writedata( ' ');
-            writedata( ' ');
-        }
-        else
-        {
-            writedata( (db%10)+48);
-            writedata( ' ');
-            writedata( ' ');
-            writedata( ' ');
-            writedata( ' ');
-        }
-	return (1);
-}
+unsigned char printint1602(unsigned int db, unsigned int y, unsigned int x);
 
 
 /************************************
@@ -325,16 +148,7 @@ unsigned char printint1602(unsigned int db, unsigned int y, unsigned int x)
 传递参数：a[]，BCD数据;b[]，可显示数据
 返回值：空
 ***************************************/
-void bcd_trans_char(unsigned char a[], unsigned char b[],unsigned char j)
-{
-	unsigned int i;
-	for( i=0; i<j; i++)
-	{
-		b[3*i]	 =a[i]/100      + 0x30;
-		b[3*i+1] =(a[i]%100)/10 + 0x30;
-		b[3*i+2] =(a[i]%10)     + 0x30;
-	}
-}
+void bcd_trans_char(unsigned char a[], unsigned char b[],unsigned char j);
 
 
 

@@ -142,74 +142,16 @@
 #ifndef _ATIME_SD_FAT_H_ 
 #define _ATIME_SD_FAT_H_
 
-
-/************************************
-库全局变量组
-***************************************/
-
-unsigned char fat_temp[512] ={0};		//FAT数据缓存
-
-/************************************
-文件系统结构体组
-***************************************/
-
-struct fat_info
-{
-	unsigned long fat_offset;				//引导扇区起始扇区数
-	unsigned long fat_directory;			//根目录扇区数
-	unsigned long fat_clu_dir;				//根目录起始簇数
-	unsigned long fat_fat1;					//fat表扇区数
-	unsigned char fat_cluster;				//每簇扇区数
-}fat_info;
+#include "atime_sd_fat.c"
 
 
-struct file_info
-{
-	unsigned char file_name[9];				//文件名，最后一位设置为0。
-	unsigned char file_extension[4];		//扩展名，最后一位设置为0。
-	unsigned long file_size;				//文件大小
-	unsigned long file_position;			//文件起始簇簇号
-	unsigned long file_next_pos;			//文件的下一个簇的簇号
-}file_info;
-
-/************************************
-错误宏定义组组
-***************************************/
-
-#define NOT_FAT			0X01				//不是FAT文件系统
-#define FAT_OK			0X00				//FAT32准备就绪
-#define FAT_READ_OK		0x03			    //读取文件数据完成
-#define FAT_READING		0x04				//文件正在读取中，且仍可以继续读取
 /************************************
 函数功能：FAT文件系统MBR初始化
 传递参数：空
 返回值：起始扇区数
 错误返回值：NOT_FAT:不是FAT文件系统或没有检测到SD卡
 ***************************************/
-unsigned long int_mbr_fat(void)
-{
-	unsigned int i;
-	unsigned char not_exit;
-	unsigned long offset;
-
-	for(i=0; i<100; i++);
-	not_exit =sd_res();
-	if(not_exit == 0x01)
-		return( NOT_FAT);
-	sd_read512( 0, fat_temp);
-	if(fat_temp[510] != 0x55 ||fat_temp[511] !=0xAA)
-		return( NOT_FAT);
-	if(fat_temp[450] != 0x0B)
-		return( NOT_FAT);
-	if(fat_temp[0] == 0xEB)
-		return(0);
-
-	offset =fat_temp[454] +fat_temp[455]*0x100 +
-			fat_temp[456]*0x10000 +fat_temp[457]*0x1000000;
-		    
-
-	return ( offset);
-}
+unsigned long int_mbr_fat(void);
 
 
 /************************************
@@ -218,23 +160,7 @@ unsigned long int_mbr_fat(void)
 返回值：根目录扇区数
 错误返回值：NOT_FAT:不是FAT文件系统或没有检测到SD卡
 ***************************************/
-unsigned long int_dbr_fat(unsigned long offset)
-{
-	unsigned long directory;
-	unsigned char not_exit;
-
-	not_exit =sd_read512( offset, fat_temp);
-	if(not_exit == 0x04)
-		return(NOT_FAT);
-	if(fat_temp[0] != 0xEB)
-		return ( NOT_FAT);
-	directory =offset +fat_temp[14] +fat_temp[15]*0x100
-		       +fat_temp[16]*(fat_temp[36] +fat_temp[37]*0x100	
-			   +fat_temp[38]*0x10000 +fat_temp[39]*0x1000000);	
-			  
-	return ( directory);
-}
-
+unsigned long int_dbr_fat(unsigned long offset);
 
 
 /************************************
@@ -242,11 +168,7 @@ unsigned long int_dbr_fat(unsigned long offset)
 传递参数：offset：起始扇区数
 返回值：每簇扇区数
 ***************************************/
-unsigned char cluster_sector(unsigned long offset)
-{
-	sd_read512( offset, fat_temp);
-	return( fat_temp[13]);
-}
+unsigned char cluster_sector(unsigned long offset);
 
 
 /************************************
@@ -254,16 +176,7 @@ unsigned char cluster_sector(unsigned long offset)
 传递参数：offset：起始扇区数
 返回值：FAT表1的扇区数
 ***************************************/
-unsigned long int_dbr_fat_dir(unsigned long offset)
-{
-	unsigned long directory;
-
-	sd_read512( offset, fat_temp);
-
-	directory =offset +fat_temp[14] +fat_temp[15]*0x100;	
-			  
-	return ( directory);	
-}
+unsigned long int_dbr_fat_dir(unsigned long offset);
 
 
 /************************************
@@ -271,11 +184,7 @@ unsigned long int_dbr_fat_dir(unsigned long offset)
 传递参数：offset：起始扇区数
 返回值：根目录起始簇数
 ***************************************/
-unsigned long int_dbr_clu_dir(unsigned long offset)
-{
-	sd_read512( offset, fat_temp);
-	return( fat_temp[44] +fat_temp[45]*0x100 +fat_temp[46]*0x10000 +fat_temp[47]*0x1000000);
-}
+unsigned long int_dbr_clu_dir(unsigned long offset);
 
 
 /************************************
@@ -286,20 +195,7 @@ unsigned long int_dbr_clu_dir(unsigned long offset)
 		NOT_FAT	:不是FAT文件系统或没有插SD卡
 错误返回值：NOT_FAT:不是FAT文件系统或没有检测到SD卡
 ***************************************/
-unsigned char int_fat(void)
-{
-	fat_info.fat_offset		=int_mbr_fat();
-	if(fat_info.fat_offset == NOT_FAT)
-		return( NOT_FAT);
-	fat_info.fat_directory	=int_dbr_fat( fat_info.fat_offset);
-	if(fat_info.fat_directory == NOT_FAT)
-		return( NOT_FAT);
-	fat_info.fat_fat1		=int_dbr_fat_dir( fat_info.fat_offset);
-	fat_info.fat_cluster	=cluster_sector( fat_info.fat_offset);
-    fat_info.fat_clu_dir	=int_dbr_clu_dir( fat_info.fat_offset);
-
-	return(FAT_OK);
-}
+unsigned char int_fat(void);
 
 
 /************************************
@@ -307,18 +203,7 @@ unsigned char int_fat(void)
 传递参数：空
 返回值：空
 ***************************************/
-void find_next_cluster(void)
-{
-	unsigned long next_cluster =0;
-	next_cluster =fat_info.fat_fat1 +file_info.file_next_pos/128;	
-	sd_read512( next_cluster, fat_temp);
-	file_info.file_next_pos =fat_temp[(file_info.file_next_pos%128)*4]+
-				  			 fat_temp[(file_info.file_next_pos%128)*4+1]*0x100+	
-				   			 fat_temp[(file_info.file_next_pos%128)*4+2]*0x10000+
-				  			 fat_temp[(file_info.file_next_pos%128)*4+3]*0x1000000;
-
-}								
-
+void find_next_cluster(void);
 
 
 /************************************
@@ -326,15 +211,7 @@ void find_next_cluster(void)
 传递参数：cluster：簇数
 返回值：扇区数
 ***************************************/
-unsigned long cluster_to_offset(unsigned long cluster)
-{
-	unsigned long offset;
-	if(cluster < fat_info.fat_clu_dir)
-		return (NOT_FAT);
-	offset =fat_info.fat_directory +( cluster -fat_info.fat_clu_dir)*fat_info.fat_cluster;
-	return ( offset);
-}
-
+unsigned long cluster_to_offset(unsigned long cluster);
 
 
 /************************************
@@ -343,46 +220,7 @@ unsigned long cluster_to_offset(unsigned long cluster)
 		  number：文件项编号（从0开始）
 返回值：空
 ***************************************/
-void read_filetable(unsigned long cluster, unsigned char number)
-{
-	unsigned long offset;
-
-	offset =cluster_to_offset( cluster);	 
-	offset =offset +number/16;
-			    
-	sd_read512( offset, fat_temp);
-
-	file_info.file_name[0] =fat_temp[(number%16)*32];
-	file_info.file_name[1] =fat_temp[(number%16)*32+1];
-	file_info.file_name[2] =fat_temp[(number%16)*32+2];
-	file_info.file_name[3] =fat_temp[(number%16)*32+3];
-	file_info.file_name[4] =fat_temp[(number%16)*32+4];
-	file_info.file_name[5] =fat_temp[(number%16)*32+5];
-	file_info.file_name[6] =fat_temp[(number%16)*32+6];
-	file_info.file_name[7] =fat_temp[(number%16)*32+7];
-	file_info.file_name[8] =0x00;
-
-	file_info.file_extension[0] =fat_temp[(number%16)*32+8];
-	file_info.file_extension[1] =fat_temp[(number%16)*32+9];
-	file_info.file_extension[2] =fat_temp[(number%16)*32+10];
-	file_info.file_extension[3] =0x00;
-
-	file_info.file_size =fat_temp[(number%16)*32+31]+
-						 fat_temp[(number%16)*32+30]*0x100+
-						 fat_temp[(number%16)*32+29]*0x10000+
-						 fat_temp[(number%16)*32+28]*0x1000000;
-
-	file_info.file_position =fat_temp[(number%16)*32+26]+
-							 fat_temp[(number%16)*32+27]*0x100+
-							 fat_temp[(number%16)*32+20]*0x10000+
-							 fat_temp[(number%16)*32+21]*0x1000000;
-
-	file_info.file_next_pos =fat_temp[(number%16)*32+26]+
-							 fat_temp[(number%16)*32+27]*0x100+
-							 fat_temp[(number%16)*32+20]*0x10000+
-							 fat_temp[(number%16)*32+21]*0x1000000;
-
-}
+void read_filetable(unsigned long cluster, unsigned char number);
 
 
 /************************************
@@ -393,19 +231,8 @@ void read_filetable(unsigned long cluster, unsigned char number)
 		FAT_READ_OK：读取完成
 		FAT_READING:文件正在读取中
 ***************************************/
-unsigned char read_file_start512(unsigned long cluster, unsigned char number)
-{
-	unsigned long offset;
-	read_filetable( cluster, number);														
-	offset =cluster_to_offset( file_info.file_next_pos);	
-	if(fat_info.fat_cluster == 0x01)
-		find_next_cluster();
-	sd_read512( offset, fat_temp);			    	//要在判断读取下一个数据之后读取数据，防止被更改
-	if(file_info.file_next_pos*0x10 >= 0X00000020 && file_info.file_next_pos*0x10 <= 0XFFFFFEF0)
-		return( FAT_READING);	
-	
-	return( FAT_READ_OK);
-}
+unsigned char read_file_start512(unsigned long cluster, unsigned char number);
+
 
 /************************************
 函数功能：继续读取文件内容
@@ -414,18 +241,7 @@ unsigned char read_file_start512(unsigned long cluster, unsigned char number)
 		FAT_READ_OK：读取完成
 		FAT_READING:文件正在读取中
 ***************************************/
-unsigned char read_file_continue512(unsigned char part)
-{
-	unsigned long offset;
-	offset =cluster_to_offset( file_info.file_next_pos) +part;
-	if((part+1) == fat_info.fat_cluster)
-		find_next_cluster();	
-	sd_read512( offset, fat_temp);					//要在判断读取下一个数据之后读取数据，防止被更改
-	if( file_info.file_next_pos*0x10 >= 0X00000020 && file_info.file_next_pos*0x10 <= 0XFFFFFEF0)
-		return( FAT_READING);	
-	
-	return( FAT_READ_OK);
-}
+unsigned char read_file_continue512(unsigned char part);
 
 
 /************************************
@@ -437,50 +253,8 @@ unsigned char read_file_continue512(unsigned char part)
 	    一个文件项32字节，一个扇区512个字节，因此有一个簇多少扇区就有16X个文件项
 		即：16*fat_info.fat_cluster
 ***************************************/
-unsigned char search_file_name( unsigned long cluster, unsigned char name[12])
-{
-	unsigned char i;
-
-	for(i=0; i<16*fat_info.fat_cluster; i++)
-	{
-		read_filetable( cluster, i);
-		if(name[0] != file_info.file_name[0])
-			continue;
-		if(name[1] != file_info.file_name[1])
-			continue;
-		if(name[2] != file_info.file_name[2])
-			continue;
-		if(name[3] != file_info.file_name[3])
-			continue;
-		if(name[4] != file_info.file_name[4])
-			continue;
-		if(name[5] != file_info.file_name[5])
-			continue;
-		if(name[6] != file_info.file_name[6])
-			continue;
-		if(name[7] != file_info.file_name[7])
-			continue;
-		
-		if(name[ 9] != file_info.file_extension[0])
-			continue;
-		if(name[10] != file_info.file_extension[1])
-			continue;
-		if(name[11] != file_info.file_extension[2])
-			continue;
-		
-		break;		
-	}
-	return (i);
-}
+unsigned char search_file_name( unsigned long cluster, unsigned char name[12]);
 
 
-
-
-
-/************************************
-函数功能：
-传递参数：
-返回值：
-***************************************/
 
 #endif

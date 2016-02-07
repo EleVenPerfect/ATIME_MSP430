@@ -27,51 +27,23 @@ or stop condition as defined below.
 #ifndef _ATIME_MSP430_IIC_SOFTWARE_H_ 
 #define _ATIME_MSP430_IIC_SOFTWARE_H_
 
+#include "atime_iic_software.c"
 
-/************************************
-库全局变量组
-***************************************/
-#define SDA_PORT        3       //定义SDA总线IO端口
-#define SDA_BIT         1       //定义SDA总线IO引脚
-#define SCL_PORT        3       //定义SCL总线IO端口
-#define SCL_BIT         0       //定义SCL总线IO引脚
 
 /************************************
 函数功能：IIC接口开始
 传递参数：空
 返回值：空
 ***************************************/
-void iic_start_s()
-{
-    PxyDIRz(SCL_PORT,SCL_BIT,1);
-    PxyDIRz(SDA_PORT,SDA_BIT,1);
-    
-    PxyOUTz(SCL_PORT,SCL_BIT,1);
-    PxyOUTz(SDA_PORT,SDA_BIT,1);
-    delay_us(50);
-    
-    PxyOUTz(SDA_PORT,SDA_BIT,0);
-    delay_us(50);
-    PxyOUTz(SCL_PORT,SCL_BIT,0);
-    delay_us(10);
-}
+void iic_start_s();
+
 
 /************************************
 函数功能：IIC接口结束
 传递参数：空
 返回值：空
 ***************************************/
-void iic_stop_s()
-{
-    PxyDIRz(SCL_PORT,SCL_BIT,1);
-    PxyDIRz(SDA_PORT,SDA_BIT,1);
-    delay_us(15);
-    PxyOUTz(SCL_PORT,SCL_BIT,1);
-    PxyOUTz(SDA_PORT,SDA_BIT,0);
-	delay_us(15);
-    PxyOUTz(SDA_PORT,SDA_BIT,1);
-	delay_us(30);
-}
+void iic_stop_s();
 
 
 /************************************
@@ -79,39 +51,16 @@ void iic_stop_s()
 传递参数：空
 返回值：ACK
 ***************************************/
-unsigned char iic_getack_s()
-{
-    unsigned char ack=1;
-    PxyDIRz(SCL_PORT,SCL_BIT,1);
-    PxyDIRz(SDA_PORT,SDA_BIT,0);
-    
-    PxyOUTz(SCL_PORT,SCL_BIT,0);
-    delay_us(10);
-    PxyOUTz(SCL_PORT,SCL_BIT,1);
-    delay_us(10);
-    ack =PxyINz(SDA_PORT,SDA_BIT);
-    PxyOUTz(SCL_PORT,SCL_BIT,0);
-    return ack;
-}
+unsigned char iic_getack_s();
+
+
 /************************************
 函数功能：IIC接口发送ACKNOWLEDGE
 传递参数：空
 返回值：空
 ***************************************/
-void iic_setack_s()
-{
-    PxyDIRz(SCL_PORT,SCL_BIT,1);
-    PxyDIRz(SDA_PORT,SDA_BIT,1);
-    
-    PxyOUTz(SCL_PORT,SCL_BIT,0);
-    PxyOUTz(SDA_PORT,SDA_BIT,0);
-	delay_us(10);
-    PxyOUTz(SCL_PORT,SCL_BIT,1);
-	delay_us(30);
-    PxyOUTz(SCL_PORT,SCL_BIT,0);
-    PxyOUTz(SDA_PORT,SDA_BIT,0);
-	delay_us(10);
-}
+void iic_setack_s();
+
 
 /************************************
 函数功能：IIC接口读byte
@@ -119,26 +68,7 @@ void iic_setack_s()
 返回值：读取数据
 注：接收数据低位先接收
 ***************************************/
-unsigned char iic_readbyte_s()
-{
-    unsigned char i,data=0,temp;
-    PxyDIRz(SCL_PORT,SCL_BIT,1);
-    PxyDIRz(SDA_PORT,SDA_BIT,0);
-    for( i=0; i<8; i++)
-    {
-        PxyOUTz(SCL_PORT,SCL_BIT,1);
-	delay_us(20);
-        data <<=1;
-        temp =PxyINz(SDA_PORT,SDA_BIT);
-        if(temp)
-            data |=0x01;
-        else
-            data &=~(0x01);
-        PxyOUTz(SCL_PORT,SCL_BIT,0);
-        delay_us(10);
-    }
-    return data;
-}
+unsigned char iic_readbyte_s();
 
 
 /************************************
@@ -147,27 +77,8 @@ unsigned char iic_readbyte_s()
 返回值：空
 注：发送数据高位先发送
 ***************************************/
-void iic_writebyte_s(unsigned char data)
-{
-    unsigned char i;
-    PxyDIRz(SCL_PORT,SCL_BIT,1);
-    PxyDIRz(SDA_PORT,SDA_BIT,1);
-    
-    for( i=0; i<8; i++)
-    {
-        if(data&0x80)
-            PxyOUTz(SDA_PORT,SDA_BIT,1);
-        else
-            PxyOUTz(SDA_PORT,SDA_BIT,0);
-		delay_us(20);
-        PxyOUTz(SCL_PORT,SCL_BIT,1);
-        delay_us(40);
-        PxyOUTz(SCL_PORT,SCL_BIT,0);
-        delay_us(15);
-        data <<=1;
-        PxyOUTz(SDA_PORT,SDA_BIT,0);
-    }
-}
+void iic_writebyte_s(unsigned char data);
+
 
 /************************************
 函数功能：IIC接口写n字节
@@ -175,21 +86,7 @@ void iic_writebyte_s(unsigned char data)
 返回值：空
 注：发送数据高位先发送
 ***************************************/
-void iic_write(unsigned char data[],unsigned char n)
-{
-    unsigned char i;
-    iic_start_s();
-    data[0] &=~0x01;
-    //delay_us(30);
-    for( i=0; i<n; i++)
-    {
-        iic_writebyte_s(data[i]);  
-        //delay_us(30);
-        iic_getack_s();
-        //delay_us(30);
-    }
-    iic_stop_s();
-}
+void iic_write(unsigned char data[],unsigned char n);
 
 
 /************************************
@@ -198,28 +95,7 @@ void iic_write(unsigned char data[],unsigned char n)
 返回值：空
 注：发送数据高位先发送
 ***************************************/
-void iic_read(unsigned char wdata[],unsigned char wn,unsigned char rdata[],unsigned char rn)
-{
-    unsigned char i;
-    iic_start_s();
-    wdata[0] &=~0x01;
-    for( i=0; i<wn; i++)
-    {
-        iic_writebyte_s(wdata[i]);  
-        iic_getack_s();
-    }
-    iic_start_s();
-    wdata[0] |=0x01;
-    iic_writebyte_s(wdata[0]);
-    iic_getack_s();	
-    for( i=0; i<rn-1; i++)
-    {
-        rdata[i] =iic_readbyte_s();
-        iic_setack_s();
-    }
-    rdata[i] =iic_readbyte_s();
-    iic_stop_s();
-}
+void iic_read(unsigned char wdata[],unsigned char wn,unsigned char rdata[],unsigned char rn);
 
 
 
