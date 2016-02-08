@@ -53,6 +53,8 @@
       <file>$TOOLKIT_DIR$\inc\msp430x14x.h</file>
       <file>$PROJ_DIR$\Debug\Obj\TAPwm.r43</file>
       <file>$PROJ_DIR$\atime_flash.c</file>
+      <file>$PROJ_DIR$\ATIME\atime_flash.h</file>
+      <file>$PROJ_DIR$\ATIME\atime_flash.c</file>
     </outputs>
     <file>
       <name>[ROOT_NODE]</name>
@@ -144,15 +146,19 @@
           <name>BICOMP</name>
           <file> 7</file>
         </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 18</file>
+        </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 44 37 11 41 16 39 32 0 6 15 22 5 21 33 14 29 9 20 27 13 46</file>
+          <file> 44 37 11 41 16 39 32 0 6 15 22 5 21 33 14 29 9 20 27 13</file>
         </tool>
         <tool>
           <name>ICC430</name>
-          <file> 44 37 11 41 16 39 32 0 6 15 22 5 21 33 14 29 9 20 27 13 46</file>
+          <file> 44 37 11 41 16 39 32 0 6 15 22 5 21 33 14 29 9 20 27 13 47 48</file>
         </tool>
       </inputs>
     </file>

@@ -51,6 +51,7 @@
           
           while(1);
       }
+	  
 注意：
 1.本库函数目前只实现了块擦出，但仍要注意不要把存储程序的flash块擦出了。
 2.flash写入前需要擦除，写入后再写入需要再擦出，否则发生错误。
@@ -64,11 +65,11 @@
 /*************************************
 库全局变量组
 *************************************/
-unsigned char SR_RSGISTER;                                     //保存SR寄存器数据，方便恢复
+unsigned char SR_RSGISTER;
 #define FLASH_DINT    SR_RSGISTER =__get_SR_register();_DINT() //关中断，并保存状态寄存器
 #define FLASH_EINT    if(SR_RSGISTER & GIE)            _EINT() //根据保存的结果判断开中断
-#define FLASH_INFO_A   (0x1080)                                //信息存储器A
-#define FLASH_INFO_B   (0x1000)                                //信息存储器B
+#define FLASH_INFO_A   (0x1080)    //信息存储器A
+#define FLASH_INFO_B   (0x1000)    //信息存储器B
 
 
 /************************************

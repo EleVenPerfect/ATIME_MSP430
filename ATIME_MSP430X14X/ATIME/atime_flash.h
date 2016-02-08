@@ -51,6 +51,7 @@
           
           while(1);
       }
+	  
 注意：
 1.本库函数目前只实现了块擦出，但仍要注意不要把存储程序的flash块擦出了。
 2.flash写入前需要擦除，写入后再写入需要再擦出，否则发生错误。
@@ -58,17 +59,10 @@
 4.flash写入时比较耗电，注意电源是否充足，有些开发板可能会出现液晶屏变暗甚至不显示。
 *************************************/
 
-#ifndef _ATIME_MSP430_FLASH_C_ 
-#define _ATIME_MSP430_FLASH_C_
+#ifndef _ATIME_MSP430_FLASH_H_ 
+#define _ATIME_MSP430_FLASH_H_
 
-/*************************************
-库全局变量组
-*************************************/
-unsigned char SR_RSGISTER;                                     //保存SR寄存器数据，方便恢复
-#define FLASH_DINT    SR_RSGISTER =__get_SR_register();_DINT() //关中断，并保存状态寄存器
-#define FLASH_EINT    if(SR_RSGISTER & GIE)            _EINT() //根据保存的结果判断开中断
-#define FLASH_INFO_A   (0x1080)                                //信息存储器A
-#define FLASH_INFO_B   (0x1000)                                //信息存储器B
+#include "atime_flash.c"
 
 
 /************************************
@@ -77,14 +71,7 @@ unsigned char SR_RSGISTER;                                     //保存SR寄存�
 返回值：空
 注：默认设置300k左右的时钟，使用mclk时钟源；
 ***************************************/
-void flash_init()
-{
-    unsigned long kk;
-    kk =(unsigned long)(XT2IN/MSP430_DIVM);
-    kk =kk/(unsigned long)300000;
-    kk &=0x3f;
-    FCTL2 = FWKEY + FSSEL_1 + kk;          // 默认MCLK;
-}
+void flash_init();
 
 
 /************************************
@@ -92,10 +79,7 @@ void flash_init()
 传递参数：空
 返回值：空Flash忙则等待，直到flash空闲。
 ***************************************/
-void flash_wait()
-{
-    while((FCTL3 & BUSY) == BUSY);      //忙
-}
+void flash_wait();
 
 
 /************************************
@@ -103,19 +87,7 @@ void flash_wait()
 传递参数：addr：待擦出块地址
 返回值：空
 ***************************************/
-void flash_erase_segment(unsigned int addr)
-{ 
-    unsigned int *flash;
-    flash =(unsigned int *)addr;
-    FCTL1 =FWKEY + ERASE;                      //Set Erase bit
-    FCTL3 =FWKEY;                              //Clear Lock bit
-    FLASH_DINT;
-    *flash =0;                                 //Dummy write to erase Flash segment B
-    flash_wait();                               //Busy
-    FLASH_EINT;
-    FCTL1 =FWKEY;                              //Lock
-    FCTL3 =FWKEY + LOCK;                       //Set Lock bit  
-}
+void flash_erase_segment(unsigned int addr);
 
 
 /************************************
@@ -125,18 +97,7 @@ void flash_erase_segment(unsigned int addr)
     data：待写入数据
 返回值：空
 ***************************************/
-void flash_writechar( unsigned int addr, unsigned char data)
-{
-    unsigned int *flash =(unsigned int *)addr; // Segment A pointer
-    FCTL1 =FWKEY + WRT;                        // Set WRT bit for write operation
-    FCTL3 =FWKEY;                              // Clear Lock bit
-    FLASH_DINT;
-    *flash =data;                              // Save Data
-    flash_wait();                              //Busy
-    FLASH_EINT;
-    FCTL1 =FWKEY;                              // Clear WRT bit
-    FCTL3 =FWKEY + LOCK;                       // Set LOCK bit
-}  
+void flash_writechar( unsigned int addr, unsigned char data);
 
 
 /************************************
@@ -146,18 +107,7 @@ addr：待写入地址；
 data：待写入字；
 返回值：空
 ***************************************/
-void flash_writeword( unsigned int addr, unsigned int data)
-{
-    unsigned int *flash= (unsigned int *)addr;
-    FCTL1 =FWKEY + WRT;                        // Set WRT bit for write operation
-    FCTL3 =FWKEY;                              // Clear Lock bit
-    FLASH_DINT;
-    *flash =data;                              // Save Data
-    flash_wait();                              //Busy
-    FLASH_EINT;
-    FCTL1 =FWKEY;                              // Clear WRT bit
-    FCTL3 =FWKEY + LOCK;                       // Set LOCK bit
-}  
+void flash_writeword( unsigned int addr, unsigned int data);
 
 
 /************************************
@@ -165,13 +115,7 @@ void flash_writeword( unsigned int addr, unsigned int data)
 传递参数：addr：待读取地址
 返回值：读取的数据
 ***************************************/
-unsigned char flash_readchar(unsigned int addr)
-{ 
-    unsigned char data;
-    unsigned int *flash =(unsigned int *)addr; 
-    data = *flash;
-    return data;
-}
+unsigned char flash_readchar(unsigned int addr);
 
 
 /************************************
@@ -179,13 +123,7 @@ unsigned char flash_readchar(unsigned int addr)
 传递参数：待读取字的地址
 返回值：读取的数据
 ***************************************/
-unsigned int flash_readword(unsigned int addr)
-{ 
-    unsigned int data;
-    unsigned int *flash =(unsigned int *)addr; 
-    data = *flash;
-    return data;
-}
+unsigned int flash_readword(unsigned int addr);
 
 
 
