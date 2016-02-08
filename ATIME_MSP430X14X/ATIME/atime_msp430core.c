@@ -39,7 +39,7 @@
 *************************************/
 #define XIN   ((double)32768)        //外部低频晶振32.768KHZ
 #define XT2IN ((double)8000000)      //外部高频晶振8MHZ
-#define MSP430_DIVM 1                //MCLK分频比
+#define MSP430_DIVM 8                //MCLK分频比
 #define MSP430_DIVS 8                //SMCLK分频比
 
 enum msp430_switch { on, off};       //枚举逻辑
