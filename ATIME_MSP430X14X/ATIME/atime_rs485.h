@@ -121,4 +121,5 @@ unsigned char rs485_sendchar( unsigned char ch, unsigned char num);
 unsigned char rs485_send( unsigned char ch[], unsigned char num);
 
 
+
 #endif

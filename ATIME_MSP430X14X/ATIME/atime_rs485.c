@@ -4,6 +4,9 @@
         #include <msp430x14x.h>
         #include "atime_uart.h"
 应用函数：
+          rs485_init(void)
+          rs485_sendchar( unsigned char ch, unsigned char num)
+          rs485_send( unsigned char ch[], unsigned char num)    
 修改历史：
          ‘修改人’   ‘修改内容’  ‘修改时间’
 	    空		  空		 空
@@ -21,11 +24,11 @@
 /*************************************
 库全局变量组
 *************************************/
-#define UART0_RS485_ON                  //定义开启RS485的接口（UART0_RS485_ON，UART0_RS485_OFF）
+#define UART0_RS485_OFF                 //定义开启RS485的接口（UART0_RS485_ON，UART0_RS485_OFF）
 #define UART0_RS485_DIRPORT     5       //定义DIR线端口
 #define UART0_RS485_DIRBIT      2       //定义DIR线引脚
 
-#define UART1_RS485_OFF                 //定义开启RS485的接口（UART1_RS485_ON，UART1_RS485_OFF）
+#define UART1_RS485_ON                  //定义开启RS485的接口（UART1_RS485_ON，UART1_RS485_OFF）
 #define UART1_RS485_DIRPORT     5       //定义DIR线端口
 #define UART1_RS485_DIRBIT      2       //定义DIR线引脚
 
@@ -34,15 +37,17 @@
 代码区段：UART0相关函数
 ***************************************/
 #ifdef UART0_RS485_ON
-
 /************************************
 函数功能：初始化串口0
 传递参数：空
 返回值：空
 ***************************************/
-void rs4850_init(void)
+void rs4850_init()
 {
-
+    PxySELz(UART0_RS485_DIRPORT,UART0_RS485_DIRBIT,0);
+    PxyDIRz(UART0_RS485_DIRPORT,UART0_RS485_DIRBIT,1);
+    PxyOUTz(UART0_RS485_DIRPORT,UART0_RS485_DIRBIT,0);
+    //uart0_init();
 }
 
 
@@ -54,7 +59,10 @@ void rs4850_init(void)
 ***************************************/
 void rs4850_sendchar(unsigned char ch)
 {
-
+    PxyOUTz(UART0_RS485_DIRPORT,UART0_RS485_DIRBIT,1);//控制线置高，RS485发送状态
+    uart0_sendchar(ch);
+    wait_ms(9600/UART0_BAUD+1);                       //切换之前先有个小延时
+    PxyOUTz(UART0_RS485_DIRPORT,UART0_RS485_DIRBIT,0);//控制线置低，RS485接收状态
 }
 
 
@@ -66,7 +74,9 @@ void rs4850_sendchar(unsigned char ch)
 ***************************************/
 void rs4850_send(unsigned char ch[])
 {
-
+    unsigned int i =0;
+    for( i=0; ch[i]!='\0'; i++)
+      rs4850_sendchar(ch[i]);
 }
 
 
@@ -85,7 +95,10 @@ void rs4850_send(unsigned char ch[])
 ***************************************/
 void rs4851_init(void)
 {
-
+    PxySELz(UART1_RS485_DIRPORT,UART1_RS485_DIRBIT,0);
+    PxyDIRz(UART1_RS485_DIRPORT,UART1_RS485_DIRBIT,1);
+    PxyOUTz(UART1_RS485_DIRPORT,UART1_RS485_DIRBIT,0);
+    //uart1_init();
 }
 
 
@@ -97,7 +110,10 @@ void rs4851_init(void)
 ***************************************/
 void rs4851_sendchar(unsigned char ch)
 {
-
+    PxyOUTz(UART1_RS485_DIRPORT,UART1_RS485_DIRBIT,1);//控制线置高，RS485发送状态
+    uart1_sendchar(ch);
+    wait_ms(9600/UART1_BAUD+1);                       //切换之前先有个小延时
+    PxyOUTz(UART1_RS485_DIRPORT,UART1_RS485_DIRBIT,0);//控制线置低，RS485接收状态
 }
 
 
@@ -109,7 +125,9 @@ void rs4851_sendchar(unsigned char ch)
 ***************************************/
 void rs4851_send(unsigned char ch[])
 {
-
+    unsigned int i =0;
+    for( i=0; ch[i]!='\0'; i++)
+      rs4851_sendchar(ch[i]);
 }
 
 
@@ -127,8 +145,9 @@ void rs4851_send(unsigned char ch[])
 传递参数：空
 返回值：空
 ***************************************/
-void rs485_init(void)
+void rs485_init()
 {
+    uart_init();
 #ifdef UART1_RS485_ON
     rs4851_init();
 #endif
@@ -173,7 +192,7 @@ unsigned char rs485_sendchar( unsigned char ch, unsigned char num)
 传递参数：
         num：串口号（0,1）；
         ch ：待发送数据；
-返回值：空
+返回值：正确：0；错误0xff；
 ***************************************/
 unsigned char rs485_send( unsigned char ch[], unsigned char num)
 {

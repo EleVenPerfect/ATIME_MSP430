@@ -58,7 +58,7 @@ Error[e46]: Undefined external "uart1_sendchar" referred in main  串口1设置�
 ***************************************/
 /*串口0设置*/
 #define UART0_ON                        //串口0开关（UART0_ON，UART0_OFF）
-#define UART0_BAUD              9600    //波特率设置（）
+#define UART0_BAUD              2400    //波特率设置（）
 #define UART0_RECEIVE           1       //串口0接收中断使能（1EN，0DIS）
 #define UART0_SEND              0       //串口0发送中断使能（1EN，0DIS）
 #define UART0_PARITY            0       //奇偶校验位设置（0NONE,1ODD,2EVEN）
@@ -66,8 +66,8 @@ Error[e46]: Undefined external "uart1_sendchar" referred in main  串口1设置�
 #define UART0_STOP_BIT          1       //停止位设置（1,2）
 
 /*串口1设置*/
-#define UART1_OFF                       //串口1开关（UART1_ON，UART1_OFF）
-#define UART1_BAUD              9600    //波特率设置（）
+#define UART1_ON                        //串口1开关（UART1_ON，UART1_OFF）
+#define UART1_BAUD              2400    //波特率设置（）
 #define UART1_RECEIVE           1       //串口1接收中断使能（1EN，0DIS）
 #define UART1_SEND              0       //串口1发送中断使能（1EN，0DIS）
 #define UART1_PARITY            0       //奇偶校验位设置（0NONE,1ODD,2EVEN）
@@ -347,7 +347,8 @@ unsigned char uart_sendchar( unsigned char ch, unsigned char num)
 传递参数：
         num：串口号（0,1）；
         ch ：待发送数据；
-返回值：空
+返回值：
+      正确：0；错误0xff；
 ***************************************/
 unsigned char uart_send( unsigned char ch[], unsigned char num)
 {
