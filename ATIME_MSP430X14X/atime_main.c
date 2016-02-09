@@ -16,7 +16,7 @@ void main(void)
     timera_pwm_init1(1000);
     while(1)
     {
-        i++;
+        i-=100;
         if(i>9999)
             i=0;
         timera_pwm_init2(0,i);

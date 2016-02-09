@@ -33,25 +33,29 @@
 ***************************************/
 void timera_pwm_init1(unsigned long freq)
 {
-    unsigned long mod =0;
+    unsigned int mod =0;
     unsigned long modtemp =0;
     unsigned char ps =0;                //分频系数
 	
     TACTL |=TACLR;                      //清除定时器A
 
-    if((modtemp=(unsigned long)(XT2IN/MSP430_DIVS)/(freq*8))<0xFFFF)
+    modtemp=(unsigned long)(double)(XT2IN/MSP430_DIVS)/(freq*8);
+    if(modtemp<0xFFFF)
     {
         ps =3;
         mod =modtemp;
-	if((modtemp=(unsigned long)(XT2IN/MSP430_DIVS)/(freq*4))<0xFFFF)
+        modtemp=(unsigned long)(double)(XT2IN/MSP430_DIVS)/(freq*4);
+	if(modtemp<0xFFFF)
 	{
             ps =2;
             mod =modtemp;
-            if((modtemp=(unsigned long)(XT2IN/MSP430_DIVS)/(freq*2))<0xFFFF)
+            modtemp=(unsigned long)(double)(XT2IN/MSP430_DIVS)/(freq*2);
+            if(modtemp<0xFFFF)
             {
                 ps =1;
 		mod =modtemp;
-		if((modtemp=(unsigned long)(XT2IN/MSP430_DIVS)/freq)<0xFFFF)
+                modtemp=(unsigned long)(double)(XT2IN/MSP430_DIVS)/freq;
+		if(modtemp<0xFFFF)
 		{
                     ps =0;
 		    mod =modtemp;
@@ -82,7 +86,7 @@ void timera_pwm_init2( unsigned char channel, unsigned int duty)
     {
           case 0:
           {
-              TACCTL1 =OUTMOD_7;
+              TACCTL1 =OUTMOD_6;
               TACCR1 =(unsigned int)((duty*TACCR0)/10000);
               P1SEL |=(0x01<<5);
               P1DIR |=(0x01<<5);
@@ -90,7 +94,7 @@ void timera_pwm_init2( unsigned char channel, unsigned int duty)
           break;
           case 1:
           {
-              TACCTL2 =OUTMOD_7;
+              TACCTL2 =OUTMOD_6;
               TACCR2 =(unsigned int)((duty*TACCR0)/10000);
               P1SEL |=(0x01<<6);
               P1DIR |=(0x01<<6);
