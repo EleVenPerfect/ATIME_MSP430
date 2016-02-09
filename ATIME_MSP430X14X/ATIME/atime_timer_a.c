@@ -82,12 +82,17 @@ void timera_pwm_init1(unsigned long freq)
 ***************************************/
 void timera_pwm_init2( unsigned char channel, unsigned int duty)
 {
+    unsigned long i;
+    unsigned int j;
+    j =TACCR0;
+    i =duty * j;
+    i /=100;
     switch(channel)
     {
           case 0:
           {
               TACCTL1 =OUTMOD_6;
-              TACCR1 =(unsigned int)((duty*TACCR0)/10000);
+              TACCR1 =(unsigned int)i;
               P1SEL |=(0x01<<5);
               P1DIR |=(0x01<<5);
           }
@@ -95,7 +100,7 @@ void timera_pwm_init2( unsigned char channel, unsigned int duty)
           case 1:
           {
               TACCTL2 =OUTMOD_6;
-              TACCR2 =(unsigned int)((duty*TACCR0)/10000);
+              TACCR2 =(unsigned int)i;
               P1SEL |=(0x01<<6);
               P1DIR |=(0x01<<6);
           }
