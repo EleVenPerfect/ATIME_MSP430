@@ -82,14 +82,18 @@ void timera_pwm_init2( unsigned char channel, unsigned int duty)
     {
           case 0:
           {
-              TACCTL1 =OUTMOD_6;
+              TACCTL1 =OUTMOD_7;
               TACCR1 =(unsigned int)((duty*TACCR0)/10000);
+              P1SEL |=(0x01<<5);
+              P1DIR |=(0x01<<5);
           }
           break;
           case 1:
           {
-              TACCTL2 =OUTMOD_6;
+              TACCTL2 =OUTMOD_7;
               TACCR2 =(unsigned int)((duty*TACCR0)/10000);
+              P1SEL |=(0x01<<6);
+              P1DIR |=(0x01<<6);
           }
           break;
     }
