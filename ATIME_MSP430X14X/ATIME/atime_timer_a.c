@@ -86,7 +86,7 @@ void timera_pwm_init2( unsigned char channel, unsigned int duty)
     unsigned int j;
     j =TACCR0;
     i =duty * j;
-    i /=100;
+    i /=10000;
     switch(channel)
     {
           case 0:

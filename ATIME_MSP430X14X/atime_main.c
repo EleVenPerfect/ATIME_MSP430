@@ -19,7 +19,7 @@ void main(void)
         i+=100;
         if(i>9999)
             i=0;
-        timera_pwm_init2(0,50);
-        timera_pwm_init2(1,80);
+        timera_pwm_init2(0,2000);
+        timera_pwm_init2(1,9000);
     }
 }
