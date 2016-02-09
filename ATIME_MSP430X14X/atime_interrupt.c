@@ -24,8 +24,9 @@
 #pragma vector=UART0RX_VECTOR
 __interrupt void USART0_RX_ISR(void)
 {
-    unsigned char data=0;
-    data =U0RXBUF;                      //接收到的数据存起来
+          unsigned char data=0;
+          data =U0RXBUF;                      //接收到的数据存起来
+          uart0_sendchar(data);               //将接收到的数据再发送出去
 }
 
 
@@ -45,8 +46,9 @@ __interrupt void USART0_TX_ISR(void)
 #pragma vector=UART1RX_VECTOR
 __interrupt void USART1_RX_ISR(void)
 {
-    unsigned char data=0;
-    data =U1RXBUF;                      //接收到的数据存起来
+          unsigned char data=0;
+          data =U1RXBUF;                      //接收到的数据存起来
+          uart0_sendchar(data);               //将接收到的数据再发送出去
 }
 
 

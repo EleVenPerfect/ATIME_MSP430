@@ -4,7 +4,7 @@
         #include <msp430x14x.h>
         #include "atime_uart.h"
 应用函数：
-          rs485_init(void)
+          rs485_init()
           rs485_sendchar( unsigned char ch, unsigned char num)
           rs485_send( unsigned char ch[], unsigned char num)    
 修改历史：
