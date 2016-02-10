@@ -52,7 +52,9 @@
       <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Defaults.h</file>
       <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Product.h</file>
       <file>$PROJ_DIR$\ATIME\atime_timer_b.c</file>
+      <file>$PROJ_DIR$\ATIME\atime_rf24l01.h</file>
       <file>$PROJ_DIR$\ATIME\atime_timer_b.h</file>
+      <file>$PROJ_DIR$\ATIME\atime_rf24l01.c</file>
     </outputs>
     <file>
       <name>$PROJ_DIR$\ATIME\atime_lcd5110.c</name>
@@ -133,11 +135,11 @@
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 22 28 32 16 36 23 26 27 1 20 18 37 43 4 44 38 19 41 8 34</file>
+          <file> 22 28 32 16 36 23 26 27 1 20 18 37 43 4 44 38 19 41 8 34 46 48</file>
         </tool>
         <tool>
           <name>ICC430</name>
-          <file> 22 28 32 16 36 23 26 27 1 20 18 37 43 4 44 38 19 41 8 34</file>
+          <file> 22 28 32 16 36 23 26 27 1 20 18 37 43 4 44 38 19 41 8 34 46 48</file>
         </tool>
       </inputs>
     </file>

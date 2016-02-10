@@ -1,7 +1,7 @@
 #include <msp430x14x.h>
 #include "atime_msp430core.h"		//MSP430核心库
 #include "atime_lcd5110_printf.h"
-
+#include "atime_rf24l01.h"
 
 
 void main(void)
