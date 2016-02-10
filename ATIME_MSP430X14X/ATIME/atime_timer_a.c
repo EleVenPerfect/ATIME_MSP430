@@ -73,8 +73,8 @@ void timera_pwm_init1(unsigned long freq)
 函数功能：PWM输出通道及占空比配置
 传递参数：
     channel - PWM输出通道
-      |__0--TA1
-      |__1--TA2
+      |__0--TA1--P1.2
+      |__1--TA2--P1.3
     duty - PWM输出占空比
       |__0~10000--占空比0.00%~100.00%
 返回值：空
@@ -83,7 +83,7 @@ void timera_pwm_init1(unsigned long freq)
 void timera_pwm_init2( unsigned char channel, unsigned int duty)
 {
     unsigned long i;
-    unsigned int j;
+    unsigned long j;
     j =TACCR0;
     i =duty * j;
     i /=10000;
@@ -93,16 +93,16 @@ void timera_pwm_init2( unsigned char channel, unsigned int duty)
           {
               TACCTL1 =OUTMOD_6;
               TACCR1 =(unsigned int)i;
-              P1SEL |=(0x01<<5);
-              P1DIR |=(0x01<<5);
+              P1SEL |=(0x01<<2);
+              P1DIR |=(0x01<<2);
           }
           break;
           case 1:
           {
               TACCTL2 =OUTMOD_6;
               TACCR2 =(unsigned int)i;
-              P1SEL |=(0x01<<6);
-              P1DIR |=(0x01<<6);
+              P1SEL |=(0x01<<3);
+              P1DIR |=(0x01<<3);
           }
           break;
     }
