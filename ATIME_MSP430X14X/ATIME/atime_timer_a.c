@@ -12,6 +12,30 @@
 最后修改时间：2016-02-09
 作者： ATIME	版权所有
 实例程序：
+      #include <msp430x14x.h>
+      #include "atime_msp430core.h"		//MSP430核心库
+      #include "atime_timer_a.h"
+
+
+      void main(void)
+      {
+          unsigned int i=1;
+          watchdog_close();			//关闭看门狗
+          wait_ms(50);
+          basic_clock_init();			//系统时钟初始化
+
+          timera_pwm_init1(1000);
+          while(1)
+          {
+              i+=1000;
+              if(i>9999)
+                  i=0;
+              timera_pwm_init2(0,i);
+              timera_pwm_init2(1,10000-i);
+              wait_ms(500);
+          }
+      }
+
 注：
 1.目前只写了PWM模式的函数，其他功能尚未添加，如有需要欢迎联系atime@atime.org.cn。
 2.timera_pwm_init1要先设置好后再调用timera_pwm_init2，才可以保证占空比正确设置。
