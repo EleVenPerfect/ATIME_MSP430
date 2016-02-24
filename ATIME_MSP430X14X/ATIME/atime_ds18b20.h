@@ -58,7 +58,7 @@
 #ifndef _ATIME_MSP430_DS18B20_H_ 
 #define _ATIME_MSP430_DS18B20_H_
 
-#include "atime_at24c32.c"
+#include "atime_ds18b20.c"
 
 
 /************************************
