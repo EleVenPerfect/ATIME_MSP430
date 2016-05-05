@@ -159,6 +159,10 @@
           <name>BICOMP</name>
           <file> 17</file>
         </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 40</file>
+        </tool>
       </outputs>
       <inputs>
         <tool>
