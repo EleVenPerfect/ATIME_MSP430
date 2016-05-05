@@ -22,7 +22,7 @@
 /************************************
 库全局变量组
 ***************************************/
-unsigned char am2320_data[8]={0x00,0x50,0x20,0x05,0x05,0x02,0x16,0x00};
+unsigned char am2320_data[8]={0x0};
 
 
 /************************************
@@ -30,11 +30,12 @@ unsigned char am2320_data[8]={0x00,0x50,0x20,0x05,0x05,0x02,0x16,0x00};
 传递参数：数据存储数组
 返回值：空
 ***************************************/
-void as2320_waken(unsigned char a[])
+void as2320_waken_iic(void)
 {
     iic_start_s();
     iic_writebyte_s(0xB8);
-    wait_ms(1);
+    iic_getack_s();
+    wait_ms(2);
     iic_stop_s();
 }
 
@@ -43,11 +44,28 @@ void as2320_waken(unsigned char a[])
 传递参数：数据存储数组
 返回值：空
 ***************************************/
-void as2320_read(unsigned char a[])
+void as2320_read_iic(void)
 {
     iic_start_s();
-    iic_writebyte_s(0xB8);
-    
+    iic_writebyte_s(0xB8|0x01);
+    iic_getack_s();
+    wait_ms(1);
+    am2320_data[0] = iic_readbyte_s();
+    iic_setack_s();
+    am2320_data[1] = iic_readbyte_s();
+    iic_setack_s();
+    am2320_data[2] = iic_readbyte_s();
+    iic_setack_s();
+    am2320_data[3] = iic_readbyte_s();
+    iic_setack_s();
+    am2320_data[4] = iic_readbyte_s();
+    iic_setack_s();
+    am2320_data[5] = iic_readbyte_s();
+    iic_setack_s();
+    am2320_data[6] = iic_readbyte_s();
+    iic_setack_s();
+    am2320_data[7] = iic_readbyte_s();
+    iic_stop_s();
 }
 
 
@@ -56,9 +74,32 @@ void as2320_read(unsigned char a[])
 传递参数：数据存储数组
 返回值：空
 ***************************************/
-void am2320_write(unsigned char a[])
+void am2320_write_iic(void)
 {
+    iic_start_s();
+    iic_writebyte_s(0xB8);
+    iic_getack_s();
+    iic_writebyte_s(0x03);
+    iic_getack_s();
+    iic_writebyte_s(0x00);
+    iic_getack_s();
+    iic_writebyte_s(0x04);
+    iic_getack_s();
+    iic_stop_s();
+}
 
+
+/************************************
+函数功能：AM2320读数据
+传递参数：数据存储数组
+返回值：空
+***************************************/
+void as2320_read()
+{
+    as2320_waken_iic();
+    as2320_read_iic();
+    wait_ms(3);
+    am2320_write_iic();
 }
 
 
