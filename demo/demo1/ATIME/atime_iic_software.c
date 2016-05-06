@@ -221,6 +221,4 @@ void iic_read(unsigned char wdata[],unsigned char wn,unsigned char rdata[],unsig
     iic_stop_s();
 }
 
-
-
 #endif
