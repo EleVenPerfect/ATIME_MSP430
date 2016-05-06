@@ -6,6 +6,7 @@
   <configuration>
     <name>Debug</name>
     <outputs>
+<<<<<<< HEAD
       <file>$PROJ_DIR$\Debug\Obj\atime_main.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\atime_lcd5110.r43</file>
       <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Threads.h</file>
@@ -99,6 +100,67 @@
         <tool>
           <name>ICC430</name>
           <file> 37</file>
+=======
+      <file>$PROJ_DIR$\Debug\Obj\atime_lcd5110.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\TAPwm.r43</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Defaults.h</file>
+      <file>$PROJ_DIR$\TAPwm.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_interrupt.r43</file>
+      <file>$TOOLKIT_DIR$\config\linker\lnk430f149.xcl</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Threads.h</file>
+      <file>$PROJ_DIR$\ATIME\atime_lcd5110_printf.c</file>
+      <file>$PROJ_DIR$\ATIME\atime_lcd5110.c</file>
+      <file>$PROJ_DIR$\ATIME\ascii_8_6.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\yvals.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\xencoding_limits.h</file>
+      <file>$TOOLKIT_DIR$\inc\msp430x16x.h</file>
+      <file>$TOOLKIT_DIR$\lib\dlib\dl430fn.h</file>
+      <file>$TOOLKIT_DIR$\inc\intrinsics.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_lcd5110_printf.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\TAPwm.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_main.pbi</file>
+      <file>$PROJ_DIR$\Debug\Exe\atime.d43</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Product.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_interrupt.pbi</file>
+      <file>$PROJ_DIR$\ATIME\atime_lcd5110_printf.h</file>
+      <file>$PROJ_DIR$\TAPwm.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_msp430core.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_lcd5110_printf.r43</file>
+      <file>$TOOLKIT_DIR$\inc\in430.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime.pbd</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_lcd5110.r43</file>
+      <file>$TOOLKIT_DIR$\inc\msp430x14x.h</file>
+      <file>$PROJ_DIR$\ATIME\atime_msp430core.h</file>
+      <file>$PROJ_DIR$\atime_main.c</file>
+      <file>$PROJ_DIR$\ATIME\atime_lcd5110.h</file>
+      <file>$PROJ_DIR$\ATIME\atime_msp430core.c</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\ystdio.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\ycheck.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\stdio.h</file>
+      <file>$PROJ_DIR$\atime_interrupt.c</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\ysizet.h</file>
+      <file>$TOOLKIT_DIR$\config\linker\multiplier.xcl</file>
+      <file>$TOOLKIT_DIR$\lib\dlib\dl430fn.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_main.r43</file>
+      <file>$PROJ_DIR$\Debug\Exe\atime.txt</file>
+      <file>$PROJ_DIR$\Debug\Exe\atime.ulp</file>
+      <file>$PROJ_DIR$\ATIME\atime_am2320.c</file>
+      <file>$PROJ_DIR$\ATIME\atime_ds1307.h</file>
+      <file>$PROJ_DIR$\ATIME\atime_iic_software.c</file>
+      <file>$PROJ_DIR$\ATIME\atime_iic_software.h</file>
+      <file>$PROJ_DIR$\ATIME\atime_ds1307.c</file>
+    </outputs>
+    <file>
+      <name>[ROOT_NODE]</name>
+      <outputs>
+        <tool>
+          <name>ULP430</name>
+          <file> 42</file>
+        </tool>
+        <tool>
+          <name>XLINK</name>
+          <file> 18 41</file>
+>>>>>>> parent of d805e50... am2320
         </tool>
       </outputs>
       <inputs>
@@ -117,25 +179,42 @@
       <outputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 28</file>
         </tool>
         <tool>
           <name>ICC430</name>
           <file> 36</file>
+=======
+          <file> 15</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 24</file>
+>>>>>>> parent of d805e50... am2320
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 31 29 6 26 45 11 33 32 19 27 2 25 20</file>
         </tool>
         <tool>
           <name>ICC430</name>
           <file> 31 29 6 26 45 11 33 32 19 27 2 25 20</file>
+=======
+          <file> 31 9 8 35 34 10 2 13 19 11 6 37 33</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 31 9 8 35 34 10 2 13 19 11 6 37 33</file>
+>>>>>>> parent of d805e50... am2320
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\Debug\Exe\atime.d43</name>
       <outputs>
         <tool>
@@ -148,6 +227,43 @@
           <name>XLINK</name>
           <file> 16 24 37 21</file>
         </tool>
+=======
+      <name>$PROJ_DIR$\ATIME\atime_lcd5110.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 0</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 27</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 9</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 9</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Debug\Exe\atime.d43</name>
+      <outputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 41</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 5 38 40 39</file>
+        </tool>
+>>>>>>> parent of d805e50... am2320
       </inputs>
     </file>
     <file>
@@ -155,11 +271,19 @@
       <outputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 35</file>
         </tool>
         <tool>
           <name>ICC430</name>
           <file> 14</file>
+=======
+          <file> 16</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 1</file>
+>>>>>>> parent of d805e50... am2320
         </tool>
       </outputs>
     </file>
@@ -168,9 +292,19 @@
       <outputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 41</file>
         </tool>
       </outputs>
+=======
+          <file> 12 25 14 3</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 12 25 14 3</file>
+        </tool>
+      </inputs>
+>>>>>>> parent of d805e50... am2320
     </file>
     <file>
       <name>$PROJ_DIR$\TAPwm.c</name>
@@ -181,19 +315,53 @@
         </tool>
         <tool>
           <name>ICC430</name>
+<<<<<<< HEAD
           <file> 13</file>
+=======
+          <file> 40</file>
+>>>>>>> parent of d805e50... am2320
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 38 15 30 5</file>
         </tool>
         <tool>
           <name>ICC430</name>
           <file> 38 15 30 5</file>
+=======
+          <file> 28 25 14 29 32 21 31 9 8 35 34 10 2 13 19 11 6 37 33 7 46 45 43</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 28 25 14 29 32 21 31 9 8 35 34 10 2 13 19 11 6 37 33 7 46 45 43</file>
         </tool>
       </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\ATIME\atime_msp430core.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 23</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\atime_interrupt.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 20</file>
+>>>>>>> parent of d805e50... am2320
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 4</file>
+        </tool>
+      </outputs>
     </file>
   </configuration>
   <configuration>
