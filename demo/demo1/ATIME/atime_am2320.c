@@ -23,6 +23,7 @@
 库全局变量组
 ***************************************/
 <<<<<<< HEAD
+<<<<<<< HEAD
 int am2320_w = 0;                       //温度数据
 int am2320_s = 0;                       //湿度数据
 
@@ -167,6 +168,9 @@ void am2320_1_iic_writebyte_s(unsigned char data)
 =======
 unsigned char am2320_data[8]={0x0};
 >>>>>>> parent of d805e50... am2320
+=======
+unsigned char am2320_data[8]={0x0};
+>>>>>>> parent of d805e50... am2320
 
 
 /************************************
@@ -190,6 +194,7 @@ void as2320_1_waken_iic(void)
 ***************************************/
 void as2320_1_read_iic(void)
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
     unsigned char am2320_data[8]={0};
     am2320_1_iic_start_s();
@@ -224,6 +229,8 @@ void as2320_1_read_iic(void)
         am2320_w = -999;
     } 
 =======
+=======
+>>>>>>> parent of d805e50... am2320
     iic_start_s();
     iic_writebyte_s(0xB8|0x01);
     iic_getack_s();
@@ -244,6 +251,9 @@ void as2320_1_read_iic(void)
     iic_setack_s();
     am2320_data[7] = iic_readbyte_s();
     iic_stop_s();
+<<<<<<< HEAD
+>>>>>>> parent of d805e50... am2320
+=======
 >>>>>>> parent of d805e50... am2320
 }
 
@@ -276,15 +286,21 @@ void am2320_1_write_iic(void)
 void as2320_1_read()
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     as2320_1_waken_iic();
     am2320_1_write_iic();
     wait_ms(3);
     as2320_1_read_iic();
 =======
+=======
+>>>>>>> parent of d805e50... am2320
     as2320_waken_iic();
     as2320_read_iic();
     wait_ms(3);
     am2320_write_iic();
+<<<<<<< HEAD
+>>>>>>> parent of d805e50... am2320
+=======
 >>>>>>> parent of d805e50... am2320
 }
 
