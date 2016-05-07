@@ -50,10 +50,10 @@
 int am2320_3_w = 0;               //温度数据*10
 int am2320_3_s = 0;               //湿度数据*10
 
-#define AM2320_3_SDA_PORT        5       //定义SDA总线IO端口
-#define AM2320_3_SDA_BIT         1       //定义SDA总线IO引脚
-#define AM2320_3_SCL_PORT        5       //定义SCL总线IO端口
-#define AM2320_3_SCL_BIT         2       //定义SCL总线IO引脚
+#define AM2320_3_SDA_PORT        4       //定义SDA总线IO端口
+#define AM2320_3_SDA_BIT         5       //定义SDA总线IO引脚
+#define AM2320_3_SCL_PORT        4       //定义SCL总线IO端口
+#define AM2320_3_SCL_BIT         6       //定义SCL总线IO引脚
 
 
 /************************************
