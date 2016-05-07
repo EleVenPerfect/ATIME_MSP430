@@ -38,8 +38,8 @@
 注意：本程序没有加入CRC校验，只是检测温度、湿度数据指令是否正确。当错误时返回-999.
 ***************************************/
 
-#ifndef _ATIME_MSP430_IIC_AM2320_C_ 
-#define _ATIME_MSP430_IIC_AM2320_C_
+#ifndef _ATIME_MSP430_IIC_AM2320_1_C_ 
+#define _ATIME_MSP430_IIC_AM2320_1_C_
 
 
 /************************************
@@ -48,10 +48,10 @@
 int am2320_1_w = 0;               //温度数据*10
 int am2320_1_s = 0;               //湿度数据*10
 
-#define AM2320_1_SDA_PORT        3       //定义SDA总线IO端口
-#define AM2320_1_SDA_BIT         1       //定义SDA总线IO引脚
-#define AM2320_1_SCL_PORT        3       //定义SCL总线IO端口
-#define AM2320_1_SCL_BIT         0       //定义SCL总线IO引脚
+#define AM2320_1_SDA_PORT        5       //定义SDA总线IO端口
+#define AM2320_1_SDA_BIT         5       //定义SDA总线IO引脚
+#define AM2320_1_SCL_PORT        5       //定义SCL总线IO端口
+#define AM2320_1_SCL_BIT         6       //定义SCL总线IO引脚
 
 
 /************************************
@@ -196,7 +196,7 @@ void am2320_1_iic_writebyte_s(unsigned char data)
 传递参数：数据存储数组
 返回值：空
 ***************************************/
-void as2320_waken_iic(void)
+void as2320_1_waken_iic(void)
 {
     am2320_1_iic_start_s();
     am2320_1_iic_writebyte_s(0xB8);
@@ -211,7 +211,7 @@ void as2320_waken_iic(void)
 传递参数：数据存储数组
 返回值：空
 ***************************************/
-void as2320_read_iic(void)
+void as2320_1_read_iic(void)
 {
     unsigned char am2320_data[8]={0};
     am2320_1_iic_start_s();
@@ -273,12 +273,12 @@ void am2320_1_write_iic(void)
 传递参数：数据存储数组
 返回值：空
 ***************************************/
-void as2320_read(void)
+void as2320_1_read(void)
 {
-    as2320_waken_iic();
+    as2320_1_waken_iic();
     am2320_1_write_iic();
     wait_ms(3);
-    as2320_read_iic();
+    as2320_1_read_iic();
 }
 
 
