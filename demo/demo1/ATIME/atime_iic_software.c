@@ -31,9 +31,9 @@ or stop condition as defined below.
 /************************************
 库全局变量组
 ***************************************/
-#define SDA_PORT        4       //定义SDA总线IO端口
+#define SDA_PORT        3       //定义SDA总线IO端口
 #define SDA_BIT         1       //定义SDA总线IO引脚
-#define SCL_PORT        4       //定义SCL总线IO端口
+#define SCL_PORT        3       //定义SCL总线IO端口
 #define SCL_BIT         0       //定义SCL总线IO引脚
 
 /************************************
@@ -220,7 +220,5 @@ void iic_read(unsigned char wdata[],unsigned char wn,unsigned char rdata[],unsig
     rdata[i] =iic_readbyte_s();
     iic_stop_s();
 }
-
-
 
 #endif
