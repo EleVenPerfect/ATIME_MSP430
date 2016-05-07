@@ -25,6 +25,144 @@
 int am2320_w = 0;               //温度数据
 int am2320_s = 0;               //湿度数据
 
+#define SDA_PORT        3       //定义SDA总线IO端口
+#define SDA_BIT         1       //定义SDA总线IO引脚
+#define SCL_PORT        3       //定义SCL总线IO端口
+#define SCL_BIT         0       //定义SCL总线IO引脚
+
+/************************************
+函数功能：IIC接口开始
+传递参数：空
+返回值：空
+***************************************/
+void iic_start_s()
+{
+    PxyDIRz(SCL_PORT,SCL_BIT,1);
+    PxyDIRz(SDA_PORT,SDA_BIT,1);
+    
+    PxyOUTz(SCL_PORT,SCL_BIT,1);
+    PxyOUTz(SDA_PORT,SDA_BIT,1);
+    delay_us(50);
+    
+    PxyOUTz(SDA_PORT,SDA_BIT,0);
+    delay_us(50);
+    PxyOUTz(SCL_PORT,SCL_BIT,0);
+    delay_us(10);
+}
+
+/************************************
+函数功能：IIC接口结束
+传递参数：空
+返回值：空
+***************************************/
+void iic_stop_s()
+{
+    PxyDIRz(SCL_PORT,SCL_BIT,1);
+    PxyDIRz(SDA_PORT,SDA_BIT,1);
+    delay_us(15);
+    PxyOUTz(SCL_PORT,SCL_BIT,1);
+    PxyOUTz(SDA_PORT,SDA_BIT,0);
+	delay_us(15);
+    PxyOUTz(SDA_PORT,SDA_BIT,1);
+	delay_us(30);
+}
+
+
+/************************************
+函数功能：IIC接口接收ACKNOWLEDGE
+传递参数：空
+返回值：ACK
+***************************************/
+unsigned char iic_getack_s()
+{
+    unsigned char ack=1;
+    PxyDIRz(SCL_PORT,SCL_BIT,1);
+    PxyDIRz(SDA_PORT,SDA_BIT,0);
+    
+    PxyOUTz(SCL_PORT,SCL_BIT,0);
+    delay_us(10);
+    PxyOUTz(SCL_PORT,SCL_BIT,1);
+    delay_us(10);
+    ack =PxyINz(SDA_PORT,SDA_BIT);
+    PxyOUTz(SCL_PORT,SCL_BIT,0);
+    return ack;
+}
+/************************************
+函数功能：IIC接口发送ACKNOWLEDGE
+传递参数：空
+返回值：空
+***************************************/
+void iic_setack_s()
+{
+    PxyDIRz(SCL_PORT,SCL_BIT,1);
+    PxyDIRz(SDA_PORT,SDA_BIT,1);
+    
+    PxyOUTz(SCL_PORT,SCL_BIT,0);
+    PxyOUTz(SDA_PORT,SDA_BIT,0);
+	delay_us(10);
+    PxyOUTz(SCL_PORT,SCL_BIT,1);
+	delay_us(30);
+    PxyOUTz(SCL_PORT,SCL_BIT,0);
+    PxyOUTz(SDA_PORT,SDA_BIT,0);
+	delay_us(10);
+}
+
+/************************************
+函数功能：IIC接口读byte
+传递参数：空
+返回值：读取数据
+注：接收数据低位先接收
+***************************************/
+unsigned char iic_readbyte_s()
+{
+    unsigned char i,data=0,temp;
+    PxyDIRz(SCL_PORT,SCL_BIT,1);
+    PxyDIRz(SDA_PORT,SDA_BIT,0);
+    for( i=0; i<8; i++)
+    {
+        PxyOUTz(SCL_PORT,SCL_BIT,1);
+	delay_us(20);
+        data <<=1;
+        temp =PxyINz(SDA_PORT,SDA_BIT);
+        if(temp)
+            data |=0x01;
+        else
+            data &=~(0x01);
+        PxyOUTz(SCL_PORT,SCL_BIT,0);
+        delay_us(10);
+    }
+    return data;
+}
+
+
+/************************************
+函数功能：IIC接口写byte
+传递参数：发送数据
+返回值：空
+注：发送数据高位先发送
+***************************************/
+void iic_writebyte_s(unsigned char data)
+{
+    unsigned char i;
+    PxyDIRz(SCL_PORT,SCL_BIT,1);
+    PxyDIRz(SDA_PORT,SDA_BIT,1);
+    
+    for( i=0; i<8; i++)
+    {
+        if(data&0x80)
+            PxyOUTz(SDA_PORT,SDA_BIT,1);
+        else
+            PxyOUTz(SDA_PORT,SDA_BIT,0);
+		delay_us(20);
+        PxyOUTz(SCL_PORT,SCL_BIT,1);
+        delay_us(40);
+        PxyOUTz(SCL_PORT,SCL_BIT,0);
+        delay_us(15);
+        data <<=1;
+        PxyOUTz(SDA_PORT,SDA_BIT,0);
+    }
+}
+
 
 /************************************
 函数功能：IIC接口读数据
