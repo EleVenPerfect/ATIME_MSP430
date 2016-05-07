@@ -196,7 +196,7 @@ void am2320_2_iic_writebyte_s(unsigned char data)
 传递参数：数据存储数组
 返回值：空
 ***************************************/
-void as2320_2_waken_iic(void)
+void am2320_2_waken_iic(void)
 {
     am2320_2_iic_start_s();
     am2320_2_iic_writebyte_s(0xB8);
@@ -211,7 +211,7 @@ void as2320_2_waken_iic(void)
 传递参数：数据存储数组
 返回值：空
 ***************************************/
-void as2320_2_read_iic(void)
+void am2320_2_read_iic(void)
 {
     unsigned char am2320_data[8]={0};
     am2320_2_iic_start_s();
@@ -273,12 +273,12 @@ void am2320_2_write_iic(void)
 传递参数：数据存储数组
 返回值：空
 ***************************************/
-void as2320_2_read(void)
+void am2320_2_read(void)
 {
-    as2320_2_waken_iic();
+    am2320_2_waken_iic();
     am2320_2_write_iic();
     wait_ms(3);
-    as2320_2_read_iic();
+    am2320_2_read_iic();
 }
 
 

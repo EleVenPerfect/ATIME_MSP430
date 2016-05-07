@@ -4,7 +4,7 @@
         #include <msp430x14x.h>
         #include "atime_msp430core.h"
 应用函数：
-        void as2320_read(void)
+        void am2320_read(void)
 修改历史：
 	‘修改人’   ‘修改内容’  ‘修改时间’
 	  空          空	  空
@@ -26,7 +26,7 @@
             while(1)
             {
                 wait_ms(2500);
-                as2320_read();
+                am2320_read();
                 printf("%d\n",am2320_1_w);      //显示温度数据*10
                 printf("%d\n",am2320_1_s);      //显示湿度数据*10
 
@@ -35,6 +35,8 @@
         }
 
 常见问题解释：
+1.如果数据始终是0，可能是没有运行对应的函数。
+2.如果返回999，则可能链接线，或没接上拉电阻。
 注意：本程序没有加入CRC校验，只是检测温度、湿度数据指令是否正确。当错误时返回-999.
 ***************************************/
 
@@ -196,7 +198,7 @@ void am2320_1_iic_writebyte_s(unsigned char data)
 传递参数：数据存储数组
 返回值：空
 ***************************************/
-void as2320_1_waken_iic(void)
+void am2320_1_waken_iic(void)
 {
     am2320_1_iic_start_s();
     am2320_1_iic_writebyte_s(0xB8);
@@ -211,7 +213,7 @@ void as2320_1_waken_iic(void)
 传递参数：数据存储数组
 返回值：空
 ***************************************/
-void as2320_1_read_iic(void)
+void am2320_1_read_iic(void)
 {
     unsigned char am2320_data[8]={0};
     am2320_1_iic_start_s();
@@ -273,12 +275,12 @@ void am2320_1_write_iic(void)
 传递参数：数据存储数组
 返回值：空
 ***************************************/
-void as2320_1_read(void)
+void am2320_1_read(void)
 {
-    as2320_1_waken_iic();
+    am2320_1_waken_iic();
     am2320_1_write_iic();
     wait_ms(3);
-    as2320_1_read_iic();
+    am2320_1_read_iic();
 }
 
 
