@@ -31,9 +31,9 @@ or stop condition as defined below.
 /************************************
 库全局变量组
 ***************************************/
-#define SDA_PORT        3       //定义SDA总线IO端口
+#define SDA_PORT        6       //定义SDA总线IO端口
 #define SDA_BIT         1       //定义SDA总线IO引脚
-#define SCL_PORT        3       //定义SCL总线IO端口
+#define SCL_PORT        6       //定义SCL总线IO端口
 #define SCL_BIT         0       //定义SCL总线IO引脚
 
 /************************************

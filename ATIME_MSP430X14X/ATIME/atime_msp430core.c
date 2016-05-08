@@ -28,6 +28,7 @@
 2.软件仿真时，弹出：a word access on odd address 0x19;
   表示有整型常量指定存储在flash奇地址上了。应该地址改成偶地址。
   但是本函数中的地址为寄存器地址，所以不应该更改，而是用char型地址保存，详见ioreg_trans函数。
+3.Warning[Pa050]: non-native end of line sequence detected (this diagnostic is only issued once) 可能是某个文件最后不是以回车结尾。
 *************************************/
 
 #ifndef _ATIME_MSP430_CORE_C_ 
