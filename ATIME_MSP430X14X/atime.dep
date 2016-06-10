@@ -2,190 +2,87 @@
 
 <project>
   <fileVersion>2</fileVersion>
-  <fileChecksum>3838019920</fileChecksum>
+  <fileChecksum>1150843695</fileChecksum>
   <configuration>
     <name>Debug</name>
     <outputs>
-      <file>$PROJ_DIR$\Debug\Obj\atime_main.r43</file>
-      <file>$PROJ_DIR$\ATIME\atime_lcd5110.c</file>
-      <file>$PROJ_DIR$\Debug\Exe\atime.ulp</file>
-      <file>$PROJ_DIR$\ATIME\atime_timer_a.h</file>
-      <file>$TOOLKIT_DIR$\lib\dlib\dl430fn.h</file>
-      <file>$PROJ_DIR$\ATIME\atime_timer_a.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\TAPwm.pbi</file>
-      <file>$PROJ_DIR$\Debug\Exe\atime.d43</file>
-      <file>$TOOLKIT_DIR$\inc\dlib\c\ystdio.h</file>
-      <file>$PROJ_DIR$\atime_interrupt.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\atime_lcd5110.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\TAPwm.r43</file>
-      <file>$PROJ_DIR$\Debug\Obj\atime_lcd5110_printf.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\atime_interrupt.r43</file>
-      <file>$PROJ_DIR$\atime_main.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\atime_main.pbi</file>
-      <file>$PROJ_DIR$\ATIME\atime_msp430core.h</file>
-      <file>$PROJ_DIR$\TAPwm.h</file>
-      <file>$TOOLKIT_DIR$\inc\dlib\c\ycheck.h</file>
-      <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Threads.h</file>
-      <file>$TOOLKIT_DIR$\inc\dlib\c\stdio.h</file>
+      <file>$TOOLKIT_DIR$\inc\msp430x16x.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Product.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Defaults.h</file>
       <file>$PROJ_DIR$\TAPwm.c</file>
-      <file>$TOOLKIT_DIR$\inc\msp430x14x.h</file>
-      <file>$PROJ_DIR$\ATIME\atime_lcd5110_printf.h</file>
-      <file>$PROJ_DIR$\Debug\Exe\atime.txt</file>
-      <file>$PROJ_DIR$\Debug\Obj\atime_lcd5110_printf.r43</file>
-      <file>$PROJ_DIR$\ATIME\atime_lcd5110.h</file>
-      <file>$PROJ_DIR$\ATIME\ascii_8_6.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_main.pbi</file>
       <file>$TOOLKIT_DIR$\inc\in430.h</file>
-      <file>$TOOLKIT_DIR$\lib\dlib\dl430fn.r43</file>
-      <file>$TOOLKIT_DIR$\config\linker\multiplier.xcl</file>
-      <file>$PROJ_DIR$\Debug\Obj\atime_lcd5110.r43</file>
-      <file>$TOOLKIT_DIR$\inc\intrinsics.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\atime.pbd</file>
-      <file>$PROJ_DIR$\ATIME\atime_lcd5110_printf.c</file>
-      <file>$TOOLKIT_DIR$\config\linker\lnk430f149.xcl</file>
+      <file>$PROJ_DIR$\ATIME\ascii_8_6.h</file>
       <file>$PROJ_DIR$\ATIME\atime_msp430core.c</file>
+      <file>$TOOLKIT_DIR$\inc\msp430x14x.h</file>
+      <file>$PROJ_DIR$\Debug\Exe\atime.txt</file>
+      <file>$TOOLKIT_DIR$\config\linker\lnk430f149.xcl</file>
+      <file>$PROJ_DIR$\ATIME\atime_msp430core.h</file>
+      <file>$PROJ_DIR$\ATIME\atime_lcd5110_printf.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Threads.h</file>
+      <file>$TOOLKIT_DIR$\inc\intrinsics.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\stdio.h</file>
+      <file>$PROJ_DIR$\ATIME\atime_lcd5110_printf.c</file>
+      <file>$PROJ_DIR$\TAPwm.h</file>
+      <file>$PROJ_DIR$\ATIME\atime_lcd5110.h</file>
       <file>$TOOLKIT_DIR$\inc\dlib\c\yvals.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_lcd5110_printf.r43</file>
       <file>$TOOLKIT_DIR$\inc\dlib\c\xencoding_limits.h</file>
       <file>$PROJ_DIR$\Debug\Obj\atime_msp430core.pbi</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\ycheck.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_interrupt.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_lcd5110.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime.pbd</file>
+      <file>$TOOLKIT_DIR$\lib\dlib\dl430fn.r43</file>
+      <file>$TOOLKIT_DIR$\config\linker\multiplier.xcl</file>
       <file>$PROJ_DIR$\Debug\Obj\atime_interrupt.pbi</file>
       <file>$TOOLKIT_DIR$\inc\dlib\c\ysizet.h</file>
-      <file>$TOOLKIT_DIR$\inc\msp430x16x.h</file>
-      <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Defaults.h</file>
-      <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Product.h</file>
-      <file>$PROJ_DIR$\ATIME\atime_timer_b.c</file>
-      <file>$PROJ_DIR$\ATIME\atime_rf24l01.h</file>
-      <file>$PROJ_DIR$\ATIME\atime_timer_b.h</file>
-      <file>$PROJ_DIR$\ATIME\atime_rf24l01.c</file>
+      <file>$PROJ_DIR$\Debug\Exe\atime.d43</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_lcd5110.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_main.r43</file>
+      <file>$PROJ_DIR$\ATIME\atime_lcd5110.c</file>
+      <file>$TOOLKIT_DIR$\lib\dlib\dl430fn.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\TAPwm.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\atime_lcd5110_printf.pbi</file>
+      <file>$PROJ_DIR$\atime_interrupt.c</file>
+      <file>$PROJ_DIR$\Debug\Exe\atime.ulp</file>
+      <file>$PROJ_DIR$\atime_main.c</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\ystdio.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\TAPwm.pbi</file>
     </outputs>
-    <file>
-      <name>$PROJ_DIR$\ATIME\atime_lcd5110.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 10</file>
-        </tool>
-        <tool>
-          <name>ICC430</name>
-          <file> 31</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 27</file>
-        </tool>
-        <tool>
-          <name>ICC430</name>
-          <file> 27</file>
-        </tool>
-      </inputs>
-    </file>
     <file>
       <name>[ROOT_NODE]</name>
       <outputs>
         <tool>
           <name>XLINK</name>
-          <file> 7 24</file>
+          <file> 31 9</file>
         </tool>
         <tool>
           <name>ULP430</name>
-          <file> 2</file>
+          <file> 39</file>
         </tool>
       </outputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\Debug\Exe\atime.d43</name>
-      <outputs>
-        <tool>
-          <name>XLINK</name>
-          <file> 24</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>XLINK</name>
-          <file> 35 30 0 29</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\atime_interrupt.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 40</file>
-        </tool>
-        <tool>
-          <name>ICC430</name>
-          <file> 13</file>
-        </tool>
-      </outputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\atime_main.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 15</file>
-        </tool>
-        <tool>
-          <name>ICC430</name>
-          <file> 0</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 22 28 32 16 36 23 26 27 1 20 18 37 43 4 44 38 19 41 8 34</file>
-        </tool>
-        <tool>
-          <name>ICC430</name>
-          <file> 22 28 32 16 36 23 26 27 1 20 18 37 43 4 44 38 19 41 8 34</file>
-        </tool>
-      </inputs>
     </file>
     <file>
       <name>$PROJ_DIR$\TAPwm.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 6</file>
+          <name>ICC430</name>
+          <file> 36</file>
         </tool>
         <tool>
-          <name>ICC430</name>
-          <file> 11</file>
+          <name>BICOMP</name>
+          <file> 42</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 42 28 32 17</file>
-        </tool>
-        <tool>
           <name>ICC430</name>
-          <file> 42 28 32 17</file>
+          <file> 0 5 14 17</file>
         </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\ATIME\atime_lcd5110_printf.c</name>
-      <outputs>
         <tool>
           <name>BICOMP</name>
-          <file> 12</file>
-        </tool>
-        <tool>
-          <name>ICC430</name>
-          <file> 25</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 26 27 1 20 18 37 43 4 44 38 19 41 8</file>
-        </tool>
-        <tool>
-          <name>ICC430</name>
-          <file> 26 27 1 20 18 37 43 4 44 38 19 41 8</file>
+          <file> 0 5 14 17</file>
         </tool>
       </inputs>
     </file>
@@ -194,9 +91,106 @@
       <outputs>
         <tool>
           <name>BICOMP</name>
-          <file> 39</file>
+          <file> 22</file>
         </tool>
       </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\ATIME\atime_lcd5110_printf.c</name>
+      <outputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 20</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 37</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 18 6 34 15 23 19 2 35 1 21 13 30 41</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 18 6 34 15 23 19 2 35 1 21 13 30 41</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Debug\Exe\atime.d43</name>
+      <outputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 9</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 10 28 33 27</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\ATIME\atime_lcd5110.c</name>
+      <outputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 25</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 32</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 6</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 6</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\atime_interrupt.c</name>
+      <outputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 24</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 29</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\atime_main.c</name>
+      <outputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 33</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 4</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 8 5 14 11 7 12 18 6 34 15 23 19 2 35 1 21 13 30 41 16</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 8 5 14 11 7 12 18 6 34 15 23 19 2 35 1 21 13 30 41 16</file>
+        </tool>
+      </inputs>
     </file>
   </configuration>
   <configuration>
@@ -205,6 +199,9 @@
     <forcedrebuild>
       <name>[MULTI_TOOL]</name>
       <tool>XLINK</tool>
+    </forcedrebuild>
+    <forcedrebuild>
+      <name>[REBUILD_ALL]</name>
     </forcedrebuild>
   </configuration>
 </project>
