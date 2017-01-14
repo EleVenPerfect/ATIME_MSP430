@@ -10,7 +10,7 @@ void main(void)
     basic_clock_init();			//系统时钟初始化
     lcd5110_init();
     printf("Power By ATIME");
-    printf("Power By ATIME");
     
     while(1);
+    
 }
