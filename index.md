@@ -33,14 +33,13 @@
 使用。下面以DS1307为例：
 
  
-`
+``
 
   #include <msp430x14x.h>
   #include "atime_msp430core.h"                  //MSP430核心库
   #include "atime_lcd5110_printf.h"
   #include "atime_iic_software.h"
   #include "atime_ds1307.h"
-
   void main(void)
   {
      unsigned char i,j;
@@ -65,7 +64,7 @@
   }
 
 
-`
+``
 
 ### 6.函数文件保存 
 
