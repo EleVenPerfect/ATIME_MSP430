@@ -2,7 +2,7 @@ title: "ATIME_MSP430 "
 description: ATIME，专注创造奇迹！
 google_analytics: 
 show_downloads: true
-theme: jekyll-theme-architect
+theme: jekyll-theme-hacker
 
 gems:
   - jekyll-mentions
