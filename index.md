@@ -40,17 +40,19 @@
   #include "atime_lcd5110_printf.h"
   #include "atime_iic_software.h"
   #include "atime_ds1307.h"
+  
   void main(void)
   {
-     unsigned char i,j;
+      unsigned char i,j;
       watchdog_close();                          //关闭看门狗
       wait_ms(50);
       basic_clock_init();                        //系统时钟初始化
       lcd5110_init();                            //液晶屏幕初始化
       ds1307_write(ds1307_data);
+      
       while(1)
       {
-         ds1307_read(ds1307_data);
+          ds1307_read(ds1307_data);
           j++;
           for( i=0; i<8; i++)
              printf("  %02X   ",ds1307_data[i]);//以16进制显示
@@ -75,4 +77,4 @@
 
 ### 联系作者 欢迎发送电子邮件到
 
-atime@atime.org.cn或登陆我的个人网站www.atime.org.cn，谢谢！
+atime@atime.org.cn或登陆我的个人网站[www.atime.org.cn](http://www.atime.org.cn)，谢谢！
