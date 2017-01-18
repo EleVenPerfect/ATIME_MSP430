@@ -30,8 +30,7 @@
 
 本采用“模块名_init” 函数作为初始化，以“模块名_read/write” 作为操作函数，方便
 
-使用。下面以DS1307为例：
-
+使用。下面以DS1307为例：如下所示 
 `
   #include <msp430x14x.h>
   #include "atime_msp430core.h"                  //MSP430核心库
@@ -46,9 +45,8 @@
       wait_ms(50);
       basic_clock_init();                        //系统时钟初始化
       lcd5110_init();                            //液晶屏幕初始化
-      
-      
       ds1307_write(ds1307_data);
+      
       while(1)
       {
          ds1307_read(ds1307_data);
