@@ -47,6 +47,7 @@
       basic_clock_init();                        //系统时钟初始化
       lcd5110_init();                            //液晶屏幕初始化
       
+      
       ds1307_write(ds1307_data);
       while(1)
       {
