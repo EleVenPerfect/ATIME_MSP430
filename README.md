@@ -37,7 +37,6 @@
   #include "atime_lcd5110_printf.h"
   #include "atime_iic_software.h"
   #include "atime_ds1307.h"
-
   void main(void)
   {
      unsigned char i,j;
@@ -46,7 +45,6 @@
       basic_clock_init();                        //系统时钟初始化
       lcd5110_init();                            //液晶屏幕初始化
       ds1307_write(ds1307_data);
-      
       while(1)
       {
          ds1307_read(ds1307_data);
