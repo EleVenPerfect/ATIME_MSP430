@@ -41,7 +41,7 @@
 
   void main(void)
   {
-      unsigned char i,j;
+     unsigned char i,j;
       watchdog_close();                          //关闭看门狗
       wait_ms(50);
       basic_clock_init();                        //系统时钟初始化
@@ -50,14 +50,14 @@
       ds1307_write(ds1307_data);
       while(1)
       {
-          ds1307_read(ds1307_data);
+         ds1307_read(ds1307_data);
           j++;
           for( i=0; i<8; i++)
-              printf("  %02X   ",ds1307_data[i]);//以16进制显示
+             printf("  %02X   ",ds1307_data[i]);//以16进制显示
           if(j%2==0)
-              printf("AT-");
+             printf("AT-");
           else
-              printf("IME");
+             printf("IME");
           printf_setadd(0,0);
           wait_ms(400);
       } 
@@ -66,6 +66,8 @@
 
 ### 6.函数文件保存 所有.c文件可以不依赖.h文件单独使用，但以.h方式载入头文件可
 
-以减小代码体积，将不编译不需要的函数。 ### 联系作者 欢迎发送电子邮件到
+以减小代码体积，将不编译不需要的函数。
+
+### 联系作者 欢迎发送电子邮件到
 
 atime@atime.org.cn或登陆我的个人网站atime.org.cn，谢谢！
