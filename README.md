@@ -30,7 +30,8 @@
 
 本采用“模块名_init” 函数作为初始化，以“模块名_read/write” 作为操作函数，方便
 
-使用。下面以DS1307为例： `
+使用。下面以DS1307为例： 
+`
 
   #include <msp430x14x.h>
   #include "atime_msp430core.h"                  //MSP430核心库
