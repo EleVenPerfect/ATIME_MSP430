@@ -1,0 +1,8 @@
+title: "ATIME_MSP430 "
+description: ATIME，专注创造奇迹！
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-tactile
+
+gems:
+  - jekyll-mentions
