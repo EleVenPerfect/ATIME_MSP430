@@ -30,9 +30,9 @@
 
 本采用“模块名_init” 函数作为初始化，以“模块名_read/write” 作为操作函数，方便
 
-使用。下面以DS1307为例： 
-`
+使用。下面以DS1307为例：
 
+`
   #include <msp430x14x.h>
   #include "atime_msp430core.h"                  //MSP430核心库
   #include "atime_lcd5110_printf.h"
@@ -62,8 +62,6 @@
           wait_ms(400);
       } 
   }
-
-
 `
 
 ### 6.函数文件保存 所有.c文件可以不依赖.h文件单独使用，但以.h方式载入头文件可
