@@ -62,7 +62,7 @@
 /*************************************
 库全局变量组
 *************************************/
-#define SCANF_TEMP_SIZE       10//输入缓冲区大小
+#define SCANF_TEMP_SIZE       200//输入缓冲区大小
 unsigned char UART0RX_FLAG = 0;
 
 
@@ -128,8 +128,8 @@ int getchar( void)
         else
         if(ch == SCANFINEOL)                    //== '\r' 回车==
         {
-            putchar(buffer[ptr++] = '\n');      //终端换行
-            putchar('\r');                      //光标返回第一列
+            buffer[ptr++] = '\n';               //终端换行
+            printf("\r\n");                     //光标返回第一列
             buffer[ptr] = 0;                    //末尾添加结束符（NULL）
             ptr = 0;                            //指针清空
             return (buffer[ptr++]);
@@ -139,7 +139,8 @@ int getchar( void)
         {
            if(ch >= ' ')                        //删除 0x20以下字符
             {
-                putchar(buffer[ptr++] = ch);    //存入缓冲区
+                printf("%c",ch);
+                buffer[ptr++] = ch;             //存入缓冲区
             }
         }
         else                                    //缓冲区已满

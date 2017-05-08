@@ -8,6 +8,7 @@
         void watchdog_init( unsigned char clks)
         void watchdog_timer_init( unsigned char clks)
         void watchdog_timer_interrupt(enum msp430_switch a)
+        unsigned char watchdog_reset_state(void)
 修改历史：
          ‘修改人’   ‘修改内容’  ‘修改时间’
 	    空	        空          空
@@ -15,7 +16,7 @@
 作者： ATIME	版权所有
 实例程序：
 1.看门狗模式：
-#include <msp430x14x.h>
+        #include <msp430x14x.h>
         #include "atime_msp430core.h"		//MSP430核心库
         #include "atime_uart0_stdio.h"
         #include "atime_watchdog.h"
@@ -23,12 +24,14 @@
 
         void main(void)
         {
+
             watchdog_init(0);			    //关闭看门狗
             basic_clock_init();			    //系统时钟初始化
             uart_init();                            //串口初始化
             interrupt_switch(on);                   //开总中断
 
             printf("ATIME\r\n");
+            printf("%d\r\n",watchdog_reset_state());//显示是否是看门狗造成了复位
             while(1);
         }
 注意：程序正常运行会每秒打印一次ATIME，这是因为看门狗定时器溢出后触复位。
@@ -144,6 +147,16 @@ void watchdog_timer_interrupt(enum msp430_switch a)
         IE1 &= ~WDTIE;
 }
 
+
+/************************************
+函数功能：查看是否是WATCHDOG引发的复位
+传递参数：空
+返回值：0：否1：是
+***************************************/
+unsigned char watchdog_reset_state(void)
+{
+    return (IFG1&0x01);
+}
 
 
 #endif

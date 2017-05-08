@@ -28,7 +28,9 @@ __interrupt void USART0_RX_ISR(void)
 #ifdef _ATIME_MSP430_UART0_SCANF_C_
 UART0RX_FLAG = 1;           //重要：此宏设置内的代码是使用于scanf函数底层设置，如果使用scanf请务必不要删除这段
 #endif                      //同时，如果没有使用scanf，此段代码将会自动不进入编译，也不建议删除这段代码
-
+#ifndef _ATIME_MSP430_UART0_PRINTF_C_
+uart0_sendchar(U0RXBUF);
+#endif                      //回显
 }
 
 

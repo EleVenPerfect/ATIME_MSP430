@@ -41,7 +41,7 @@
 2.timera_pwm_init1要先设置好后再调用timera_pwm_init2，才可以保证占空比正确设置。
 ***************************************/
 
-#ifndef _ATIME_MSP430_TIMER_A_C_ 
+#ifndef _ATIME_MSP430_TIMER_A_C_
 #define _ATIME_MSP430_ATMER_A_C_
 
 
@@ -52,7 +52,7 @@
 
 /************************************
 函数功能：TIMER_A的PWM频率设置与初始化
-传递参数：定时器频率设置
+传递参数：定时器频率设置2~65kHz
 返回值：空
 ***************************************/
 void timera_pwm_init1(unsigned long freq)
@@ -60,7 +60,7 @@ void timera_pwm_init1(unsigned long freq)
     unsigned int mod =0;
     unsigned long modtemp =0;
     unsigned char ps =0;                //分频系数
-	
+
     TACTL |=TACLR;                      //清除定时器A
 
     modtemp=(unsigned long)(double)(XT2IN/MSP430_DIVS)/(freq*8);

@@ -3,6 +3,8 @@
 库要求：程序已经载入：
         #include <msp430x14x.h>
         #include "atime_msp430core.h"
+        #include "atime_uart0_stdio.h"
+        #include "atime_interrupt.c"//必须载入
         #include <stdio.h>(可不写)
 应用函数：
         scanf("",&)
