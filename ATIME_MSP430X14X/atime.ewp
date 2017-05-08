@@ -50,19 +50,19 @@
         <option>
           <name>GRuntimeLibSelect</name>
           <version>0</version>
-          <state>1</state>
+          <state>4</state>
         </option>
         <option>
           <name>RTDescription</name>
-          <state>Use the normal configuration of the C/EC++ runtime library. No locale interface, C locale, no file descriptor support, no multibytes in printf and scanf, and no hex floats in strtod.</state>
+          <state>Use the legacy C runtime library.</state>
         </option>
         <option>
           <name>RTConfigPath</name>
-          <state>$TOOLKIT_DIR$\lib\dlib\dl430fn.h</state>
+          <state></state>
         </option>
         <option>
           <name>RTLibraryPath</name>
-          <state>$TOOLKIT_DIR$\lib\dlib\dl430fn.r43</state>
+          <state>$TOOLKIT_DIR$\lib\clib\cl430f.r43</state>
         </option>
         <option>
           <name>Input variant</name>
@@ -85,7 +85,7 @@
         <option>
           <name>GRuntimeLibSelectSlave</name>
           <version>0</version>
-          <state>1</state>
+          <state>4</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>

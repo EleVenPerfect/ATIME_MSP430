@@ -98,6 +98,8 @@ int getchar( void)
     static char ptr;                            //缓存指针
     char ch;
 
+    atime_interrupt_c_exist();                  //检测中断函数文件是否存在，否则报错提示
+
     if(buffer[ptr] != 0x0)                     //如果缓冲区有字符
     {
         ch = buffer[ptr];

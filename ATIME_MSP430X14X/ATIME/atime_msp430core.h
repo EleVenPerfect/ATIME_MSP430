@@ -13,13 +13,13 @@
 实例程序：
       #include <msp430x14x.h>
       #include "atime_msp430core.h"		    //MSP430核心库
-      
+
       void main(void)
-      { 
-        
+      {
+
           watchdog_close();					//关闭看门狗
           basic_clock_init();				//系统时钟初始化
-              
+
           while(1);
       }
 
@@ -31,7 +31,7 @@
 3.Warning[Pa050]: non-native end of line sequence detected (this diagnostic is only issued once) 可能是某个文件最后不是以回车结尾。
 *************************************/
 
-#ifndef _ATIME_MSP430_CORE_H_ 
+#ifndef _ATIME_MSP430_CORE_H_
 #define _ATIME_MSP430_CORE_H_
 
 #include "atime_msp430core.c"
@@ -97,5 +97,16 @@ void interrupt_switch(enum msp430_switch a);
 unsigned char* ioreg_trans( unsigned char port, unsigned char func);
 
 
+/************************************
+函数功能：空函数
+注意：本函数作用只是用于检测是否载入了本文件，使在需要载入而没有载入的情况下报错
+本函数位于atime_interrupt.c中，但是实际文件通常在最后载入，因而将这个函数声明放在前面。
+***************************************/
+void atime_interrupt_c_exist(void);
 
+
+/************************************
+函数功能：空函数
+注意：本函数作用只是用于检测是否载入了本文件，使在需要载入而没有载入的情况下报错
+***************************************/
 #endif

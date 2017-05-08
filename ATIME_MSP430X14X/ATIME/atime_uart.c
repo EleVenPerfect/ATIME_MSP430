@@ -396,6 +396,7 @@ unsigned char uart_send( unsigned char ch[], unsigned char num)
 unsigned char uart0_getchar()
 {
     while( UART0RX_FLAG==0 );
+    UART0RX_FLAG = 0;
     return U0RXBUF;
 }
 
