@@ -39,14 +39,14 @@
 注：目前只写了PWM模式的函数，其他功能尚未添加，如有需要欢迎联系atime@atime.org.cn。
 ***************************************/
 
-#ifndef _ATIME_MSP430_TIMER_A_H_ 
+#ifndef _ATIME_MSP430_TIMER_A_H_
 #define _ATIME_MSP430_ATMER_A_H_
 
 #include "atime_timer_a.c"
 
 /************************************
 函数功能：TIMER_A的PWM频率设置与初始化
-传递参数：定时器频率设置
+传递参数：定时器频率设置2~65kHz
 返回值：空
 ***************************************/
 void timera_pwm_init1(unsigned long freq);

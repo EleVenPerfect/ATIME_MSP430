@@ -3,6 +3,7 @@
 库要求：程序已经载入：
         #include <msp430x14x.h>
         #include "atime_msp430core.h"
+		#include "atime_interrupt.c"//必须载入
         #include <stdio.h>(可不写)
 应用函数：
         scanf("",&)
@@ -45,6 +46,7 @@
 需要注意文件的载入顺序，atime_uart0_scanf.h要比atime_uart0_printf.h先载入。
 这是因为atime_uart0_scanf.c中有UART0RX_FLAG全局变量定义，而atime_uart.c中条件编译设置成需要编译uart0_getchar()函数，
 同时atime_uart0_printf.c中也会编译atime_uart.c，如果atime_uart0_printf的库放在前面就会在编译atime_uart0_printf过程中编译了atime_uart.c。
+3.若下载程序后出现无反应，首先检查是否进行了串口初始化，然后检查是否在入了#include "atime_interrupt.c"。
 使用注意：
 1.VT100终端设置流控（DTR/DSR、RTS/CTS、XON/XOFF）均为关闭状态，终端使用VT100模式。
 2.本scanf移植函数不支持光标移动操作，只会记录按键记录，因此Backspace和Delete按键实际是一样的功能。

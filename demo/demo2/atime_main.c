@@ -3,7 +3,7 @@
 #include "atime_oled4_12864_printf.h"
 #include "atime_uart0_scanf.h"
 #include "atime_interrupt.c"
-
+#include "atime_timer_a.h"
 void main(void)
 {
     unsigned char a[20];
