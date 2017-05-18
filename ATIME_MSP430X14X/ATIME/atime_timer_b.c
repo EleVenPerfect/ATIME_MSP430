@@ -41,7 +41,7 @@
 2.timerb_pwm_init1要先设置好后再调用timerb_pwm_init2，才可以保证占空比正确设置。
 ***************************************/
 
-#ifndef _ATIME_MSP430_TIMER_B_C_ 
+#ifndef _ATIME_MSP430_TIMER_B_C_
 #define _ATIME_MSP430_ATMER_B_C_
 
 
@@ -61,7 +61,7 @@ void timerb_pwm_init1(unsigned long freq)
     unsigned int mod =0;
     unsigned long modtemp =0;
     unsigned char ps =0;                //分频系数
-	
+
     TBCTL |=TBCLR;                      //清除定时器B
 
     modtemp=(unsigned long)(double)(XT2IN/MSP430_DIVS)/(freq*8);
@@ -166,6 +166,64 @@ void timerb_pwm_init2( unsigned char channel, unsigned int duty)
           break;
     }
 }
+
+
+
+/************************************
+函数功能：PWM输出通道占空比配置
+传递参数：
+    channel - PWM输出通道
+      |__0--TB1--P4.1
+      |__1--TB2--P4.2
+      |__------------
+      |__5--TB2--P4.6
+    duty - PWM输出占空比
+      |__0~10000--占空比0.00%~100.00%
+返回值：空
+注意：此函数只是在配置好后用于修改占空比。
+***************************************/
+void timerb_pwm_duty( unsigned char channel, unsigned int duty)
+{
+    unsigned long i;
+    unsigned long j;
+    j =TBCCR0;
+    i =duty * j;
+    i /=10000;
+    switch(channel)
+    {
+          case 0:
+          {
+              TBCCR1 =(unsigned int)i;
+          }
+          break;
+          case 1:
+          {
+              TBCCR2 =(unsigned int)i;
+          }
+          break;
+          case 2:
+          {
+              TBCCR3 =(unsigned int)i;
+          }
+          break;
+          case 3:
+          {
+              TBCCR4 =(unsigned int)i;
+          }
+          break;
+          case 4:
+          {
+              TBCCR5 =(unsigned int)i;
+          }
+          break;
+          case 5:
+          {
+              TBCCR6 =(unsigned int)i;
+          }
+          break;
+    }
+}
+
 
 
 /************************************

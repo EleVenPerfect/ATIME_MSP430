@@ -134,10 +134,39 @@ void timera_pwm_init2( unsigned char channel, unsigned int duty)
 
 
 /************************************
-函数功能：
-传递参数：空
+函数功能：PWM输出通道及占空比配置
+传递参数：
+    channel - PWM输出通道
+      |__0--TA1--P1.2
+      |__1--TA2--P1.3
+    duty - PWM输出占空比
+      |__0~10000--占空比0.00%~100.00%
 返回值：空
+注意：此函数只是在配置好后用于修改占空比。
 ***************************************/
+void timera_pwm_duty( unsigned char channel, unsigned int duty)
+{
+    unsigned long i;
+    unsigned long j;
+    j =TACCR0;
+    i =duty * j;
+    i /=10000;
+    switch(channel)
+    {
+          case 0:
+          {
+              TACCR1 =(unsigned int)i;
+          }
+          break;
+          case 1:
+          {
+              TACCR2 =(unsigned int)i;
+          }
+          break;
+    }
+}
+
+
 /************************************
 函数功能：
 传递参数：空
