@@ -83,6 +83,8 @@ I/O接口设置组，切勿修改！
 #define PxyINz(x,y)           PxyINzTEMP(x,y)
 #define PxyINzTEMP(x,y)       (P##x##IN)&(0x01<<y)
 
+#define PxyIFG(x,y)           PxyIFGTEMP(x,y)
+#define PxyIFGTEMP(x,y)       (P##x##IFG)&(0x01<<y)
 
 /*************************************
 函数功能：准确延时函数

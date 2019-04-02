@@ -25,24 +25,37 @@
 #pragma vector = PORT1_VECTOR
 __interrupt void PROT1_ISR(void)
 {
-    if((P1IN&0X01) == 0)
-    {
-        PxyOUTz(1,7,0);
-        PxyIFGz(1,0,0);
-    }
+    unsigned char temp_data = PxIFG(1);
+    PxIFG(1) = 0x00;
+    interrupt_switch(off);
     
-    if((P1IN&0X02) == 0)
+    if(temp_data==0x01)
     {
-        PxyOUTz(1,7,1);
+        mubiao_num++;
+        wait_ms(100);
+        PxyIFGz(1,0,0);
+    }  
+    
+    if(temp_data==0x02)
+    {
+        mubiao_num--;
+        wait_ms(100);
         PxyIFGz(1,1,0);
-    }
-        
-    if((P1IN&0X04) == 1)
+    }  
+    
+    if(temp_data==0x04)
     {
-        PxyOUTz(1,7,1);
+        dangqian_num2++;
+        if(dangqian_num2%2==1)
+        {
+            dangqian_num++;
+            dangqian_num2 = 1;
+        }
+        wait_ms(100);
         PxyIFGz(1,2,0);
     }
-    
+    interrupt_switch(on);
+    number_update();
 }
 /************************************
 函数功能：串口0接收中断服务函数
