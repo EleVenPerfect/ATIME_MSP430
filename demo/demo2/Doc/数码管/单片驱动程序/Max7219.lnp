@@ -1,0 +1,4 @@
+"STARTUP.obj",
+"main.obj" 
+TO "Max7219" 
+RAMSIZE(256) 
