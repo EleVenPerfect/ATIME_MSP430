@@ -32,14 +32,18 @@ __interrupt void PROT1_ISR(void)
     if(temp_data==0x01)
     {
         mubiao_num++;
-        wait_ms(100);
+        wait_ms(10);
+        number_update_mb();
+        number_update_mb();
         PxyIFGz(1,0,0);
     }  
     
     if(temp_data==0x02)
     {
         mubiao_num--;
-        wait_ms(100);
+        wait_ms(10);
+        number_update_mb();
+        number_update_mb();
         PxyIFGz(1,1,0);
     }  
     
@@ -50,13 +54,34 @@ __interrupt void PROT1_ISR(void)
         {
             dangqian_num++;
             dangqian_num2 = 1;
-        }
-        wait_ms(100);
+            number_update_dq();
+            number_update_dq();
+            if( dangqian_num >= mubiao_num+3 )
+            {
+                PxyOUTz(1,7,1); //继电器关闭
+                bjdj_stop = 1;
+            }
+            else
+            {
+                PxyOUTz(1,7,0); //继电器打开
+                bjdj_stop = 0;
+            }
+            }
+        wait_ms(10);
         PxyIFGz(1,2,0);
     }
     interrupt_switch(on);
-    number_update();
 }
+
+/************************************
+函数功能：定时器A中断服务函数
+***************************************/
+#pragma vector=TIMERA0_VECTOR
+__interrupt void TIMER_A (void)
+{
+    bjdj_run();
+}
+
 /************************************
 函数功能：串口0接收中断服务函数
 ***************************************/

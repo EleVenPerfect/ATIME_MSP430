@@ -7,7 +7,7 @@
 修改历史：
 	‘修改人’   ‘修改内容’  ‘修改时间’
 	  空          空	  空
-最后修改时间：2016-05-07
+最后修改时间：
 作者： ATIME	版权所有
 实例程序：
 常见问题解释：
@@ -17,7 +17,7 @@
 #ifndef _ATIME_MSP430_BSP_C_ 
 #define _ATIME_MSP430_BSP_C_
 
-unsigned int mubiao_num = 10;           //预设目标数量
+unsigned int mubiao_num = 5;           //预设目标数量
 unsigned int dangqian_num = 0;          //记录当前数量
 
 unsigned char dangqian_num2 = 1;        //临时变量
@@ -32,19 +32,19 @@ void bsp_init()
     PxyDIRz( 6, 1, 1); //P61 - CS
     PxyDIRz( 6, 2, 1); //P62 - CLK
     PxyOUTz(6,0,0);
-    PxyOUTz(6,1,0);
+    PxyOUTz(6,1,1);
     PxyOUTz(6,2,0);
-    Init_MAX7219();
+    
     
     //步进电机接口初始化
     PxyDIRz( 3, 1, 1);
     PxyDIRz( 3, 2, 1);
     PxyDIRz( 3, 3, 1);
-    PxyDIRz( 3, 4, 1);
+    PxyDIRz( 3, 6, 1);
     PxyOUTz(3,1,0);
     PxyOUTz(3,2,0);
     PxyOUTz(3,3,0);
-    PxyOUTz(3,4,0);
+    PxyOUTz(3,6,0);
     
     //继电器接口初始化
     PxyDIRz( 1, 7, 1);
@@ -85,53 +85,61 @@ void bsp_init()
     // P24置为低电平
     PxyDIRz( 2, 4, 0);
     
+    //定时器A中断设置
+    //CCTL0 = 0X0010;          // CCR0 中断使能,或写为 CCTL0 = CCIE;
+    //CCR0 = 1000;
+    //TACTL = 0X02E0;        // SMCLK = 1MHz, 连续计数模式
+    
 }
 
-unsigned char phasecw[4] ={0x01,0x02,0x04,0x08};//正转 电机导通相序 D-C-B-A
+unsigned char phasecw[4] ={0x02,0x04,0x08,0x40};//正转 电机导通相序 D-C-B-A
 void bjdj_run()//步进电机运转
 {
     if(bjdj_stop==0)
     {
-        for(unsigned int j=0;j<20;j++)
+        for(unsigned int j=0;j<40;j++)
         for(unsigned char i=0;i<4;i++)
         {
-            PxOUT(3)=phasecw[i]>>1;
+            PxOUT(3)=phasecw[i];
             wait_ms(bjdj_speed);//转速调节
         }
     }
+    else
+        wait_ms(500);
 }
 
 
 void fengmingqi_run()//蜂鸣器报警,继电器工作
 {
-    for(int i=0; i<500; i++)
+    for(int i=0; i<20; i++)
     {
-        wait_ms(3);
+        wait_ms(1);
         PxyOUTz(6,7,1);  //蜂鸣器响一声
-        wait_ms(3);
+        wait_ms(1);
         PxyOUTz(6,7,0);
-        wait_ms(3);
+        wait_ms(1);
         PxyOUTz(6,7,1);  //蜂鸣器响一声
-        wait_ms(3);
+        wait_ms(1);
         PxyOUTz(6,7,0);
-        wait_ms(3);
+        wait_ms(1);
         PxyOUTz(6,7,1);  //蜂鸣器响一声
-        wait_ms(3);
+        wait_ms(1);
         PxyOUTz(6,7,0);
     }
 }
 
 void Write_Max7219_byte(unsigned char DATA)         
 {
-    unsigned char i;    
-    PxyOUTz(6,1,0);		
+    unsigned char i;  
+    PxyOUTz(6,1,0);
     for(i=8;i>=1;i--)
     {		  
         PxyOUTz(6,2,0);
         PxyOUTz(6,0,(DATA&0x80)>>7);
         DATA=DATA<<1;
         PxyOUTz(6,2,1);
-   }                                 
+    } 
+    //PxyOUTz(6,1,1);
 }
 
 
@@ -140,7 +148,7 @@ void Write_Max7219(unsigned char address,unsigned char dat)
      PxyOUTz(6,1,0);
      Write_Max7219_byte(address);           //写入地址，即数码管编号
      Write_Max7219_byte(dat);               //写入数据，即数码管显示数字 
-     PxyOUTz(6,1,1);                        
+     PxyOUTz(6,1,1); 
 }
 
 void Init_MAX7219(void)
@@ -153,18 +161,33 @@ void Init_MAX7219(void)
 }
 
 
-void number_update()//更新待显示数字左边四位为目标数字，右侧为当前数字
+void number_update()//更新待显示数字右边四位为目标数字，左侧为当前数字
 {
-    Write_Max7219(1,dangqian_num%10);
-    Write_Max7219(2,dangqian_num/10%10);
-    Write_Max7219(3,dangqian_num/100%10);
-    Write_Max7219(4,dangqian_num/1000%10);
+    Write_Max7219(5,dangqian_num%10);
+    Write_Max7219(6,dangqian_num/10%10);
+    Write_Max7219(7,dangqian_num/100%10);
+    Write_Max7219(8,dangqian_num/1000%10);
     
-    Write_Max7219(5,mubiao_num%10);
-    Write_Max7219(6,mubiao_num/10%10);
-    Write_Max7219(7,mubiao_num/100%10);
-    Write_Max7219(8,mubiao_num/1000%10);
+    Write_Max7219(1,mubiao_num%10);
+    Write_Max7219(2,mubiao_num/10%10);
+    Write_Max7219(3,mubiao_num/100%10);
+    Write_Max7219(4,mubiao_num/1000%10);
 }
 
+void number_update_mb()
+{
+    Write_Max7219(1,mubiao_num%10);
+    Write_Max7219(2,mubiao_num/10%10);
+    Write_Max7219(3,mubiao_num/100%10);
+    Write_Max7219(4,mubiao_num/1000%10);
+}
+
+void number_update_dq()
+{
+    Write_Max7219(5,dangqian_num%10);
+    Write_Max7219(6,dangqian_num/10%10);
+    Write_Max7219(7,dangqian_num/100%10);
+    Write_Max7219(8,dangqian_num/1000%10);
+}
 
 #endif
