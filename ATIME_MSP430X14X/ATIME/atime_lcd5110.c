@@ -65,7 +65,7 @@ Error[Pe011]: unrecognized preprocessing directive:检查#include拼写。
 #define LCD5110_CLK_PORT        5       //定义CLK位端口
 #define LCD5110_CLK_BIT         5       //定义CLK位引脚
 
-#define LCD5110_CONTRAST        4       //设置液晶对比度（0~7）数字越小越黑
+#define LCD5110_CONTRAST        5       //设置液晶对比度（0~7）数字越小越黑
 
 
 /************************************
